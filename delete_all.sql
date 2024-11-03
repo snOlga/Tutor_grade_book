@@ -1,0 +1,12 @@
+DROP TABLE students_lessons;
+DROP TABLE tutor_lessons_requests;
+DROP TABLE student_lessons_requests;
+DROP TABLE lessons;
+DROP TABLE subjects;
+DROP TABLE messages;
+DROP TABLE chats;
+DROP TABLE students;
+DROP TABLE tutors;
+DROP TABLE creds;
+DROP TABLE user_info;
+DROP TABLE contacts;
