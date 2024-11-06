@@ -188,11 +188,10 @@ RETURNS TRIGGER AS $$
 	END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER before_delete_lesson
-BEFORE DELETE
-ON lessons
+CREATE TRIGGER delete_lesson
+INSTEAD OF DELETE ON lessons
 FOR EACH ROW
-EXECUTE FUNCTION delete_lesson();
+EXECUTE FUNCTION instead_of_delete_lesson();
 
 ----------------
 

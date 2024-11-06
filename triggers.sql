@@ -69,7 +69,7 @@ EXECUTE FUNCTION insert_lesson_if_not_exists();
 
 
 
-CREATE OR REPLACE FUNCTION delete_lesson()
+CREATE OR REPLACE FUNCTION instead_of_delete_lesson()
 RETURNS TRIGGER AS $$
 	BEGIN
 		UPDATE lessons SET is_active = FALSE WHERE ID = OLD.ID;
@@ -77,11 +77,10 @@ RETURNS TRIGGER AS $$
 	END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER before_delete_lesson
-BEFORE DELETE
-ON lessons
+CREATE TRIGGER delete_lesson
+INSTEAD OF DELETE ON lessons
 FOR EACH ROW
-EXECUTE FUNCTION delete_lesson();
+EXECUTE FUNCTION instead_of_delete_lesson();
 
 
 
