@@ -98,8 +98,8 @@ CREATE INDEX tutors_index ON tutors USING HASH (ID);
 
 CREATE INDEX contacts_index ON contacts USING HASH (ID);
 
-CREATE INDEX lessons_index_on_ID ON lessons (start_time);
-CREATE INDEX lessons_index_on_time ON lessons USING HASH (ID);
+CREATE INDEX lessons_index_on_time ON lessons (start_time);
+CREATE INDEX lessons_index_on_ID ON lessons USING HASH (ID);
 
 CREATE INDEX subjects_index ON subjects USING HASH (ID);
 
