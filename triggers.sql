@@ -78,7 +78,7 @@ RETURNS TRIGGER AS $$
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER delete_lesson
-INSTEAD OF DELETE ON lessons
+BEFORE DELETE ON lessons
 FOR EACH ROW
 EXECUTE FUNCTION instead_of_delete_lesson();
 
