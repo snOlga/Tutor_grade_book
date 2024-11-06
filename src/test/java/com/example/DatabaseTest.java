@@ -37,15 +37,12 @@ class CustomerServiceTest {
         );
 
         try (Connection conn = connectionProvider.getConnection()) {
-            PreparedStatement pstmt = conn.prepareStatement(
-                    """
+            PreparedStatement pstmt = conn.prepareStatement("""
                     CREATE TABLE contacts (
                         ID SERIAL PRIMARY KEY,
                         phone VARCHAR(50) CHECK (phone ~ '^[0-9]*$'),
                         email VARCHAR(50) CHECK (email ~ '^[0-z]+@([A-z]+\\.)+[A-z]{2,4}$')
-                     );
-                    """
-            );
+                     );""");
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
