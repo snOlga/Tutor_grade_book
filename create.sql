@@ -1,7 +1,6 @@
-CREATE TABLE creds (
-	ID SERIAL PRIMARY KEY,
-	login VARCHAR(50) CHECK ((LENGTH(login)>10) AND (login ~ '^([A-z]|[0-9])*$')),
-	password TEXT
+CREATE TABLE roles (
+  ID SERIAL PRIMARY KEY,    
+	role_name VARCHAR(50) CHECK (role_name ~ '^([A-z])*$')
 );
 
 CREATE TABLE contacts (
@@ -10,38 +9,36 @@ CREATE TABLE contacts (
 	email VARCHAR(50) CHECK (email ~ '^[0-z]+@([A-z]+\.)+[A-z]{2,4}$')
 );
 
-CREATE TABLE user_info (
+CREATE TABLE users (
 	ID SERIAL PRIMARY KEY,
 	name VARCHAR(50) CHECK (name ~ '^[A-z]*$'),
 	second_name VARCHAR(50) CHECK (second_name ~ '^[A-z]*$'),
-	contacts_id INT REFERENCES contacts(ID),
-	description VARCHAR(400) CHECK (description ~ '^([A-z]|[0-9]|\s)*$')
+  	phone VARCHAR(50) CHECK (phone ~ '^[0-9]*$'),    
+	email VARCHAR(50) CHECK (email ~ '^[0-z]+@([A-z]+\.)+[A-z]{2,4}$'),
+  	role INT REFERENCES roles(ID),    
+	human_readable_id TEXT UNIQUE NOT NULL,
+  	description VARCHAR(400) CHECK (description ~ '^([A-z]|[0-9]|\s)*$'),    
+	login VARCHAR(50) CHECK ((LENGTH(login)>10) AND (login ~ '^([A-z]|[0-9])*$')),
+  	password TEXT
 );
 
-CREATE TABLE students (
-	ID SERIAL PRIMARY KEY,
-	creds_id INT REFERENCES creds(ID),
-	info_id INT REFERENCES user_info(ID),
-	human_readable_id TEXT UNIQUE NOT NULL
-);
-
-CREATE TABLE tutors (
-	ID SERIAL PRIMARY KEY,
-	creds_id INT REFERENCES creds(ID),
-	info_id INT REFERENCES user_info(ID),
-	human_readable_id TEXT UNIQUE NOT NULL
+CREATE TABLE users_roles (
+	user_id INT REFERENCES users(ID),
+	role_id INT REFERENCES roles(ID)
 );
 
 CREATE TABLE chats (
-	ID SERIAL PRIMARY KEY,
-	tutor_id INT REFERENCES tutors(ID),
-	student_id INT REFERENCES students(ID)
+  	ID SERIAL PRIMARY KEY,
+	user1 INT REFERENCES users(ID),
+  	user2_id INT REFERENCES users(ID)
 );
 
 CREATE TABLE messages (
 	ID SERIAL PRIMARY KEY,
 	chat_id INT REFERENCES chats(ID),
-	creds_id INT REFERENCES creds(ID),
+  	author_id INT REFERENCES users(ID),    
+	sent_time TIMESTAMP,
+  	is_edited BOOLEAN,
 	msg_text VARCHAR(200)
 );
 
@@ -53,7 +50,6 @@ CREATE TABLE subjects (
 
 CREATE TABLE lessons (
 	ID SERIAL PRIMARY KEY,
-	tutor_id INT REFERENCES tutors(ID),
 	start_time TIMESTAMP NOT NULL,
 	duration INTERVAL NOT NULL,
 	subject_id INT REFERENCES subjects(ID),
@@ -64,25 +60,21 @@ CREATE TABLE lessons (
 	human_readable_id TEXT UNIQUE NOT NULL
 );
 
-CREATE TABLE students_lessons (
-	student_id INT REFERENCES students(ID),
-	lesson_id INT REFERENCES lessons(ID)
+CREATE TABLE users_lessons (
+	user_id INT REFERENCES users(ID),
+  	lesson_id INT REFERENCES lessons(ID)
 );
 
-CREATE TABLE student_lessons_requests (
+CREATE TABLE request_types (
 	ID SERIAL PRIMARY KEY,
-	student_id INT REFERENCES students(ID),
-	lesson_id INT REFERENCES lessons(ID),
-	is_approved BOOLEAN
+  	request_type VARCHAR(50) CHECK (request_type ~ '^([A-z])*$')
 );
 
-CREATE TABLE tutor_lessons_requests (
-	ID SERIAL PRIMARY KEY,
-	tutor_id INT REFERENCES tutors(ID),
-	student_id INT REFERENCES students(ID),
-	lesson_id INT REFERENCES lessons(ID),
-	is_approved BOOLEAN
+CREATE TABLE lessons_requests (
+  	ID SERIAL PRIMARY KEY,    
+	is_approved BOOLEAN,
+  	sender_id INT REFERENCES users(ID),
+	reciever_id INT REFERENCES users(ID),
+  	lesson_id INT REFERENCES lessons(ID),    
+	request_type_id INT REFERENCES request_types(ID)
 );
-
-
-
