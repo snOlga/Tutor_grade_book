@@ -8,7 +8,7 @@ PREPARE insert_into_users_roles (INT, INT) AS
 	INSERT INTO users_roles (user_id, role_id) VALUES ($1, $2);
 
 PREPARE insert_into_chats (INT, INT) AS
-	INSERT INTO chats (user1, user2_id) VALUES ($1, $2);
+	INSERT INTO chats (user1_id, user2_id) VALUES ($1, $2);
 
 PREPARE insert_into_messages (INT, INT, TIMESTAMP, BOOLEAN, VARCHAR) AS
 	INSERT INTO messages (chat_id, author_id, sent_time, is_edited, msg_text) VALUES ($1, $2, $3, $4, $5);

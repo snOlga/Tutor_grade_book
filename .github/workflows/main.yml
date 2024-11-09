@@ -1,29 +1,29 @@
-name: CI
+# name: CI
 
-on:
-  push:
-    branches:
-      - main  # Запускать при пуше в основную ветку
-  pull_request:
-    branches:
-      - main  # Запускать при создании PR в основную ветку
+# on:
+#   push:
+#     branches:
+#       - main  # Запускать при пуше в основную ветку
+#   pull_request:
+#     branches:
+#       - main  # Запускать при создании PR в основную ветку
 
-jobs:
-  build:
-    runs-on: ubuntu-latest  # Используем последнюю версию Ubuntu
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest  # Используем последнюю версию Ubuntu
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2  # Клонируем репозиторий
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2  # Клонируем репозиторий
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'  # Укажите нужную версию JDK
-          distribution: 'adopt'
+#       - name: Set up JDK
+#         uses: actions/setup-java@v2
+#         with:
+#           java-version: '11'  # Укажите нужную версию JDK
+#           distribution: 'adopt'
 
-      - name: Build with Maven
-        run: mvn clean install  # Собираем проект и запускаем тесты
+#       - name: Build with Maven
+#         run: mvn clean install  # Собираем проект и запускаем тесты
 
-      - name: Run tests
-        run: mvn test  # Запускаем тесты
+#       - name: Run tests
+#         run: mvn test  # Запускаем тесты

@@ -22,7 +22,7 @@ CREATE TABLE users_roles (
 
 CREATE TABLE chats (
   	ID SERIAL PRIMARY KEY,
-	user1 INT REFERENCES users(ID),
+	user1_id INT REFERENCES users(ID),
   	user2_id INT REFERENCES users(ID)
 );
 
