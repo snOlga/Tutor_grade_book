@@ -1,47 +1,37 @@
-CREATE TABLE creds (
-	ID SERIAL PRIMARY KEY,
-	login VARCHAR(50) CHECK ((LENGTH(login)>10) AND (login ~ '^([A-z]|[0-9])*$')),
-	password TEXT
+CREATE TABLE roles (
+  ID SERIAL PRIMARY KEY,    
+	role_name VARCHAR(50) CHECK (role_name ~ '^([A-z])*$')
 );
 
-CREATE TABLE contacts (
-	ID SERIAL PRIMARY KEY,
-	phone VARCHAR(50) CHECK (phone ~ '^[0-9]*$'),
-	email VARCHAR(50) CHECK (email ~ '^[0-z]+@([A-z]+\.)+[A-z]{2,4}$')
-);
-
-CREATE TABLE user_info (
+CREATE TABLE users (
 	ID SERIAL PRIMARY KEY,
 	name VARCHAR(50) CHECK (name ~ '^[A-z]*$'),
 	second_name VARCHAR(50) CHECK (second_name ~ '^[A-z]*$'),
-	contacts_id INT REFERENCES contacts(ID),
-	description VARCHAR(400) CHECK (description ~ '^([A-z]|[0-9]|\s)*$')
+  	phone VARCHAR(50) CHECK (phone ~ '^[0-9]*$'),    
+	email VARCHAR(50) CHECK (email ~ '^[0-z]+@([A-z]+\.)+[A-z]{2,4}$'),
+	human_readable_id TEXT UNIQUE NOT NULL,
+  	description VARCHAR(400) CHECK (description ~ '^([A-z]|[0-9]|\s)*$'),    
+	login VARCHAR(50) CHECK ((LENGTH(login)>10) AND (login ~ '^([A-z]|[0-9])*$')),
+  	password TEXT
 );
 
-CREATE TABLE students (
-	ID SERIAL PRIMARY KEY,
-	creds_id INT REFERENCES creds(ID),
-	info_id INT REFERENCES user_info(ID),
-	human_readable_id TEXT UNIQUE NOT NULL
-);
-
-CREATE TABLE tutors (
-	ID SERIAL PRIMARY KEY,
-	creds_id INT REFERENCES creds(ID),
-	info_id INT REFERENCES user_info(ID),
-	human_readable_id TEXT UNIQUE NOT NULL
+CREATE TABLE users_roles (
+	user_id INT REFERENCES users(ID),
+	role_id INT REFERENCES roles(ID)
 );
 
 CREATE TABLE chats (
-	ID SERIAL PRIMARY KEY,
-	tutor_id INT REFERENCES tutors(ID),
-	student_id INT REFERENCES students(ID)
+  	ID SERIAL PRIMARY KEY,
+	user1 INT REFERENCES users(ID),
+  	user2_id INT REFERENCES users(ID)
 );
 
 CREATE TABLE messages (
 	ID SERIAL PRIMARY KEY,
 	chat_id INT REFERENCES chats(ID),
-	creds_id INT REFERENCES creds(ID),
+  	author_id INT REFERENCES users(ID),    
+	sent_time TIMESTAMP,
+  	is_edited BOOLEAN,
 	msg_text VARCHAR(200)
 );
 
@@ -53,7 +43,6 @@ CREATE TABLE subjects (
 
 CREATE TABLE lessons (
 	ID SERIAL PRIMARY KEY,
-	tutor_id INT REFERENCES tutors(ID),
 	start_time TIMESTAMP NOT NULL,
 	duration INTERVAL NOT NULL,
 	subject_id INT REFERENCES subjects(ID),
@@ -64,250 +53,112 @@ CREATE TABLE lessons (
 	human_readable_id TEXT UNIQUE NOT NULL
 );
 
-CREATE TABLE students_lessons (
-	student_id INT REFERENCES students(ID),
-	lesson_id INT REFERENCES lessons(ID)
+CREATE TABLE users_lessons (
+	user_id INT REFERENCES users(ID),
+  	lesson_id INT REFERENCES lessons(ID)
 );
 
-CREATE TABLE student_lessons_requests (
+CREATE TABLE request_types (
 	ID SERIAL PRIMARY KEY,
-	student_id INT REFERENCES students(ID),
-	lesson_id INT REFERENCES lessons(ID),
-	is_approved BOOLEAN
+  	request_type VARCHAR(50) CHECK (request_type ~ '^([A-z])*$')
 );
 
-CREATE TABLE tutor_lessons_requests (
-	ID SERIAL PRIMARY KEY,
-	tutor_id INT REFERENCES tutors(ID),
-	student_id INT REFERENCES students(ID),
-	lesson_id INT REFERENCES lessons(ID),
-	is_approved BOOLEAN
+CREATE TABLE lessons_requests (
+  	ID SERIAL PRIMARY KEY,    
+	is_approved BOOLEAN,
+  	sender_id INT REFERENCES users(ID),
+	reciever_id INT REFERENCES users(ID),
+  	lesson_id INT REFERENCES lessons(ID),    
+	request_type_id INT REFERENCES request_types(ID)
 );
 
 ----------------
 
-CREATE INDEX creds_index ON creds USING HASH (ID);
 
-CREATE INDEX user_info_index ON user_info USING HASH (ID);
-
-CREATE INDEX students_index_ID ON students USING HASH (ID);
-CREATE INDEX student_index_on_human_readable_id ON students USING HASH (human_readable_id);
-
-CREATE INDEX tutors_index ON tutors USING HASH (ID);
-
-CREATE INDEX contacts_index ON contacts USING HASH (ID);
-
-CREATE INDEX lessons_index_on_time ON lessons (start_time);
-CREATE INDEX lessons_index_on_tutor_id ON lessons USING HASH (tutor_id);
-CREATE INDEX lessons_index_on_subject_id ON lessons USING HASH (subject_id);
-CREATE INDEX lessons_index_on_ID ON lessons USING HASH (ID);
-CREATE INDEX lessons_index_on_human_readable_id ON lessons USING HASH (human_readable_id);
-
-CREATE INDEX subjects_index ON subjects USING HASH (ID);
-
-CREATE INDEX student_lessons_requests_index ON student_lessons_requests USING HASH (ID);
-
-CREATE INDEX tutor_lessons_requests_index ON tutor_lessons_requests USING HASH (ID);
 
 ----------------
 
-CREATE OR REPLACE FUNCTION update_student_lessons_from_tutor()
-RETURNS TRIGGER AS $$
-	BEGIN
-		IF NOT EXISTS (
-			SELECT * FROM students_lessons WHERE student_id = NEW.student_id AND lesson_id = NEW.lesson_id
-			)
-		AND (NEW.is_approved = TRUE)
-		THEN	
-			INSERT INTO students_lessons (student_id, lesson_id) VALUES
-				(NEW.student_id, NEW.lesson_id);
-		END IF;
-		RETURN NEW;
-	END;
-$$ LANGUAGE plpgsql;
 
-CREATE TRIGGER after_approving_lesson_by_student
-AFTER UPDATE OF is_approved ON tutor_lessons_requests
-FOR EACH ROW
-WHEN (NEW.is_approved = TRUE)
-EXECUTE FUNCTION update_student_lessons_from_tutor();
-
-
-
-CREATE OR REPLACE FUNCTION update_student_lessons_from_student()
-RETURNS TRIGGER AS $$
-	BEGIN
-		IF NOT EXISTS (
-			SELECT * FROM students_lessons WHERE student_id = NEW.student_id AND lesson_id = NEW.lesson_id
-			)
-		AND (NEW.is_approved = TRUE)
-		THEN
-			INSERT INTO students_lessons (student_id, lesson_id) VALUES
-				(NEW.student_id, NEW.lesson_id);
-		END IF;
-		RETURN NEW;
-	END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER after_approving_lesson_by_tutor
-AFTER UPDATE OF is_approved ON student_lessons_requests
-FOR EACH ROW
-WHEN (NEW.is_approved = TRUE)
-EXECUTE FUNCTION update_student_lessons_from_student();
-
-
-
-CREATE OR REPLACE FUNCTION insert_lesson_if_not_exists()
-RETURNS TRIGGER AS $$
-	BEGIN
-		IF EXISTS (
-			SELECT * FROM lessons WHERE tutor_id = NEW.tutor_id AND
-				(((start_time + duration) > NEW.start_time) AND
-					(start_time < NEW.start_time) OR
-					((start_time + duration) > (NEW.start_time + duration)) AND
-					(start_time >= NEW.start_time))
-			)
-		THEN
-			RAISE EXCEPTION 'At this time lesson already exists';
-		END IF;
-		RETURN NEW;
-	END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER before_insert_lesson_if_not_exists
-BEFORE INSERT
-ON lessons
-FOR EACH ROW
-EXECUTE FUNCTION insert_lesson_if_not_exists();
-
-
-
-CREATE OR REPLACE FUNCTION instead_of_delete_lesson()
-RETURNS TRIGGER AS $$
-	BEGIN
-		UPDATE lessons SET is_active = FALSE WHERE ID = OLD.ID;
-		RETURN NULL;
-	END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER delete_lesson
-BEFORE DELETE ON lessons
-FOR EACH ROW
-EXECUTE FUNCTION instead_of_delete_lesson();
 
 ----------------
 
-PREPARE insert_creds (VARCHAR(50), TEXT) AS 
-	INSERT INTO creds (login, password) VALUES($1, $2);
+PREPARE insert_into_roles (VARCHAR) AS
+	INSERT INTO roles (role_name) VALUES ($1);
 
-PREPARE insert_contacts (VARCHAR(50), VARCHAR(50)) AS
-	INSERT INTO contacts (phone, email) VALUES ($1, $2);
+PREPARE insert_into_users (VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, TEXT) AS
+	INSERT INTO users (name, second_name, phone, email, human_readable_id, description, login, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
 
-PREPARE insert_user_info (VARCHAR(50), VARCHAR(50), INT, VARCHAR(400)) AS
-	INSERT INTO user_info (name, second_name, contacts_id, description) VALUES ($1, $2, $3, $4);
+PREPARE insert_into_users_roles (INT, INT) AS
+	INSERT INTO users_roles (user_id, role_id) VALUES ($1, $2);
 
-PREPARE insert_students (INT, INT, TEXT) AS
-	INSERT INTO students (creds_id, info_id, human_readable_id) VALUES ($1, $2, $3);
+PREPARE insert_into_chats (INT, INT) AS
+	INSERT INTO chats (user1, user2_id) VALUES ($1, $2);
 
-PREPARE insert_tutors (INT, INT, TEXT) AS
-	INSERT INTO tutors (creds_id, info_id, human_readable_id) VALUES ($1, $2, $3);
+PREPARE insert_into_messages (INT, INT, TIMESTAMP, BOOLEAN, VARCHAR) AS
+	INSERT INTO messages (chat_id, author_id, sent_time, is_edited, msg_text) VALUES ($1, $2, $3, $4, $5);
 
-PREPARE insert_chats (INT, INT) AS
-	INSERT INTO chats (tutor_id, student_id) VALUES ($1, $2);
-
-PREPARE insert_messages (INT, INT, VARCHAR(200)) AS
-	INSERT INTO messages (chat_id, creds_id, msg_text) VALUES ($1, $2, $3);
-
-PREPARE insert_subjects (VARCHAR(50), TEXT) AS
+PREPARE insert_into_subjects (VARCHAR, TEXT) AS
 	INSERT INTO subjects (main_name, analogy_names) VALUES ($1, $2);
 
-PREPARE insert_lessons (INT, TIMESTAMP, INTERVAL, INT, TEXT, BOOLEAN, BOOLEAN, VARCHAR(200), TEXT) AS
-	INSERT INTO lessons (tutor_id, start_time, duration, subject_id, homework, is_open, is_active, description, human_readable_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
+PREPARE insert_into_lessons (TIMESTAMP, INTERVAL, INT, TEXT, BOOLEAN, BOOLEAN, VARCHAR, TEXT) AS
+	INSERT INTO lessons (start_time, duration, subject_id, homework, is_open, is_active, description, human_readable_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
 
-PREPARE insert_students_lessons (INT, INT) AS
-	INSERT INTO students_lessons (student_id, lesson_id) VALUES ($1, $2);
+PREPARE insert_into_users_lessons (INT, INT) AS
+	INSERT INTO users_lessons (user_id, lesson_id) VALUES ($1, $2);
 
-PREPARE insert_student_lessons_requests (INT, INT, BOOLEAN) AS
-	INSERT INTO student_lessons_requests (student_id, lesson_id, is_approved) VALUES ($1, $2, $3);
+PREPARE insert_into_request_types (VARCHAR) AS
+	INSERT INTO request_types (request_type) VALUES ($1);
 
-PREPARE insert_tutor_lessons_requests (INT, INT, INT, BOOLEAN) AS
-	INSERT INTO tutor_lessons_requests (tutor_id, student_id, lesson_id, is_approved) VALUES ($1, $2, $3, $4);
-
-----------------
-
-EXECUTE insert_creds('foostudent123', 'password1');
-EXECUTE insert_creds('cooltutor123', 'password2');
-EXECUTE insert_creds('barstudent123', 'password3');
-EXECUTE insert_creds('supertutor007', 'password4');
-
-EXECUTE insert_contacts('1234567890', 'student1@example.com');
-EXECUTE insert_contacts('2345678901', 'tutor1@example.com');
-EXECUTE insert_contacts('3456789012', 'student2@example.com');
-EXECUTE insert_contacts('4567890123', 'tutor2@example.com');
-
-EXECUTE insert_user_info('John', 'Doe', 1, 'Student of mathematics');
-EXECUTE insert_user_info('Jane', 'Smith', 2, 'Tutor in mathematics');
-EXECUTE insert_user_info('Emily', 'Johnson', 3, 'Student of physics');
-EXECUTE insert_user_info('Michael', 'Brown', 4, 'Tutor in physics');
-
-EXECUTE insert_students(1, 1, 'student-001');
-EXECUTE insert_students(3, 3, 'student-002');
-
-EXECUTE insert_tutors(2, 2, 'tutor-001');
-EXECUTE insert_tutors(4, 4, 'tutor-002');
-
-EXECUTE insert_chats(1, 1);
-EXECUTE insert_chats(2, 2);
-
-EXECUTE insert_messages(1, 1, 'I have a question about the homework.');
-EXECUTE insert_messages(1, 2, 'I can help you.');
-EXECUTE insert_messages(2, 3, 'When will we start?');
-EXECUTE insert_messages(2, 4, 'Wait for 5 minutes.');
-
-EXECUTE insert_subjects('Mathematics', 'Math;Algebra;Geometry');
-EXECUTE insert_subjects('Physics', 'Mechanics;Thermodynamics');
-
-EXECUTE insert_lessons(1, '2024-11-01 10:00:00', '01:30:00', 1, 'Solve problems', TRUE, TRUE, 'Mathematics lesson', 'lesson-001');
-EXECUTE insert_lessons(2, '2024-11-02 14:00:00', '02:00:00', 2, 'Review', TRUE, TRUE, 'Physics lesson', 'lesson-002');
-EXECUTE insert_lessons(1, '2024-11-01 12:00:00', '01:30:00', 1, 'Solve problems', TRUE, TRUE, 'Mathematics lesson', 'lesson-003');
-EXECUTE insert_lessons(1, '2024-11-02 14:00:00', '02:00:00', 1, 'Review', TRUE, TRUE, 'Physics lesson', 'lesson-004');
-
-EXECUTE insert_students_lessons(1, 1);
-
-EXECUTE insert_tutor_lessons_requests(1, 1, 1, TRUE);
-EXECUTE insert_tutor_lessons_requests(2, 2, 2, FALSE);
-
-EXECUTE insert_student_lessons_requests(2, 3, FALSE);
+PREPARE insert_into_lessons_requests (BOOLEAN, INT, INT, INT, INT) AS
+	INSERT INTO lessons_requests (is_approved, sender_id, reciever_id, lesson_id, request_type_id) VALUES ($1, $2, $3, $4, $5);
 
 ----------------
 
-UPDATE tutor_lessons_requests SET is_approved = TRUE WHERE lesson_id=2;
+EXECUTE insert_into_roles('Admin');
+EXECUTE insert_into_roles('Teacher');
+EXECUTE insert_into_roles('Student');
 
-SELECT * FROM students_lessons;
+EXECUTE insert_into_users('John', 'Doe', '1234567890', 'john.doe@example.com', 1, 'John123', 'Admin', 'jdoe', 'password123');
+EXECUTE insert_into_users('Jane', 'Smith', '0987654321', 'jane.smith@example.com', 2, 'CoolJane', 'Mathematics Teacher', 'jsmith', 'securepass');
+EXECUTE insert_into_users('Alice', 'Johnson', '5551234567', 'alice.j@example.com', 3, 'Alice111', 'Student in Mathematics', 'alice.j', 'password');
+EXECUTE insert_into_users('Mike', 'Smith', '0987654321', 'mike.smith@example.com', 2, 'CoolMike', 'Mathematics Teacher', 'msmith', 'securepass');
 
-UPDATE student_lessons_requests SET is_approved = TRUE WHERE lesson_id=3;
+EXECUTE insert_into_users_roles(1, 1);
+EXECUTE insert_into_users_roles(2, 2);
+EXECUTE insert_into_users_roles(3, 3);
 
-SELECT * FROM students_lessons;
+EXECUTE insert_into_chats(1, 2);
+EXECUTE insert_into_chats(2, 3);
 
-SELECT * FROM lessons;
+EXECUTE insert_into_messages(1, 1, '2024-11-09 12:30:00', false, 'Hello, Jane!');
+EXECUTE insert_into_messages(1, 2, '2024-11-09 12:31:00', false, 'Hi John, how can I help?');
+EXECUTE insert_into_messages(2, 2, '2024-11-09 13:00:00', true, 'Hello, Alice!');
 
-DELETE FROM lessons WHERE ID = 1;
+EXECUTE insert_into_subjects('Mathematics', 'Math;Algebra;Geometry');
+EXECUTE insert_into_subjects('Physics', 'Mechanics');
 
-SELECT * FROM lessons;
+EXECUTE insert_into_lessons('2024-11-10 09:00:00', '12:30', 1, 'Complete exercises', true, true, 'Math lesson on Algebra', 'L001');
+EXECUTE insert_into_lessons('2024-11-10 11:00:00', '14:00', 2, 'Read Chapter', true, true, 'Physics lesson on Mechanics', 'L002');
 
--- INSERT INTO lessons (tutor_id, start_time, duration, subject_id, homework, is_open, is_active, description, human_readable_id) 
--- VALUES 
--- 	(1, '2024-11-01 10:00:00', '01:30:00', 1, 'Solve problems', TRUE, TRUE, 'Mathematics lesson', 'lesson-01');
+EXECUTE insert_into_users_lessons(3, 1);
+EXECUTE insert_into_users_lessons(3, 2);
 
-DROP TABLE students_lessons;
-DROP TABLE tutor_lessons_requests;
-DROP TABLE student_lessons_requests;
-DROP TABLE lessons;
-DROP TABLE subjects;
-DROP TABLE messages;
+EXECUTE insert_into_request_types('Lesson Approval'); -- from teacher to student
+EXECUTE insert_into_request_types('Attendance Request'); -- from student to teacher
+EXECUTE insert_into_request_types('Collab Request'); -- from teacher to teacher
+
+EXECUTE insert_into_lessons_requests(true, 3, 2, 1, 2);
+EXECUTE insert_into_lessons_requests(false, 3, 4, 2, 3);
+
+----------------
+
+DROP TABLE roles;
+DROP TABLE users;
+DROP TABLE users_roles;
 DROP TABLE chats;
-DROP TABLE students;
-DROP TABLE tutors;
-DROP TABLE creds;
-DROP TABLE user_info;
-DROP TABLE contacts;
+DROP TABLE messages;
+DROP TABLE subjects;
+DROP TABLE lessons;
+DROP TABLE users_lessons;
+DROP TABLE request_types;
+DROP TABLE lessons_requests;

@@ -1,43 +1,36 @@
-EXECUTE insert_creds('foostudent123', 'password1');
-EXECUTE insert_creds('cooltutor123', 'password2');
-EXECUTE insert_creds('barstudent123', 'password3');
-EXECUTE insert_creds('supertutor007', 'password4');
+EXECUTE insert_into_roles('Admin');
+EXECUTE insert_into_roles('Teacher');
+EXECUTE insert_into_roles('Student');
 
-EXECUTE insert_contacts('1234567890', 'student1@example.com');
-EXECUTE insert_contacts('2345678901', 'tutor1@example.com');
-EXECUTE insert_contacts('3456789012', 'student2@example.com');
-EXECUTE insert_contacts('4567890123', 'tutor2@example.com');
+EXECUTE insert_into_users('John', 'Doe', '1234567890', 'john.doe@example.com', 'John123', 'Admin', 'jdoe', 'password123');
+EXECUTE insert_into_users('Jane', 'Smith', '0987654321', 'jane.smith@example.com', 'CoolJane', 'Mathematics Teacher', 'jsmith', 'securepass');
+EXECUTE insert_into_users('Alice', 'Johnson', '5551234567', 'alice.j@example.com', 'Alice111', 'Student in Mathematics', 'alice.j', 'password');
+EXECUTE insert_into_users('Mike', 'Smith', '0987654321', 'mike.smith@example.com', 'CoolMike', 'Mathematics Teacher', 'm_smith', 'securepass');
 
-EXECUTE insert_user_info('John', 'Doe', 1, 'Student of mathematics');
-EXECUTE insert_user_info('Jane', 'Smith', 2, 'Tutor in mathematics');
-EXECUTE insert_user_info('Emily', 'Johnson', 3, 'Student of physics');
-EXECUTE insert_user_info('Michael', 'Brown', 4, 'Tutor in physics');
+EXECUTE insert_into_users_roles(1, 1);
+EXECUTE insert_into_users_roles(2, 2);
+EXECUTE insert_into_users_roles(3, 3);
+EXECUTE insert_into_users_roles(4, 2);
 
-EXECUTE insert_students(1, 1, 'student-001');
-EXECUTE insert_students(3, 3, 'student-002');
+EXECUTE insert_into_chats(1, 2);
+EXECUTE insert_into_chats(2, 3);
 
-EXECUTE insert_tutors(2, 2, 'tutor-001');
-EXECUTE insert_tutors(4, 4, 'tutor-002');
+EXECUTE insert_into_messages(1, 1, '2024-11-09 12:30:00', false, 'Hello, Jane!');
+EXECUTE insert_into_messages(1, 2, '2024-11-09 12:31:00', false, 'Hi John, how can I help?');
+EXECUTE insert_into_messages(2, 2, '2024-11-09 13:00:00', true, 'Hello, Alice!');
 
-EXECUTE insert_chats(1, 1);
-EXECUTE insert_chats(2, 2);
+EXECUTE insert_into_subjects('Mathematics', 'Math;Algebra;Geometry');
+EXECUTE insert_into_subjects('Physics', 'Mechanics');
 
-EXECUTE insert_messages(1, 1, 'I have a question about the homework.');
-EXECUTE insert_messages(1, 2, 'I can help you.');
-EXECUTE insert_messages(2, 3, 'When will we start?');
-EXECUTE insert_messages(2, 4, 'Wait for 5 minutes.');
+EXECUTE insert_into_lessons('2024-11-10 09:00:00', '12:30', 1, 'Complete exercises', true, true, 'Math lesson on Algebra', 'L001');
+EXECUTE insert_into_lessons('2024-11-10 11:00:00', '14:00', 2, 'Read Chapter', true, true, 'Physics lesson on Mechanics', 'L002');
 
-EXECUTE insert_subjects('Mathematics', 'Math;Algebra;Geometry');
-EXECUTE insert_subjects('Physics', 'Mechanics;Thermodynamics');
+EXECUTE insert_into_users_lessons(3, 1);
+EXECUTE insert_into_users_lessons(3, 2);
 
-EXECUTE insert_lessons(1, '2024-11-01 10:00:00', '01:30:00', 1, 'Solve problems', TRUE, TRUE, 'Mathematics lesson', 'lesson-001');
-EXECUTE insert_lessons(2, '2024-11-02 14:00:00', '02:00:00', 2, 'Review', TRUE, TRUE, 'Physics lesson', 'lesson-002');
-EXECUTE insert_lessons(1, '2024-11-01 12:00:00', '01:30:00', 1, 'Solve problems', TRUE, TRUE, 'Mathematics lesson', 'lesson-003');
-EXECUTE insert_lessons(1, '2024-11-02 14:00:00', '02:00:00', 1, 'Review', TRUE, TRUE, 'Physics lesson', 'lesson-004');
+EXECUTE insert_into_request_types('Lesson Approval'); -- from teacher to student
+EXECUTE insert_into_request_types('Attendance Request'); -- from student to teacher
+EXECUTE insert_into_request_types('Collab Request'); -- from teacher to teacher
 
-EXECUTE insert_students_lessons(1, 1);
-
-EXECUTE insert_tutor_lessons_requests(1, 1, 1, TRUE);
-EXECUTE insert_tutor_lessons_requests(2, 2, 2, FALSE);
-
-EXECUTE insert_student_lessons_requests(2, 3, FALSE);
+EXECUTE insert_into_lessons_requests(true, 3, 2, 1, 2);
+EXECUTE insert_into_lessons_requests(false, 3, 4, 2, 3);
