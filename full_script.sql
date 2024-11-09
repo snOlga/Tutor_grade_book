@@ -9,7 +9,7 @@ CREATE TABLE users (
 	second_name VARCHAR(50) CHECK (second_name ~ '^[A-z]*$'),
   	phone VARCHAR(50) CHECK (phone ~ '^[0-9]*$'),    
 	email VARCHAR(50) CHECK (email ~ '^[0-z\.]+@([0-z]+\.)+[A-z]{2,4}$'),
-	human_readable_id TEXT UNIQUE NOT NULL,
+	human_readable_id TEXT UNIQUE NOT NULL CHECK (human_readable_id ~ '^([0-z\_])*$'),
   	description VARCHAR(400) CHECK (description ~ '^([A-z]|[0-9]|\s)*$'),    
 	login VARCHAR(50) UNIQUE NOT NULL CHECK (login ~ '^([A-z\.]|[0-9\.]|[A-z\_]|[0-9\_])*$'),
   	password TEXT
@@ -50,7 +50,7 @@ CREATE TABLE lessons (
 	is_open BOOLEAN NOT NULL,
 	is_deleted BOOLEAN NOT NULL,
 	description VARCHAR(200),
-	human_readable_id TEXT UNIQUE NOT NULL
+	human_readable_id TEXT UNIQUE NOT NULL CHECK (human_readable_id ~ '^([0-z\_])*$')
 );
 
 CREATE TABLE users_lessons (
@@ -72,7 +72,6 @@ CREATE TABLE lessons_requests (
 	request_type_id INT REFERENCES request_types(ID),
 	is_deleted BOOLEAN NOT NULL
 );
-
 
 ----------------
 
@@ -240,6 +239,42 @@ PREPARE insert_into_request_types (VARCHAR) AS
 
 PREPARE insert_into_lessons_requests (BOOLEAN, INT, INT, INT, INT, BOOLEAN) AS
 	INSERT INTO lessons_requests (is_approved, sender_id, reciever_id, lesson_id, request_type_id, is_deleted) VALUES ($1, $2, $3, $4, $5, $6);
+
+PREPARE update_role (INT, VARCHAR) AS
+    UPDATE roles SET role_name = $2 WHERE ID = $1;
+
+PREPARE update_user_name (INT, VARCHAR) AS
+    UPDATE users SET name = $2 WHERE ID = $1;
+PREPARE update_user_second_name (INT, VARCHAR) AS
+    UPDATE users SET second_name = $2 WHERE ID = $1;
+PREPARE update_user_phone (INT, VARCHAR) AS
+    UPDATE users SET phone = $2 WHERE ID = $1;
+PREPARE update_user_email (INT, VARCHAR) AS
+    UPDATE users SET email = $2 WHERE ID = $1;
+PREPARE update_user_human_readable_id (INT, TEXT) AS
+    UPDATE users SET human_readable_id = $2 WHERE ID = $1;
+PREPARE update_user_description (INT, VARCHAR) AS
+    UPDATE users SET description = $2 WHERE ID = $1;
+PREPARE update_user_login (INT, VARCHAR) AS
+    UPDATE users SET login = $2 WHERE ID = $1;
+
+PREPARE update_message (INT, VARCHAR) AS
+    UPDATE messages SET msg_text = $2 WHERE ID = $1;
+
+PREPARE update_subject_main_name (INT, VARCHAR) AS
+    UPDATE subjects SET main_name = $2 WHERE ID = $1;
+PREPARE update_subject_analogy_names (INT, TEXT) AS
+    UPDATE subjects SET analogy_names = $2 WHERE ID = $1;
+
+PREPARE update_lesson_description (INT, VARCHAR) AS
+    UPDATE lessons SET description = $2 WHERE ID = $1;
+PREPARE update_lesson_human_readable_id (INT, TEXT) AS
+    UPDATE lessons SET human_readable_id = $2 WHERE ID = $1;
+PREPARE update_lesson_homework (INT, TEXT) AS
+    UPDATE lessons SET homework = $2 WHERE ID = $1;
+
+PREPARE update_request_type (INT, VARCHAR) AS
+    UPDATE request_types SET request_type = $2 WHERE ID = $1;
 
 ----------------
 

@@ -9,7 +9,7 @@ CREATE TABLE users (
 	second_name VARCHAR(50) CHECK (second_name ~ '^[A-z]*$'),
   	phone VARCHAR(50) CHECK (phone ~ '^[0-9]*$'),    
 	email VARCHAR(50) CHECK (email ~ '^[0-z\.]+@([0-z]+\.)+[A-z]{2,4}$'),
-	human_readable_id TEXT UNIQUE NOT NULL,
+	human_readable_id TEXT UNIQUE NOT NULL CHECK (human_readable_id ~ '^([0-z\_])*$'),
   	description VARCHAR(400) CHECK (description ~ '^([A-z]|[0-9]|\s)*$'),    
 	login VARCHAR(50) UNIQUE NOT NULL CHECK (login ~ '^([A-z\.]|[0-9\.]|[A-z\_]|[0-9\_])*$'),
   	password TEXT
@@ -50,7 +50,7 @@ CREATE TABLE lessons (
 	is_open BOOLEAN NOT NULL,
 	is_deleted BOOLEAN NOT NULL,
 	description VARCHAR(200),
-	human_readable_id TEXT UNIQUE NOT NULL
+	human_readable_id TEXT UNIQUE NOT NULL CHECK (human_readable_id ~ '^([0-z\_])*$')
 );
 
 CREATE TABLE users_lessons (
