@@ -48,7 +48,7 @@ CREATE TABLE lessons (
 	subject_id INT REFERENCES subjects(ID),
 	homework TEXT NULL,
 	is_open BOOLEAN NOT NULL,
-	is_active BOOLEAN NOT NULL,
+	is_deleted BOOLEAN NOT NULL,
 	description VARCHAR(200),
 	human_readable_id TEXT UNIQUE NOT NULL
 );
@@ -69,5 +69,6 @@ CREATE TABLE lessons_requests (
   	sender_id INT REFERENCES users(ID),
 	reciever_id INT REFERENCES users(ID),
   	lesson_id INT REFERENCES lessons(ID),    
-	request_type_id INT REFERENCES request_types(ID)
+	request_type_id INT REFERENCES request_types(ID),
+	is_deleted BOOLEAN NOT NULL
 );

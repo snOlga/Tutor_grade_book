@@ -1,11 +1,22 @@
-UPDATE tutor_lessons_requests SET is_approved = TRUE WHERE lesson_id=2;
+SELECT * FROM lessons;
+DELETE FROM lessons WHERE ID = 1;
+SELECT * FROM lessons;
+SELECT * FROM lessons_requests;
+DELETE FROM lessons_requests WHERE ID = 1;
+SELECT * FROM lessons_requests;
 
-SELECT * FROM students_lessons;
+SELECT * FROM users_lessons;
+UPDATE lessons_requests SET is_approved = true WHERE ID = 1;
+SELECT * FROM users_lessons;
+UPDATE lessons_requests SET is_approved = true WHERE ID = 2;
+SELECT * FROM lessons_requests;
+SELECT * FROM users_lessons;
 
-UPDATE student_lessons_requests SET is_approved = TRUE WHERE lesson_id=3;
+SELECT * FROM messages;
+UPDATE messages SET msg_text = 'Hello, Jane! :)' WHERE ID = 1;
+SELECT * FROM messages;
 
-SELECT * FROM students_lessons;
-
-INSERT INTO lessons (tutor_id, start_time, duration, subject_id, homework, is_open, is_active, description, human_readable_id) 
-VALUES 
-	(1, '2024-11-01 10:00:00', '01:30:00', 1, 'Solve problems', TRUE, TRUE, 'Mathematics lesson', 'lesson-01');
+SELECT * FROM lessons;
+SELECT * FROM lessons_requests;
+EXECUTE insert_into_lessons_requests(false, 3, 2, 1, 2, false);
+SELECT * FROM lessons_requests;

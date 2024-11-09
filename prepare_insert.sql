@@ -17,7 +17,7 @@ PREPARE insert_into_subjects (VARCHAR, TEXT) AS
 	INSERT INTO subjects (main_name, analogy_names) VALUES ($1, $2);
 
 PREPARE insert_into_lessons (TIMESTAMP, INTERVAL, INT, TEXT, BOOLEAN, BOOLEAN, VARCHAR, TEXT) AS
-	INSERT INTO lessons (start_time, duration, subject_id, homework, is_open, is_active, description, human_readable_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
+	INSERT INTO lessons (start_time, duration, subject_id, homework, is_open, is_deleted, description, human_readable_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
 
 PREPARE insert_into_users_lessons (INT, INT) AS
 	INSERT INTO users_lessons (user_id, lesson_id) VALUES ($1, $2);
@@ -25,5 +25,5 @@ PREPARE insert_into_users_lessons (INT, INT) AS
 PREPARE insert_into_request_types (VARCHAR) AS
 	INSERT INTO request_types (request_type) VALUES ($1);
 
-PREPARE insert_into_lessons_requests (BOOLEAN, INT, INT, INT, INT) AS
-	INSERT INTO lessons_requests (is_approved, sender_id, reciever_id, lesson_id, request_type_id) VALUES ($1, $2, $3, $4, $5);
+PREPARE insert_into_lessons_requests (BOOLEAN, INT, INT, INT, INT, BOOLEAN) AS
+	INSERT INTO lessons_requests (is_approved, sender_id, reciever_id, lesson_id, request_type_id, is_deleted) VALUES ($1, $2, $3, $4, $5, $6);
