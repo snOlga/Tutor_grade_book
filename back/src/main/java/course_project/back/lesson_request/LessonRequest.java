@@ -1,5 +1,5 @@
-package course_project.back.requests;
+package course_project.back.lesson_request;
 
-public class Request {
+public class LessonRequest {
 
 }

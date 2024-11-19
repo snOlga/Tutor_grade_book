@@ -1,4 +1,4 @@
-package course_project.back.utils.abstract;
+package course_project.back.utils;
 
 public class IRepository {
 
