@@ -4,7 +4,7 @@ import Registration from './pages/Registration'
 import TutorCalendar from './pages/TutorCalendar'
 
 function App() {
-    const isTutor = true
+    const isTutor = false
     const isStudent = false
     return (
         <>

@@ -21,10 +21,20 @@ const RegistrationForm = () => {
             setError('Passwords do not match!');
         } else {
             setError('');
-            console.log('Form Submitted', formData);
-            alert('Registration successful!');
+            fetch('http://localhost:18018/auth/sign_up', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: formData.username,
+                    email: formData.email,
+                    password: formData.password
+                })
+            })
         }
-    };
+    }
 
     return (
         <form className="registration-form" onSubmit={handleSubmit}>

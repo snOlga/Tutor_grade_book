@@ -3,7 +3,7 @@ CREATE TABLE roles (
 	role_name VARCHAR(50) UNIQUE NOT NULL CHECK (role_name ~ '^([A-z])*$')
 );
 
-CREATE TABLE users (
+CREATE TABLE users_tutor_grade_book ( -- because of another db on my account :(
 	ID SERIAL PRIMARY KEY,
 	name VARCHAR(50) NOT NULL CHECK (name ~ '^[A-z]*$'),
 	second_name VARCHAR(50) CHECK (second_name ~ '^[A-z]*$'),
@@ -16,20 +16,20 @@ CREATE TABLE users (
 );
 
 CREATE TABLE users_roles (
-	user_id INT REFERENCES users(ID),
+	user_id INT REFERENCES users_tutor_grade_book(ID),
 	role_id INT REFERENCES roles(ID)
 );
 
 CREATE TABLE chats (
   	ID SERIAL PRIMARY KEY,
-	user1_id INT REFERENCES users(ID),
-  	user2_id INT REFERENCES users(ID)
+	user1_id INT REFERENCES users_tutor_grade_book(ID),
+  	user2_id INT REFERENCES users_tutor_grade_book(ID)
 );
 
 CREATE TABLE messages (
 	ID SERIAL PRIMARY KEY,
 	chat_id INT REFERENCES chats(ID),
-  	author_id INT REFERENCES users(ID),    
+  	author_id INT REFERENCES users_tutor_grade_book(ID),    
 	sent_time TIMESTAMP NOT NULL,
   	is_edited BOOLEAN,
 	msg_text VARCHAR(200) NOT NULL
@@ -54,7 +54,7 @@ CREATE TABLE lessons (
 );
 
 CREATE TABLE users_lessons (
-	user_id INT REFERENCES users(ID),
+	user_id INT REFERENCES users_tutor_grade_book(ID),
   	lesson_id INT REFERENCES lessons(ID)
 );
 
@@ -66,8 +66,8 @@ CREATE TABLE request_types (
 CREATE TABLE lessons_requests (
   	ID SERIAL PRIMARY KEY,    
 	is_approved BOOLEAN,
-  	sender_id INT REFERENCES users(ID),
-	reciever_id INT REFERENCES users(ID),
+  	sender_id INT REFERENCES users_tutor_grade_book(ID),
+	reciever_id INT REFERENCES users_tutor_grade_book(ID),
   	lesson_id INT REFERENCES lessons(ID),    
 	request_type_id INT REFERENCES request_types(ID),
 	is_deleted BOOLEAN NOT NULL
@@ -213,8 +213,8 @@ EXECUTE FUNCTION check_if_lesson_not_deleted();
 PREPARE insert_into_roles (VARCHAR) AS
 	INSERT INTO roles (role_name) VALUES ($1);
 
-PREPARE insert_into_users (VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, TEXT) AS
-	INSERT INTO users (name, second_name, phone, email, human_readable_id, description, login, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
+PREPARE insert_into_users_tutor_grade_book (VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, TEXT) AS
+	INSERT INTO users_tutor_grade_book (name, second_name, phone, email, human_readable_id, description, login, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
 
 PREPARE insert_into_users_roles (INT, INT) AS
 	INSERT INTO users_roles (user_id, role_id) VALUES ($1, $2);
@@ -244,19 +244,19 @@ PREPARE update_role (INT, VARCHAR) AS
     UPDATE roles SET role_name = $2 WHERE ID = $1;
 
 PREPARE update_user_name (INT, VARCHAR) AS
-    UPDATE users SET name = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET name = $2 WHERE ID = $1;
 PREPARE update_user_second_name (INT, VARCHAR) AS
-    UPDATE users SET second_name = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET second_name = $2 WHERE ID = $1;
 PREPARE update_user_phone (INT, VARCHAR) AS
-    UPDATE users SET phone = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET phone = $2 WHERE ID = $1;
 PREPARE update_user_email (INT, VARCHAR) AS
-    UPDATE users SET email = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET email = $2 WHERE ID = $1;
 PREPARE update_user_human_readable_id (INT, TEXT) AS
-    UPDATE users SET human_readable_id = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET human_readable_id = $2 WHERE ID = $1;
 PREPARE update_user_description (INT, VARCHAR) AS
-    UPDATE users SET description = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET description = $2 WHERE ID = $1;
 PREPARE update_user_login (INT, VARCHAR) AS
-    UPDATE users SET login = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET login = $2 WHERE ID = $1;
 
 PREPARE update_message (INT, VARCHAR) AS
     UPDATE messages SET msg_text = $2 WHERE ID = $1;
@@ -282,11 +282,11 @@ EXECUTE insert_into_roles('Admin');
 EXECUTE insert_into_roles('Teacher');
 EXECUTE insert_into_roles('Student');
 
-EXECUTE insert_into_users('John', 'Doe', '1234567890', 'john.doe@example.com', 'John123', 'Admin', 'jdoe', 'password123');
-EXECUTE insert_into_users('Jane', 'Smith', '0987654321', 'jane.smith@example.com', 'CoolJane', 'Mathematics Teacher', 'jsmith', 'securepass');
-EXECUTE insert_into_users('Alice', 'Johnson', '5551234567', 'alice.j@example.com', 'Alice111', 'Student in Mathematics', 'alice.j', 'password');
-EXECUTE insert_into_users('Mike', 'Smith', '0987654321', 'mike.smith@example.com', 'CoolMike', 'Mathematics Teacher', 'm_smith', 'securepass');
-EXECUTE insert_into_users('Kyle', 'Johnson', '5551234567', 'Kyle.j@example.com', 'superKyle111', 'Student in Mathematics', 'hihihi.j', 'password');
+EXECUTE insert_into_users_tutor_grade_book('John', 'Doe', '1234567890', 'john.doe@example.com', 'John123', 'Admin', 'jdoe', 'password123');
+EXECUTE insert_into_users_tutor_grade_book('Jane', 'Smith', '0987654321', 'jane.smith@example.com', 'CoolJane', 'Mathematics Teacher', 'jsmith', 'securepass');
+EXECUTE insert_into_users_tutor_grade_book('Alice', 'Johnson', '5551234567', 'alice.j@example.com', 'Alice111', 'Student in Mathematics', 'alice.j', 'password');
+EXECUTE insert_into_users_tutor_grade_book('Mike', 'Smith', '0987654321', 'mike.smith@example.com', 'CoolMike', 'Mathematics Teacher', 'm_smith', 'securepass');
+EXECUTE insert_into_users_tutor_grade_book('Kyle', 'Johnson', '5551234567', 'Kyle.j@example.com', 'superKyle111', 'Student in Mathematics', 'hihihi.j', 'password');
 
 EXECUTE insert_into_users_roles(1, 1);
 EXECUTE insert_into_users_roles(2, 2);
@@ -352,7 +352,7 @@ DROP TABLE subjects;
 DROP TABLE messages;
 DROP TABLE chats;
 DROP TABLE users_roles;
-DROP TABLE users;
+DROP TABLE users_tutor_grade_book;
 DROP TABLE roles;
 
 ----------------
