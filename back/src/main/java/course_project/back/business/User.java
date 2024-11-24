@@ -2,6 +2,7 @@ package course_project.back.business;
 
 import java.util.Set;
 
+import course_project.back.enums.UserRoles;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -17,22 +18,15 @@ public class User extends UserAbstract {
             String humanReadableID,
             String login,
             String password,
-            Set roles) {
+            Set<UserRoles> roles) {
         super(name, secondName, email, phone, description, humanReadableID, login, password, roles);
     }
 
     public User(String name,
-            String email,
+            String humanReadableID,
             String login,
             String password,
-            Set roles) {
-        super(name, email, login, password, roles);
-    }
-
-    public User(String name,
-            String login,
-            String password,
-            Set roles) {
-        super(name, login, password, roles);
+            Set<UserRoles> roles) {
+        super(name, humanReadableID, login, password, roles);
     }
 }

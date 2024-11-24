@@ -2,16 +2,32 @@ package course_project.back.business;
 
 import java.util.Set;
 
-import course_project.back.business.enums.UserRoles;
+import org.hibernate.annotations.ManyToAny;
+
+import course_project.back.converters.UserRoleConverter;
+import course_project.back.enums.UserRoles;
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.UniqueConstraint;;
 
+@MappedSuperclass
 public abstract class UserAbstract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Nonnull
     @Column(name = "name")
     private String name;
     @Column(name = "second_name")
@@ -22,12 +38,18 @@ public abstract class UserAbstract {
     private String phone;
     @Column(name = "description")
     private String description;
-    @Column(name = "human_readable_id")
+    @Nonnull
+    @Column(name = "human_readable_id", unique = true)
     private String humanReadableID;
-    @Column(name = "login")
+    @Nonnull
+    @Column(name = "login", unique = true)
     private String login;
+    @Nonnull
     @Column(name = "password")
     private String password;
+    @ElementCollection(targetClass = UserRoles.class)
+    @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role_id")
     private Set<UserRoles> roles;
 
     public UserAbstract(String name,
@@ -38,7 +60,7 @@ public abstract class UserAbstract {
             String humanReadableID,
             String login,
             String password,
-            Set roles) {
+            Set<UserRoles> roles) {
         this.name = name;
         this.secondName = secondName;
         this.email = email;
@@ -51,22 +73,12 @@ public abstract class UserAbstract {
     }
 
     public UserAbstract(String name,
-            String email,
+            String humanReadableID,
             String login,
             String password,
-            Set roles) {
+            Set<UserRoles> roles) {
         this.name = name;
-        this.email = email;
-        this.login = login;
-        this.password = password;
-        this.roles = roles;
-    }
-
-    public UserAbstract(String name,
-            String login,
-            String password,
-            Set roles) {
-        this.name = name;
+        this.humanReadableID = humanReadableID;
         this.login = login;
         this.password = password;
         this.roles = roles;

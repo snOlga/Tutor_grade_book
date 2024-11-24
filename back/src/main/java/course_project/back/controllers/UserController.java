@@ -1,7 +1,6 @@
 package course_project.back.controllers;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -20,6 +19,7 @@ import course_project.back.security.SecurityUser;
 import course_project.back.security.SecutiryJwtTokenProvider;
 import course_project.back.repositories.UserRepository;
 import course_project.back.business.User;
+import course_project.back.enums.UserRoles;
 
 @RestController
 @RequestMapping("/auth")
@@ -34,10 +34,11 @@ public class UserController {
     @PostMapping("/sign_up")
     public Map<String, String> signUp(@RequestBody Map<String, String> json) {
         Map<String, String> response = defaultResponse();
-        Set someSet = new HashSet<String>();
-        someSet.add("ROLE_TUTOR");
+        Set<UserRoles> someSet = new HashSet<UserRoles>();
+        someSet.add(UserRoles.TUTOR);
 
-        User user = new User(json.get("name"), json.get("login"),
+        // TODO: MOCK HERE
+        User user = new User(json.get("name"), json.get("login"), json.get("name"),
                 passwordEncoder.encode(json.get("password")), someSet);
 
         if (userExists(user.getName(), user.getLogin()))
@@ -45,7 +46,10 @@ public class UserController {
 
         repoUser.add(user);
 
-        SecurityUser securityUser = new SecurityUser(user.getName(), user.getPassword(), someSet);
+        Set<String> someStrSet = new HashSet<String>();
+        someStrSet.add(UserRoles.TUTOR.getRoleName());
+
+        SecurityUser securityUser = new SecurityUser(user.getName(), user.getPassword(), someStrSet);
         Authentication authentication = new UsernamePasswordAuthenticationToken(securityUser, null,
                 securityUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);

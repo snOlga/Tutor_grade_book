@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { jwtDecode } from "jwt-decode";
 
 const RegistrationForm = () => {
     const [formData, setFormData] = useState({
@@ -28,7 +29,9 @@ const RegistrationForm = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    username: formData.username,
+                    // TODO: MOCK HERE
+                    name: formData.username,
+                    login: formData.username,
                     email: formData.email,
                     password: formData.password
                 })
