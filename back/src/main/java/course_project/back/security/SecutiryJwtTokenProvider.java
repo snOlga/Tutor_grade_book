@@ -37,6 +37,15 @@ public class SecutiryJwtTokenProvider {
         return claims.getSubject();
     }
 
+    // public String getAuthoritiesFromJWT(String token) {
+    //     Claims claims = Jwts.parserBuilder()
+    //             .setSigningKey(key)
+    //             .build()
+    //             .parseClaimsJws(token)
+    //             .getBody();
+    //     return claims.getSubject();
+    // }
+
     public Boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()

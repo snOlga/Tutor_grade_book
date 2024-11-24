@@ -38,16 +38,16 @@ public class SecurityJwtTokenValidator extends OncePerRequestFilter {
             SecutiryJwtTokenProvider jwtProvider = new SecutiryJwtTokenProvider();
             boolean isValid = jwtProvider.validateToken(jwt);
 
-            if (isValid) {
-                String login = jwtProvider.getUsernameFromJWT(jwt);
+            // if (isValid) {
+            //     String login = jwtProvider.getUsernameFromJWT(jwt);
 
-                String authorities = "USER";
-                List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
+            //     String authorities = "USER";
+            //     List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
 
-                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        login, null, auth);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            //     Authentication authentication = new UsernamePasswordAuthenticationToken(
+            //             login, null, auth);
+            //     SecurityContextHolder.getContext().setAuthentication(authentication);
+            // }
         }
 
         filterChain.doFilter(request, response);

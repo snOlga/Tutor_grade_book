@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 
-const LoginForm = () => {
+const LoginForm = ({ setRoles }) => {
     const [formData, setFormData] = useState({
         login: '',
         password: '',

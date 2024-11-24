@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { jwtDecode } from "jwt-decode";
+import React, { useRef, useState } from 'react'
 
-const RegistrationForm = () => {
+const RegistrationForm = ({ setRoles }) => {
     const [formData, setFormData] = useState({
         username: '',
         secondName: '',
@@ -21,8 +20,7 @@ const RegistrationForm = () => {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData)
+        e.preventDefault()
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match!');
         } else {
@@ -43,6 +41,14 @@ const RegistrationForm = () => {
                     isTutor: formData.isTutor
                 })
             })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isSuccessful === "true") {
+                        let expires = (new Date(Date.now() + 86400 * 1000)).toUTCString();
+                        document.cookie = "token=" + data.token + "; expires=" + expires
+                        window.location.reload();
+                    }
+                })
         }
     }
 
