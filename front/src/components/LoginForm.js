@@ -16,29 +16,24 @@ const LoginForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (formData.password !== formData.confirmPassword) {
-            setError('Passwords do not match!');
-        } else {
-            setError('');
-            fetch('http://localhost:18018/auth/log_in', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    login: formData.username,
-                    password: formData.password
-                })
+        fetch('http://localhost:18018/auth/log_in', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                login: formData.username,
+                password: formData.password
             })
-        }
+        })
     }
 
     return (
         <form className="registration-form" onSubmit={handleSubmit}>
             {error && <p className="error-message">{error}</p>}
             <div className="form-group">
-                <label className="req-label" htmlFor="login">Login</label>
+                <label className="req-label" htmlFor="login">Email</label>
                 <input
                     type="text"
                     id="login"

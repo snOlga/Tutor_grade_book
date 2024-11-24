@@ -49,6 +49,9 @@ public abstract class UserAbstract {
     @Column(name = "role_id")
     private Set<UserRoles> roles;
 
+    public UserAbstract() {
+    }
+
     public UserAbstract(String name,
             String secondName,
             String email,

@@ -1,6 +1,7 @@
 package course_project.back.controllers;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -50,8 +51,8 @@ public class UserController {
             return response;
 
         repoUser.add(user);
-
         user.setDefaultHumanRedableID();
+        repoUser.update(user);
 
         Set<String> someStrSet = new HashSet<String>();
         someStrSet.add(UserRoles.TUTOR.getRoleName());
@@ -61,28 +62,56 @@ public class UserController {
                 securityUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.generateToken(authentication);
-        setResponse(response, true, token, user.getName(), "user");
+        setResponse(response, true, token, user.getName());
 
         return response;
+    }
+
+    @PostMapping("/log_in")
+    public Map<String, String> logIn(@RequestBody Map<String, String> json) {
+        Map<String, String> response = defaultResponse();
+
+        if (validateUser(json.get("email"), json.get("password"))) {
+            Authentication authentication = new UsernamePasswordAuthenticationToken(json.get("email"), null);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = jwtProvider.generateToken(authentication);
+            String currentUserNickname = repoUser.findByEmail(json.get("email")).getEmail();
+            setResponse(response, true, token, currentUserNickname);
+            if (jwtProvider.isAdmin(token))
+                setResponse(response, true, token, currentUserNickname);
+        }
+        return response;
+    }
+
+    private boolean validateUser(String login, String password) {
+        List<User> users = repoUser.findAll(login);
+
+        if (users.size() == 0)
+            return false;
+
+        for (User itUser : users) {
+            if (!passwordEncoder.matches(password, itUser.getPassword()))
+                return false;
+        }
+
+        return true;
     }
 
     private Map<String, String> defaultResponse() {
         Map<String, String> response = new TreeMap<>();
-        setResponse(response, false, "", "", "user");
+        setResponse(response, false, "", "");
         return response;
     }
 
-    private void setResponse(Map<String, String> response, boolean isSuccessful, String token, String nickname,
-            String role) {
+    private void setResponse(Map<String, String> response, boolean isSuccessful, String token, String nickname) {
         response.put("isSuccessful", isSuccessful + "");
         response.put("token", token);
         response.put("nickname", nickname);
-        response.put("role", role);
     }
 
     private boolean userExists(String nickname, String login) {
         try {
-            repoUser.findByLogin(login);
+            repoUser.findByEmail(login);
             repoUser.findByName(nickname);
             return true;
         } catch (Exception e) {

@@ -23,11 +23,11 @@ public class UserRepository extends AbstractRepository<User> {
         return (User) runQuery(() -> (User) currentSession().get(User.class, ID));
     }
 
-    public User findByLogin(String currentLogin) {
+    public User findByEmail(String currentEmail) {
         return (User) runQuery(() -> {
             @SuppressWarnings("deprecation")
-            Query query = currentSession().createQuery("FROM User where login = :currentLogin");
-            query.setParameter("currentLogin", currentLogin);
+            Query query = currentSession().createQuery("FROM User where email = :currentEmail");
+            query.setParameter("currentEmail", currentEmail);
             return (User) query.getSingleResult();
         });
     }
@@ -41,12 +41,12 @@ public class UserRepository extends AbstractRepository<User> {
         });
     }
 
-    public List findAll(String currentLogin)
+    public List findAll(String currentEmail)
     {
         return (List) runQuery(() -> {
             @SuppressWarnings("deprecation")
-            Query query = currentSession().createQuery("FROM User where login = :currentLogin");
-            query.setParameter("currentLogin", currentLogin);
+            Query query = currentSession().createQuery("FROM User where email = :currentEmail");
+            query.setParameter("currentEmail", currentEmail);
             return (List) query.getResultList();
         });
     }
