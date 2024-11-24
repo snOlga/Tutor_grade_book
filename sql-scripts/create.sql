@@ -3,7 +3,7 @@ CREATE TABLE roles (
 	role_name VARCHAR(50) UNIQUE NOT NULL CHECK (role_name ~ '^([A-z])*$')
 );
 
-CREATE TABLE users (
+CREATE TABLE users_tutor_grade_book ( -- because of another db on my account :(
 	ID SERIAL PRIMARY KEY,
 	name VARCHAR(50) NOT NULL CHECK (name ~ '^[A-z]*$'),
 	second_name VARCHAR(50) CHECK (second_name ~ '^[A-z]*$'),
@@ -11,25 +11,24 @@ CREATE TABLE users (
 	email VARCHAR(50) CHECK (email ~ '^[0-z\.]+@([0-z]+\.)+[A-z]{2,4}$'),
 	human_readable_id TEXT UNIQUE NOT NULL CHECK (human_readable_id ~ '^([0-z\_])*$'),
   	description VARCHAR(400) CHECK (description ~ '^([A-z]|[0-9]|\s)*$'),    
-	login VARCHAR(50) UNIQUE NOT NULL CHECK (login ~ '^([A-z\.]|[0-9\.]|[A-z\_]|[0-9\_])*$'),
   	password TEXT
 );
 
 CREATE TABLE users_roles (
-	user_id INT REFERENCES users(ID),
+	user_id INT REFERENCES users_tutor_grade_book(ID),
 	role_id INT REFERENCES roles(ID)
 );
 
 CREATE TABLE chats (
   	ID SERIAL PRIMARY KEY,
-	user1_id INT REFERENCES users(ID),
-  	user2_id INT REFERENCES users(ID)
+	user1_id INT REFERENCES users_tutor_grade_book(ID),
+  	user2_id INT REFERENCES users_tutor_grade_book(ID)
 );
 
 CREATE TABLE messages (
 	ID SERIAL PRIMARY KEY,
 	chat_id INT REFERENCES chats(ID),
-  	author_id INT REFERENCES users(ID),    
+  	author_id INT REFERENCES users_tutor_grade_book(ID),    
 	sent_time TIMESTAMP NOT NULL,
   	is_edited BOOLEAN,
 	msg_text VARCHAR(200) NOT NULL
@@ -54,7 +53,7 @@ CREATE TABLE lessons (
 );
 
 CREATE TABLE users_lessons (
-	user_id INT REFERENCES users(ID),
+	user_id INT REFERENCES users_tutor_grade_book(ID),
   	lesson_id INT REFERENCES lessons(ID)
 );
 
@@ -66,8 +65,8 @@ CREATE TABLE request_types (
 CREATE TABLE lessons_requests (
   	ID SERIAL PRIMARY KEY,    
 	is_approved BOOLEAN,
-  	sender_id INT REFERENCES users(ID),
-	reciever_id INT REFERENCES users(ID),
+  	sender_id INT REFERENCES users_tutor_grade_book(ID),
+	reciever_id INT REFERENCES users_tutor_grade_book(ID),
   	lesson_id INT REFERENCES lessons(ID),    
 	request_type_id INT REFERENCES request_types(ID),
 	is_deleted BOOLEAN NOT NULL

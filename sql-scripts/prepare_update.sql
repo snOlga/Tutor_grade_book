@@ -2,19 +2,17 @@ PREPARE update_role (INT, VARCHAR) AS
     UPDATE roles SET role_name = $2 WHERE ID = $1;
 
 PREPARE update_user_name (INT, VARCHAR) AS
-    UPDATE users SET name = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET name = $2 WHERE ID = $1;
 PREPARE update_user_second_name (INT, VARCHAR) AS
-    UPDATE users SET second_name = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET second_name = $2 WHERE ID = $1;
 PREPARE update_user_phone (INT, VARCHAR) AS
-    UPDATE users SET phone = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET phone = $2 WHERE ID = $1;
 PREPARE update_user_email (INT, VARCHAR) AS
-    UPDATE users SET email = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET email = $2 WHERE ID = $1;
 PREPARE update_user_human_readable_id (INT, TEXT) AS
-    UPDATE users SET human_readable_id = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET human_readable_id = $2 WHERE ID = $1;
 PREPARE update_user_description (INT, VARCHAR) AS
-    UPDATE users SET description = $2 WHERE ID = $1;
-PREPARE update_user_login (INT, VARCHAR) AS
-    UPDATE users SET login = $2 WHERE ID = $1;
+    UPDATE users_tutor_grade_book SET description = $2 WHERE ID = $1;
 
 PREPARE update_message (INT, VARCHAR) AS
     UPDATE messages SET msg_text = $2 WHERE ID = $1;

@@ -42,9 +42,6 @@ public abstract class UserAbstract {
     @Column(name = "human_readable_id", unique = true)
     private String humanReadableID;
     @Nonnull
-    @Column(name = "login", unique = true)
-    private String login;
-    @Nonnull
     @Column(name = "password")
     private String password;
     @ElementCollection(targetClass = UserRoles.class)
@@ -58,7 +55,6 @@ public abstract class UserAbstract {
             String phone,
             String description,
             String humanReadableID,
-            String login,
             String password,
             Set<UserRoles> roles) {
         this.name = name;
@@ -67,19 +63,16 @@ public abstract class UserAbstract {
         this.phone = phone;
         this.description = description;
         this.humanReadableID = humanReadableID;
-        this.login = login;
         this.password = password;
         this.roles = roles;
     }
 
     public UserAbstract(String name,
             String humanReadableID,
-            String login,
             String password,
             Set<UserRoles> roles) {
         this.name = name;
         this.humanReadableID = humanReadableID;
-        this.login = login;
         this.password = password;
         this.roles = roles;
     }
@@ -110,10 +103,6 @@ public abstract class UserAbstract {
 
     public void setHumanReadableID(String humanReadableID) {
         this.humanReadableID = humanReadableID;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public void setPassword(String password) {
@@ -152,10 +141,6 @@ public abstract class UserAbstract {
 
     public String getHumanReadableID() {
         return humanReadableID;
-    }
-
-    public String getLogin() {
-        return login;
     }
 
     public String getPassword() {

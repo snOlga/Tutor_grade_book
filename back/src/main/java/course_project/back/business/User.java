@@ -16,10 +16,9 @@ public class User extends UserAbstract {
             String phone,
             String description,
             String humanReadableID,
-            String login,
             String password,
             Set<UserRoles> roles) {
-        super(name, secondName, email, phone, description, humanReadableID, login, password, roles);
+        super(name, secondName, email, phone, description, humanReadableID, password, roles);
     }
 
     public User(String name,
@@ -27,7 +26,7 @@ public class User extends UserAbstract {
             String login,
             String password,
             Set<UserRoles> roles) {
-        super(name, humanReadableID, login, password, roles);
+        super(name, humanReadableID, password, roles);
     }
 
     public void setDefaultHumanRedableID() {

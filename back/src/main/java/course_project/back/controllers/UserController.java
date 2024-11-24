@@ -44,10 +44,9 @@ public class UserController {
                 json.get("phone"),
                 json.get("description"),
                 "",
-                "somecoolstr",
                 passwordEncoder.encode(json.get("password")), someSet);
 
-        if (userExists(user.getName(), user.getLogin()))
+        if (userExists(user.getName(), user.getEmail()))
             return response;
 
         repoUser.add(user);

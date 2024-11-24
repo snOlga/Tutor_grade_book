@@ -1,8 +1,8 @@
 PREPARE insert_into_roles (VARCHAR) AS
 	INSERT INTO roles (role_name) VALUES ($1);
 
-PREPARE insert_into_users (VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, TEXT) AS
-	INSERT INTO users (name, second_name, phone, email, human_readable_id, description, login, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
+PREPARE insert_into_users_tutor_grade_book (VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, TEXT) AS
+	INSERT INTO users_tutor_grade_book (name, second_name, phone, email, human_readable_id, description, password) VALUES ($1, $2, $3, $4, $5, $6, $7);
 
 PREPARE insert_into_users_roles (INT, INT) AS
 	INSERT INTO users_roles (user_id, role_id) VALUES ($1, $2);

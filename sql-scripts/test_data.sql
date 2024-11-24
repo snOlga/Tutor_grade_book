@@ -2,11 +2,11 @@ EXECUTE insert_into_roles('Admin');
 EXECUTE insert_into_roles('Teacher');
 EXECUTE insert_into_roles('Student');
 
-EXECUTE insert_into_users('John', 'Doe', '1234567890', 'john.doe@example.com', 'John123', 'Admin', 'jdoe', 'password123');
-EXECUTE insert_into_users('Jane', 'Smith', '0987654321', 'jane.smith@example.com', 'CoolJane', 'Mathematics Teacher', 'jsmith', 'securepass');
-EXECUTE insert_into_users('Alice', 'Johnson', '5551234567', 'alice.j@example.com', 'Alice111', 'Student in Mathematics', 'alice.j', 'password');
-EXECUTE insert_into_users('Mike', 'Smith', '0987654321', 'mike.smith@example.com', 'CoolMike', 'Mathematics Teacher', 'm_smith', 'securepass');
-EXECUTE insert_into_users('Kyle', 'Johnson', '5551234567', 'Kyle.j@example.com', 'superKyle111', 'Student in Mathematics', 'hihihi.j', 'password');
+EXECUTE insert_into_users_tutor_grade_book('John', 'Doe', '1234567890', 'john.doe@example.com', 'John123', 'Admin', 'password123');
+EXECUTE insert_into_users_tutor_grade_book('Jane', 'Smith', '0987654321', 'jane.smith@example.com', 'CoolJane', 'Mathematics Teacher', 'securepass');
+EXECUTE insert_into_users_tutor_grade_book('Alice', 'Johnson', '5551234567', 'alice.j@example.com', 'Alice111', 'Student in Mathematics', 'password');
+EXECUTE insert_into_users_tutor_grade_book('Mike', 'Smith', '0987654321', 'mike.smith@example.com', 'CoolMike', 'Mathematics Teacher', 'securepass');
+EXECUTE insert_into_users_tutor_grade_book('Kyle', 'Johnson', '5551234567', 'Kyle.j@example.com', 'superKyle111', 'Student in Mathematics', 'password');
 
 EXECUTE insert_into_users_roles(1, 1);
 EXECUTE insert_into_users_roles(2, 2);

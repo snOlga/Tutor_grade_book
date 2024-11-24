@@ -11,7 +11,6 @@ CREATE TABLE users_tutor_grade_book ( -- because of another db on my account :(
 	email VARCHAR(50) CHECK (email ~ '^[0-z\.]+@([0-z]+\.)+[A-z]{2,4}$'),
 	human_readable_id TEXT UNIQUE NOT NULL CHECK (human_readable_id ~ '^([0-z\_])*$'),
   	description VARCHAR(400) CHECK (description ~ '^([A-z]|[0-9]|\s)*$'),    
-	login VARCHAR(50) UNIQUE NOT NULL CHECK (login ~ '^([A-z\.]|[0-9\.]|[A-z\_]|[0-9\_])*$'),
   	password TEXT
 );
 
@@ -214,7 +213,7 @@ PREPARE insert_into_roles (VARCHAR) AS
 	INSERT INTO roles (role_name) VALUES ($1);
 
 PREPARE insert_into_users_tutor_grade_book (VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, TEXT) AS
-	INSERT INTO users_tutor_grade_book (name, second_name, phone, email, human_readable_id, description, login, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
+	INSERT INTO users_tutor_grade_book (name, second_name, phone, email, human_readable_id, description, password) VALUES ($1, $2, $3, $4, $5, $6, $7);
 
 PREPARE insert_into_users_roles (INT, INT) AS
 	INSERT INTO users_roles (user_id, role_id) VALUES ($1, $2);
@@ -255,8 +254,6 @@ PREPARE update_user_human_readable_id (INT, TEXT) AS
     UPDATE users_tutor_grade_book SET human_readable_id = $2 WHERE ID = $1;
 PREPARE update_user_description (INT, VARCHAR) AS
     UPDATE users_tutor_grade_book SET description = $2 WHERE ID = $1;
-PREPARE update_user_login (INT, VARCHAR) AS
-    UPDATE users_tutor_grade_book SET login = $2 WHERE ID = $1;
 
 PREPARE update_message (INT, VARCHAR) AS
     UPDATE messages SET msg_text = $2 WHERE ID = $1;
@@ -282,11 +279,11 @@ EXECUTE insert_into_roles('Admin');
 EXECUTE insert_into_roles('Teacher');
 EXECUTE insert_into_roles('Student');
 
-EXECUTE insert_into_users_tutor_grade_book('John', 'Doe', '1234567890', 'john.doe@example.com', 'John123', 'Admin', 'jdoe', 'password123');
-EXECUTE insert_into_users_tutor_grade_book('Jane', 'Smith', '0987654321', 'jane.smith@example.com', 'CoolJane', 'Mathematics Teacher', 'jsmith', 'securepass');
-EXECUTE insert_into_users_tutor_grade_book('Alice', 'Johnson', '5551234567', 'alice.j@example.com', 'Alice111', 'Student in Mathematics', 'alice.j', 'password');
-EXECUTE insert_into_users_tutor_grade_book('Mike', 'Smith', '0987654321', 'mike.smith@example.com', 'CoolMike', 'Mathematics Teacher', 'm_smith', 'securepass');
-EXECUTE insert_into_users_tutor_grade_book('Kyle', 'Johnson', '5551234567', 'Kyle.j@example.com', 'superKyle111', 'Student in Mathematics', 'hihihi.j', 'password');
+EXECUTE insert_into_users_tutor_grade_book('John', 'Doe', '1234567890', 'john.doe@example.com', 'John123', 'Admin', 'password123');
+EXECUTE insert_into_users_tutor_grade_book('Jane', 'Smith', '0987654321', 'jane.smith@example.com', 'CoolJane', 'Mathematics Teacher', 'securepass');
+EXECUTE insert_into_users_tutor_grade_book('Alice', 'Johnson', '5551234567', 'alice.j@example.com', 'Alice111', 'Student in Mathematics', 'password');
+EXECUTE insert_into_users_tutor_grade_book('Mike', 'Smith', '0987654321', 'mike.smith@example.com', 'CoolMike', 'Mathematics Teacher', 'securepass');
+EXECUTE insert_into_users_tutor_grade_book('Kyle', 'Johnson', '5551234567', 'Kyle.j@example.com', 'superKyle111', 'Student in Mathematics', 'password');
 
 EXECUTE insert_into_users_roles(1, 1);
 EXECUTE insert_into_users_roles(2, 2);
