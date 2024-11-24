@@ -32,7 +32,8 @@ public abstract class UserAbstract {
     private String name;
     @Column(name = "second_name")
     private String secondName;
-    @Column(name = "email")
+    @Nonnull
+    @Column(name = "email", unique = true)
     private String email;
     @Column(name = "phone")
     private String phone;

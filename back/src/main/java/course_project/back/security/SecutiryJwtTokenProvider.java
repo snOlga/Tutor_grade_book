@@ -20,7 +20,7 @@ public class SecutiryJwtTokenProvider {
                 .setSubject(username)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
-                .claim("authorities", "ROLE_USER")
+                .claim("authorities", authentication.getAuthorities())
                 .signWith(key)
                 .compact();
 

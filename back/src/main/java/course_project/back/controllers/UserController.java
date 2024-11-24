@@ -35,8 +35,12 @@ public class UserController {
     @PostMapping("/sign_up")
     public Map<String, String> signUp(@RequestBody Map<String, String> json) {
         Map<String, String> response = defaultResponse();
-        Set<UserRoles> someSet = new HashSet<UserRoles>();
-        someSet.add(UserRoles.TUTOR);
+        Set<UserRoles> roles = new HashSet<>();
+
+        if (Boolean.parseBoolean(json.get("isTutor")))
+            roles.add(UserRoles.TUTOR);
+        if (Boolean.parseBoolean(json.get("isStudent")))
+            roles.add(UserRoles.STUDENT);
 
         User user = new User(
                 json.get("name"),
@@ -45,7 +49,7 @@ public class UserController {
                 json.get("phone"),
                 json.get("description"),
                 "",
-                passwordEncoder.encode(json.get("password")), someSet);
+                passwordEncoder.encode(json.get("password")), roles);
 
         if (userExists(user.getName(), user.getEmail()))
             return response;
@@ -54,10 +58,12 @@ public class UserController {
         user.setDefaultHumanRedableID();
         repoUser.update(user);
 
-        Set<String> someStrSet = new HashSet<String>();
-        someStrSet.add(UserRoles.TUTOR.getRoleName());
+        Set<String> rolesStrSet = new HashSet<String>();
+        for (UserRoles role : roles) {
+            rolesStrSet.add(role.getRoleName());
+        }
 
-        SecurityUser securityUser = new SecurityUser(user.getName(), user.getPassword(), someStrSet);
+        SecurityUser securityUser = new SecurityUser(user.getName(), user.getPassword(), rolesStrSet);
         Authentication authentication = new UsernamePasswordAuthenticationToken(securityUser, null,
                 securityUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);

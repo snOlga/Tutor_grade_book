@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 
 const RegistrationForm = () => {
@@ -8,18 +8,21 @@ const RegistrationForm = () => {
         phone: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        isStudent: false,
+        isTutor: false
     });
 
     const [error, setError] = useState('');
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        const { name, value } = e.target
+        setFormData({ ...formData, [name]: name == 'isStudent' || name == 'isTutor' ? e.target.checked : value })
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(formData)
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match!');
         } else {
@@ -35,7 +38,9 @@ const RegistrationForm = () => {
                     secondName: formData.secondName,
                     phone: formData.phone,
                     email: formData.email,
-                    password: formData.password
+                    password: formData.password,
+                    isStudent: formData.isStudent,
+                    isTutor: formData.isTutor
                 })
             })
         }
@@ -113,6 +118,29 @@ const RegistrationForm = () => {
                     placeholder="Confirm your password"
                     required
                 />
+            </div>
+            <div className="form-group">
+                <label className="req-label">I am here for...</label>
+                <div className='checkbox-holder'>
+                    <input
+                        id="isTutor"
+                        name="isTutor"
+                        value={formData.isTutor}
+                        onChange={handleChange}
+                        type="checkbox"
+                    />
+                    Teaching someone!
+                </div>
+                <div className='checkbox-holder'>
+                    <input
+                        id="isStudent"
+                        name="isStudent"
+                        value={formData.isStudent}
+                        onChange={handleChange}
+                        type="checkbox"
+                    />
+                    Learning something!
+                </div>
             </div>
             <button type="submit" className="submit-button">Register</button>
         </form>

@@ -29,4 +29,13 @@ public enum UserRoles {
         }
         throw new IllegalArgumentException("Invalid Role ID: " + id);
     }
+
+    public static UserRoles fromString(String name) {
+        for (UserRoles role : UserRoles.values()) {
+            if (role.roleName.equals(name)) {
+                return role;
+            }
+        }
+        throw new IllegalArgumentException("Invalid Role name: " + name);
+    }
 }

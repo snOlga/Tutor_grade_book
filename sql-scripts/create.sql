@@ -8,7 +8,7 @@ CREATE TABLE users_tutor_grade_book ( -- because of another db on my account :(
 	name VARCHAR(50) NOT NULL CHECK (name ~ '^[A-z]*$'),
 	second_name VARCHAR(50) CHECK (second_name ~ '^[A-z]*$'),
   	phone VARCHAR(50) CHECK (phone ~ '^[0-9]*$'),    
-	email VARCHAR(50) CHECK (email ~ '^[0-z\.]+@([0-z]+\.)+[A-z]{2,4}$'),
+	email VARCHAR(50) UNIQUE NOT NULL CHECK (email ~ '^[0-z\.]+@([0-z]+\.)+[A-z]{2,4}$'),
 	human_readable_id TEXT UNIQUE NOT NULL CHECK (human_readable_id ~ '^([0-z\_])*$'),
   	description VARCHAR(400) CHECK (description ~ '^([A-z]|[0-9]|\s)*$'),    
   	password TEXT
