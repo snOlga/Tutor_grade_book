@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Registration from './pages/Registration'
+import Enter from './pages/Enter'
 import TutorCalendar from './pages/TutorCalendar'
 
 function App() {
@@ -12,10 +12,10 @@ function App() {
                 <Router>
                     <Routes>
                         {
-                            !isStudent && !isTutor && <Route path="/" element={<Registration />} />
+                            !isStudent && !isTutor && <Route path="/" element={<Enter />} />
                         }
                         {
-                            isStudent && <Route path="/" element={<Registration />} />
+                            isStudent && <Route path="/" element={<Enter />} />
                         }
                         {
                             isTutor && <Route path="/" element={<TutorCalendar />} />

@@ -4,9 +4,11 @@ import { jwtDecode } from "jwt-decode";
 const RegistrationForm = () => {
     const [formData, setFormData] = useState({
         username: '',
+        secondName: '',
+        phone: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        confirmPassword: ''
     });
 
     const [error, setError] = useState('');
@@ -29,9 +31,9 @@ const RegistrationForm = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    // TODO: MOCK HERE
                     name: formData.username,
-                    login: formData.username,
+                    secondName: formData.secondName,
+                    phone: formData.phone,
                     email: formData.email,
                     password: formData.password
                 })
@@ -43,19 +45,41 @@ const RegistrationForm = () => {
         <form className="registration-form" onSubmit={handleSubmit}>
             {error && <p className="error-message">{error}</p>}
             <div className="form-group">
-                <label htmlFor="username">Username</label>
+                <label className="req-label" htmlFor="username">Name</label>
                 <input
                     type="text"
                     id="username"
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
-                    placeholder="Enter your username"
+                    placeholder="Enter your name"
                     required
                 />
             </div>
             <div className="form-group">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="secondName">Second name</label>
+                <input
+                    type="text"
+                    id="secondName"
+                    name="secondName"
+                    value={formData.secondName}
+                    onChange={handleChange}
+                    placeholder="Enter your second name"
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="phone">Phone</label>
+                <input
+                    type="number"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="Enter your phone"
+                />
+            </div>
+            <div className="form-group">
+                <label className="req-label" htmlFor="email">Email</label>
                 <input
                     type="email"
                     id="email"
@@ -67,7 +91,7 @@ const RegistrationForm = () => {
                 />
             </div>
             <div className="form-group">
-                <label htmlFor="password">Password</label>
+                <label className="req-label" htmlFor="password">Password</label>
                 <input
                     type="password"
                     id="password"
@@ -79,7 +103,7 @@ const RegistrationForm = () => {
                 />
             </div>
             <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password</label>
+                <label className="req-label" htmlFor="confirmPassword">Confirm Password</label>
                 <input
                     type="password"
                     id="confirmPassword"

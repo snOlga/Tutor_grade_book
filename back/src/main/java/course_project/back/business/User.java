@@ -29,4 +29,8 @@ public class User extends UserAbstract {
             Set<UserRoles> roles) {
         super(name, humanReadableID, login, password, roles);
     }
+
+    public void setDefaultHumanRedableID() {
+        setHumanReadableID(getName() + "_" + getSecondName() + "_" + getId());
+    }
 }

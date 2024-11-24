@@ -37,14 +37,22 @@ public class UserController {
         Set<UserRoles> someSet = new HashSet<UserRoles>();
         someSet.add(UserRoles.TUTOR);
 
-        // TODO: MOCK HERE
-        User user = new User(json.get("name"), json.get("login"), json.get("name"),
+        User user = new User(
+                json.get("name"),
+                json.get("secondName"),
+                json.get("email"),
+                json.get("phone"),
+                json.get("description"),
+                "",
+                "somecoolstr",
                 passwordEncoder.encode(json.get("password")), someSet);
 
         if (userExists(user.getName(), user.getLogin()))
             return response;
 
         repoUser.add(user);
+
+        user.setDefaultHumanRedableID();
 
         Set<String> someStrSet = new HashSet<String>();
         someStrSet.add(UserRoles.TUTOR.getRoleName());
