@@ -8,11 +8,6 @@ function App() {
     const [isTutor, setTutorRole] = useState(false);
     const [isStudent, setStudentRole] = useState(false);
 
-    function setRoles(tutorRole, studentRole) {
-        setTutorRole(tutorRole)
-        setStudentRole(studentRole)
-    }
-
     useEffect(() => {
         checkRoles()
     }, [])
@@ -59,7 +54,7 @@ function App() {
                 <Router>
                     <Routes>
                         {
-                            !isStudent && !isTutor && <Route path="/" element={<Enter setRoles={setRoles} />} />
+                            !isStudent && !isTutor && <Route path="/" element={<Enter />} />
                         }
                         {
                             isStudent && <Route path="/" element={<Enter />} />

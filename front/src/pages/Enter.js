@@ -3,7 +3,7 @@ import RegistrationForm from '../components/RegistrationForm';
 import LoginForm from '../components/LoginForm';
 import '../styles/styles.css';
 
-function Enter({ setRoles }) {
+function Enter() {
     const [isRegstration, showRegistration] = useState(true)
     const [isLogin, showLogin] = useState(false)
 
@@ -21,7 +21,7 @@ function Enter({ setRoles }) {
                         <h1>Register</h1>
                         <a className="reg-selector"
                             onClick={resetForm}>Log in</a>
-                        <RegistrationForm setRoles={setRoles} />
+                        <RegistrationForm />
                     </div>
                 }
                 {
@@ -30,7 +30,7 @@ function Enter({ setRoles }) {
                         <h1>Log in</h1>
                         <a className="reg-selector"
                             onClick={resetForm}>Register</a>
-                        <LoginForm setRoles={setRoles} />
+                        <LoginForm />
                     </div>
                 }
             </div>
