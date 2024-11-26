@@ -2,7 +2,9 @@ package course_project.back.converters;
 
 import course_project.back.enums.UserRoles;
 import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
+@Converter(autoApply = true)
 public class UserRoleConverter implements AttributeConverter<UserRoles, Integer> {
 
     @Override

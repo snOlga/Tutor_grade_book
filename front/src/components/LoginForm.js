@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
-        login: '',
+        email: '',
         password: '',
     });
 
@@ -22,24 +22,32 @@ const LoginForm = () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                login: formData.username,
+                email: formData.email,
                 password: formData.password
             })
         })
+            .then(response => response.json())
+            .then(data => {
+                if (data.isSuccessful === "true") {
+                    let expires = (new Date(Date.now() + 86400 * 1000)).toUTCString();
+                    document.cookie = "token=" + data.token + "; expires=" + expires
+                    window.location.reload();
+                }
+            })
     }
 
     return (
         <form className="registration-form" onSubmit={handleSubmit}>
             {error && <p className="error-message">{error}</p>}
             <div className="form-group">
-                <label className="req-label" htmlFor="login">Email</label>
+                <label className="req-label" htmlFor="email">Email</label>
                 <input
-                    type="text"
-                    id="login"
-                    name="login"
-                    value={formData.login}
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
                     onChange={handleChange}
-                    placeholder="Enter your login"
+                    placeholder="Enter your email"
                     required
                 />
             </div>
@@ -55,7 +63,7 @@ const LoginForm = () => {
                     required
                 />
             </div>
-            <button type="submit" className="submit-button">Register</button>
+            <button type="submit" className="submit-button">Log in</button>
         </form>
     );
 };

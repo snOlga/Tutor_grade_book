@@ -57,13 +57,13 @@ function App() {
                             !isStudent && !isTutor && <Route path="/" element={<Enter />} />
                         }
                         {
+                            isTutor && isStudent && <Route path="/" element={<TutorCalendar />} />
+                        }
+                        {
                             isStudent && <Route path="/" element={<Enter />} />
                         }
                         {
                             isTutor && <Route path="/" element={<TutorCalendar />} />
-                        }
-                        {
-                            isTutor && isStudent && <Route path="/" element={<TutorCalendar />} />
                         }
                     </Routes>
                 </Router>

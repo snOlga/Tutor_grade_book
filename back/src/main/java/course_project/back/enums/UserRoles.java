@@ -1,15 +1,34 @@
 package course_project.back.enums;
 
 public enum UserRoles {
-    ADMIN(1, "ROLE_ADMIN"),
-    TUTOR(2, "ROLE_TUTOR"),
-    STUDENT(3, "ROLE_STUDENT");
+    ADMIN(0, "ROLE_ADMIN"), 
+    TUTOR(1, "ROLE_TUTOR"),
+    STUDENT(2, "ROLE_STUDENT");
 
     private final int id;
     private final String roleName;
 
     UserRoles(int id, String roleName) {
         this.id = id;
+        this.roleName = roleName;
+    }
+
+    UserRoles(int id) {
+        this.id = id;
+        String roleName = "";
+        switch (id) {
+            case 0:
+                roleName = "ROLE_ADMIN";
+                break;
+            case 1:
+                roleName = "ROLE_TUTOR";
+                break;
+            case 2:
+                roleName = "ROLE_STUDENT";
+                break;
+            default:
+                break;
+        }
         this.roleName = roleName;
     }
 
