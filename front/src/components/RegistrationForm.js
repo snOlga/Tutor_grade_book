@@ -8,16 +8,34 @@ const RegistrationForm = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        isStudent: false,
-        isTutor: false
+        roles: []
     });
 
     const [error, setError] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target
-        setFormData({ ...formData, [name]: name == 'isStudent' || name == 'isTutor' ? e.target.checked : value })
-    };
+        setFormData({ ...formData, [name]: value })
+
+        console.log(JSON.stringify({
+            name: [formData.username],
+            secondName: [formData.secondName],
+            phone: [formData.phone],
+            email: [formData.email],
+            password: [formData.password],
+            roles: formData.roles
+        }))
+    }
+
+    const setRole = (e) => {
+        let name = e.target.name
+        let valueBefore = formData.roles
+        if (name == 'isStudent')
+            setFormData({ ...formData, ["roles"]: [...valueBefore, 'ROLE_STUDENT'] })
+        if (name == 'isTutor')
+            setFormData({ ...formData, ["roles"]: [...valueBefore, 'ROLE_TUTOR'] })
+
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -32,13 +50,12 @@ const RegistrationForm = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    name: formData.username,
-                    secondName: formData.secondName,
-                    phone: formData.phone,
-                    email: formData.email,
-                    password: formData.password,
-                    isStudent: formData.isStudent,
-                    isTutor: formData.isTutor
+                    name: [formData.username],
+                    secondName: [formData.secondName],
+                    phone: [formData.phone],
+                    email: [formData.email],
+                    password: [formData.password],
+                    roles: formData.roles
                 })
             })
                 .then(response => response.json())
@@ -132,7 +149,7 @@ const RegistrationForm = () => {
                         id="isTutor"
                         name="isTutor"
                         value={formData.isTutor}
-                        onChange={handleChange}
+                        onChange={setRole}
                         type="checkbox"
                     />
                     Teaching someone!
@@ -142,7 +159,7 @@ const RegistrationForm = () => {
                         id="isStudent"
                         name="isStudent"
                         value={formData.isStudent}
-                        onChange={handleChange}
+                        onChange={setRole}
                         type="checkbox"
                     />
                     Learning something!

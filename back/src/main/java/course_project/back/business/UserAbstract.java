@@ -2,24 +2,16 @@ package course_project.back.business;
 
 import java.util.Set;
 
-import org.hibernate.annotations.ManyToAny;
-
-import course_project.back.converters.UserRoleConverter;
 import course_project.back.enums.UserRoles;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.UniqueConstraint;;
 
 @MappedSuperclass
 public abstract class UserAbstract {
@@ -113,7 +105,7 @@ public abstract class UserAbstract {
         this.password = password;
     }
 
-    public void setRoles(Set roles) {
+    public void setRoles(Set<UserRoles> roles) {
         this.roles = roles;
     }
 

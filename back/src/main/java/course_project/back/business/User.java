@@ -1,5 +1,7 @@
 package course_project.back.business;
 
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import course_project.back.enums.UserRoles;
@@ -30,6 +32,23 @@ public class User extends UserAbstract {
     }
 
     public User() {
+    }
+
+    public User(Map<String, String[]> json) {
+        this(json.get("name")[0],
+                json.get("secondName")[0],
+                json.get("email")[0],
+                json.get("phone")[0],
+                "", //json.get("description")[0],
+                "",
+                json.get("password")[0], new HashSet<UserRoles>());
+
+        Set<UserRoles> roles = new HashSet<>();
+        String[] rolesStr = json.get("roles");
+        for (String role : rolesStr) {
+            roles.add(UserRoles.fromString(role));
+        }
+        this.setRoles(roles);
     }
 
     public void setDefaultHumanRedableID() {

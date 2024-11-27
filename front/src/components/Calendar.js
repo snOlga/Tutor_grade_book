@@ -27,7 +27,7 @@ const Calendar = () => {
     const [currentWeek, setCurrentWeek] = useState(0)
     const [days, setDays] = useState([[new Date(), ""]])
     const [weekdays] = useState(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
-    const [time] = useState(['08 AM', '09 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'])
+    const [time] = useState(['08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'])
 
     useEffect(() => {
         const curr = new Date();
@@ -56,7 +56,40 @@ const Calendar = () => {
                 <button onClick={nextWeek}>{">"}</button>
             </div>
             <div class="calendar">
-                <div class="timeline">
+                <div className='data-days'>
+                    <div class="date">
+                        <p class="date-num"></p>
+                        <p class="date-day"></p>
+                    </div>
+                    {
+                        days.map(dayDate => {
+                            return (
+                                <div class="date">
+                                    <p class="date-num">{dayDate[0].getDate()}</p>
+                                    <p class="date-day">{dayDate[1]}</p>
+                                </div>
+                            )
+
+                        })
+                    }
+                </div>
+
+                {
+                    time.map(time => {
+                        return (
+                            <div className='line-holder'>
+                                <div className='half-of-hour'>
+                                    {time}:00
+                                </div>
+                                <div className='half-of-hour'>
+                                    {time}:30
+                                </div>
+                            </div>
+                        )
+                    })
+                }
+
+                {/* <div class="timeline">
                     <div class="spacer"></div>
                     {
                         time.map((time) =>
@@ -76,7 +109,7 @@ const Calendar = () => {
                             });
 
                             return (
-                                <div>
+                                <div class='day-holder'>
                                     <div class="date">
                                         <p class="date-num">{dayDate[0].getDate()}</p>
                                         <p class="date-day">{dayDate[1]}</p>
@@ -96,7 +129,7 @@ const Calendar = () => {
                             );
                         })
                     }
-                </div>
+                </div> */}
             </div>
         </div>
     );

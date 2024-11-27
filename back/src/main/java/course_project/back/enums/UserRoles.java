@@ -13,25 +13,6 @@ public enum UserRoles {
         this.roleName = roleName;
     }
 
-    UserRoles(int id) {
-        this.id = id;
-        String roleName = "";
-        switch (id) {
-            case 0:
-                roleName = "ROLE_ADMIN";
-                break;
-            case 1:
-                roleName = "ROLE_TUTOR";
-                break;
-            case 2:
-                roleName = "ROLE_STUDENT";
-                break;
-            default:
-                break;
-        }
-        this.roleName = roleName;
-    }
-
     public int getId() {
         return id;
     }

@@ -33,24 +33,11 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/sign_up")
-    public Map<String, String> signUp(@RequestBody Map<String, String> json) {
+    public Map<String, String> signUp(@RequestBody Map<String, String[]> json) {
         Map<String, String> response = defaultResponse();
-        Set<UserRoles> roles = new HashSet<>();
 
-        // TODO:
-        if (Boolean.parseBoolean(json.get("isTutor"))) 
-            roles.add(UserRoles.TUTOR);
-        if (Boolean.parseBoolean(json.get("isStudent")))
-            roles.add(UserRoles.STUDENT);
-
-        User user = new User(
-                json.get("name"),
-                json.get("secondName"),
-                json.get("email"),
-                json.get("phone"),
-                json.get("description"),
-                "",
-                passwordEncoder.encode(json.get("password")), roles);
+        json.get("password")[0] = passwordEncoder.encode(json.get("password")[0]);
+        User user = new User(json);
 
         if (userExists(user.getEmail()))
             return response;
