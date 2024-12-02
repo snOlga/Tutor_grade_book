@@ -1,0 +1,10 @@
+DROP TABLE lessons_requests;
+DROP TABLE request_types;
+DROP TABLE users_lessons;
+DROP TABLE lessons;
+DROP TABLE subjects;
+DROP TABLE messages;
+DROP TABLE chats;
+DROP TABLE users_roles;
+DROP TABLE users;
+DROP TABLE roles;
