@@ -24,12 +24,12 @@ import course_project.back.enums.UserRoles;
 @RestController
 @RequestMapping("/auth")
 public class UserController {
-
-    private UserRepository repoUser = new UserRepository();
     private SecutiryJwtTokenProvider jwtProvider = new SecutiryJwtTokenProvider();
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository repoUser;
 
     @PostMapping("/sign_up")
     public Map<String, String> signUp(@RequestBody Map<String, String[]> json) {
@@ -41,9 +41,9 @@ public class UserController {
         if (userExists(user.getEmail()))
             return response;
 
-        repoUser.add(user);
+        repoUser.save(user);
         user.setDefaultHumanRedableID();
-        repoUser.update(user);
+        repoUser.save(user);
 
         String token = setUserToSecurity(user);
         setResponse(response, true, token);

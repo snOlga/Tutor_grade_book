@@ -8,12 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import course_project.back.repositories.UserRepository;
-
+@Service
 public class SecurityJwtTokenValidator extends OncePerRequestFilter {
-    UserRepository repoUser = new UserRepository();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
