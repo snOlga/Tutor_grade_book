@@ -5,7 +5,7 @@ import Enter from './pages/Enter'
 import TutorCalendar from './pages/TutorCalendar'
 
 function App() {
-    const [isTutor, setTutorRole] = useState(false);
+    const [isTutor, setTutorRole] = useState(true);
     const [isStudent, setStudentRole] = useState(false);
 
     useEffect(() => {

@@ -79,7 +79,20 @@ const Calendar = () => {
                         return (
                             <div className='line-holder'>
                                 <div className='half-of-hour'>
-                                    {time}:00
+                                    <div>
+                                        {time}:00
+                                    </div>
+                                    <div>
+                                        {/* {
+                                            lessonsForDay.map(lesson => (
+                                                <div class="event start-1 end-4 ent-law">
+                                                    <p class="title">{lesson.heading}</p>
+                                                    <p class="time">{lesson.timestamp}</p>
+                                                    <p class="description">{lesson.description}</p>
+                                                </div>
+                                            ))
+                                        } */}
+                                    </div>
                                 </div>
                                 <div className='half-of-hour'>
                                     {time}:30

@@ -1,11 +1,8 @@
 package course_project.back.repositories;
 
 import course_project.back.business.User;
-import course_project.back.enums.UserRoles;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import jakarta.persistence.Query;
 
@@ -28,9 +25,9 @@ public class UserRepository extends AbstractRepository<User> {
         return (User) runQuery(() -> (User) currentSession().get(User.class, ID)); // TODO: what's here?
     }
 
-    @SuppressWarnings("deprecation")
     public User findByEmail(String currentEmail) {
         return (User) runQuery(() -> {
+            @SuppressWarnings("deprecation")
             Query queryUser = currentSession().createQuery("SELECT u FROM User u JOIN FETCH u.roles WHERE u.email = :currentEmail");
             queryUser.setParameter("currentEmail", currentEmail);
             User foundUser = (User) queryUser.getSingleResult();

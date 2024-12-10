@@ -20,12 +20,11 @@
 .calendar {
     display: grid;
     max-width: 70%;
-    gap: 4em;
 }
 
 .data-days {
     display: flex;
-    gap: 8%;
+    gap: 5em;
 }
 
 .date {
@@ -46,8 +45,8 @@
 }
 
 .half-of-hour {
-    background-color: rgb(169, 48, 48);
-    min-height: 100%;
+    border-top: #555 solid 1px;
+    min-height: 5em;
 }
 
 .line-holder {

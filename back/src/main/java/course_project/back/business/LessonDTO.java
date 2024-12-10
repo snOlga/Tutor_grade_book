@@ -1,4 +1,4 @@
-package main.java.course_project.back.business;
+package course_project.back.business;
 
 import java.sql.Timestamp;
 import lombok.Data;
