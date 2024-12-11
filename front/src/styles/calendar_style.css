@@ -1,170 +1,156 @@
-:root {
-    --numDays: 5;
-    --numHours: 10;
-    --timeHeight: 60px;
-    --calBgColor: white;
-    --eventBorderColor: #f2d3d8;
-    --eventColor1: #ffd6d1;
-    --eventColor2: #fafaa3;
-    --eventColor3: #e2f8ff;
-    --eventColor4: #d1ffe6;
-    background: #F1F0E8;
-    color: #555;
-    font-size: 20px;
-}
-
-.spacer {
-    min-height: 300px;
-}
-
 .calendar {
-    display: grid;
-    max-width: 70%;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 100%;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background-color: #F1F0E8;
+    color: #89A8B2;
+}
+
+.times {
+    position: relative;
+    width: 10%;
+    border-right: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.line-holder {
+    position: relative;
+    height: 60px;
+    border-bottom: 1px dashed #ddd;
+}
+
+.half-of-hour {
+    position: absolute;
+    width: 90%;
+    text-align: right;
+    padding-right: 10px;
+    font-size: 0.9em;
+    color: #89A8B2;
 }
 
 .data-days {
     display: flex;
-    gap: 5em;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+    padding: 10px;
 }
 
 .date {
+    flex: 1;
     display: flex;
-    gap: 0.5em;
+    flex-direction: column;
+    /* align-items: center; */
+    border-left: 1px solid #ddd;
+    position: relative;
+    padding: 5px;
+}
+
+.date:first-child {
+    border-left: none;
 }
 
 .date-num {
-    font-size: 40px;
-    font-weight: 600;
-    display: inline;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    margin: 5px 0;
+    right: 0px;
 }
 
 .date-day {
-    display: inline;
-    font-size: 40px;
-    font-weight: 100;
+    font-size: 0.9em;
+    color: #89A8B2;
+    right: 0px;
 }
 
-.half-of-hour {
-    border-top: #555 solid 1px;
-    min-height: 5em;
+.lesson {
+    position: absolute;
+    width: 90%;
+    padding: 5px;
+    background-color: #ddd;
+    color: #555;
+    border-radius: 0px 4px 4px  0px;
+    font-size: 0.9em;
+    cursor: pointer;
+    z-index: 5;
+    transition: 0.2s;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
 }
 
-.line-holder {
-    min-width: 100%;
+.create-lesson {
+    position: absolute;
+    width: 90%;
+    left: 5%;
+    padding: 5px;
+    background-color: #ffffff00;
+    color: #ffffff00;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.9em;
+    cursor: pointer;
 }
 
-/* 
-.timeline {
-    margin-top: 5em;
-    display: grid;
-    grid-template-rows: repeat(var(--numHours), var(--timeHeight));
+.lesson:hover {
+    transform: translateY(-4px); 
+    z-index: 100;
+    box-shadow: 0px 0px 10px #33333350;
 }
 
-.day-holder {
-    display: block;
+.create-lesson:hover {
+    color: #555;
+    background: #72DAD3;
 }
 
-.days {
-    display: grid;
-    grid-column: 2;
-    gap: 5px;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    background-color: #B5E4E8;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
 }
 
-.events {
-    display: grid;
-    grid-template-rows: repeat(var(--numHours), var(--timeHeight));
-    border-radius: 5px;
-    background: var(--calBgColor);
+button:hover {
+    background-color: #72DAD3;
 }
 
-.start-10 {
-    grid-row-start: 2;
+.day-header {
+    right: 0px;
 }
 
-.start-12 {
-    grid-row-start: 4;
+.lesson-time {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555; 
+    margin-bottom: 4px; 
 }
 
-.start-1 {
-    grid-row-start: 5;
+.lesson-details {
+    text-align: left;
 }
 
-.start-2 {
-    grid-row-start: 6;
-}
-
-.end-12 {
-    grid-row-end: 4;
-}
-
-.end-1 {
-    grid-row-end: 5;
-}
-
-.end-3 {
-    grid-row-end: 7;
-}
-
-.end-4 {
-    grid-row-end: 8;
-}
-
-.end-5 {
-    grid-row-end: 9;
-}
-
-.title {
+.lesson-heading {
+    font-size: 18px;
     font-weight: 600;
-    margin-bottom: 0.25rem;
+    color: #333; 
+    margin-bottom: 4px; 
 }
 
-.event {
-    border: 1px solid var(--eventBorderColor);
-    border-radius: 5px;
-    padding: 0.5rem;
-    margin: 0 0.5rem;
-    background: white;
+.lesson-duration,
+.lesson-tutors {
+    font-size: 14px;
+    color: #777; 
+    margin: 4px 0;
 }
 
-.space,
-.date {
-    height: 60px
-}
-
-body {
-    font-family: system-ui, sans-serif;
-}
-
-.corp-fi {
-    background: var(--eventColor1);
-}
-
-.ent-law {
-    background: var(--eventColor2);
-}
-
-.writing {
-    background: var(--eventColor3);
-}
-
-.securities {
-    background: var(--eventColor4);
-}
-
-.date {
-    display: flex;
-    gap: 1em;
-}
-
-.date-num {
-    font-size: 3rem;
-    font-weight: 600;
-    display: inline;
-}
-
-.date-day {
-    display: inline;
-    font-size: 3rem;
-    font-weight: 100;
-} */

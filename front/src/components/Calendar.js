@@ -16,9 +16,18 @@ const mockJson = [
         "id": "2",
         "students_participator": ["Kyle", "Mike"],
         "tutors_participator": ["Ms March", "Mr Brown"],
+        "timestamp": "November 20, 2024 10:00:00",
+        "duration": "1",
+        "heading": "Foo",
+        "description": "you will be interested at this lesson!"
+    },
+    {
+        "id": "3",
+        "students_participator": ["Kyle", "Mike"],
+        "tutors_participator": ["Ms March", "Mr Brown"],
         "timestamp": "November 20, 2024 11:00:00",
         "duration": "1",
-        "heading": "SomeCoolLesson",
+        "heading": "Foo",
         "description": "you will be interested at this lesson!"
     }
 ]
@@ -56,93 +65,80 @@ const Calendar = () => {
                 <button onClick={nextWeek}>{">"}</button>
             </div>
             <div class="calendar">
-                <div className='data-days'>
-                    <div class="date">
-                        <p class="date-num"></p>
-                        <p class="date-day"></p>
+                <div className='times'>
+                    <div className='line-holder'>
+                        <div className='half-of-hour'>
+                        </div>
                     </div>
+                    {
+                        time.map(time => {
+                            return (
+                                <div className='line-holder'>
+                                    <div className='half-of-hour'>
+                                        {time}:00
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+                <div className='data-days'>
                     {
                         days.map(dayDate => {
                             return (
                                 <div class="date">
-                                    <p class="date-num">{dayDate[0].getDate()}</p>
-                                    <p class="date-day">{dayDate[1]}</p>
+                                    <div className='day-header'>
+                                        <p class="date-num">{dayDate[0].getDate()}</p>
+                                        <p class="date-day">{dayDate[1]}</p>
+                                    </div>
+                                    <div className='day-content'>
+                                        {
+                                            mockJson.map(lesson => {
+                                                const lessonDate = new Date(lesson.timestamp)
+                                                const currentDate = dayDate[0]
+                                                if (lessonDate.getDate() == currentDate.getDate() &&
+                                                    lessonDate.getMonth() == currentDate.getMonth() &&
+                                                    lessonDate.getFullYear() == currentDate.getFullYear()) {
+                                                    const topPositionLesson = (lessonDate.getHours() - 7) * 60 + lessonDate.getMinutes() + 10;
+                                                    return (
+                                                        <div className="lesson" style={{ top: topPositionLesson + 'px' }}>
+                                                            <div className="lesson-time">
+                                                                { lessonDate.toLocaleTimeString().substring(0, 5) + " - " + (new Date(lessonDate.getTime() + lesson.duration*60*60*1000)).toLocaleTimeString().substring(0, 5) }
+                                                            </div>
+                                                            <div className="lesson-details">
+                                                                <h4 className="lesson-heading">
+                                                                    {lesson.heading}
+                                                                </h4>
+                                                                <p className="lesson-tutors">
+                                                                    {lesson.tutors_participator.map(tutor => {
+                                                                        return (
+                                                                            <div>
+                                                                                {tutor}
+                                                                            </div>
+                                                                        )
+                                                                    })}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
+                                            })
+                                        }
+                                        {
+                                            time.map(oneTime => {
+                                                const topPosition = (oneTime - 7) * 60 + 10
+                                                return (
+                                                    <button className='create-lesson' style={{ top: topPosition + 'px' }}>click</button>
+                                                )
+                                            })
+                                        }
+                                    </div>
                                 </div>
                             )
 
                         })
                     }
                 </div>
-
-                {
-                    time.map(time => {
-                        return (
-                            <div className='line-holder'>
-                                <div className='half-of-hour'>
-                                    <div>
-                                        {time}:00
-                                    </div>
-                                    <div>
-                                        {/* {
-                                            lessonsForDay.map(lesson => (
-                                                <div class="event start-1 end-4 ent-law">
-                                                    <p class="title">{lesson.heading}</p>
-                                                    <p class="time">{lesson.timestamp}</p>
-                                                    <p class="description">{lesson.description}</p>
-                                                </div>
-                                            ))
-                                        } */}
-                                    </div>
-                                </div>
-                                <div className='half-of-hour'>
-                                    {time}:30
-                                </div>
-                            </div>
-                        )
-                    })
-                }
-
-                {/* <div class="timeline">
-                    <div class="spacer"></div>
-                    {
-                        time.map((time) =>
-                        (
-                            <div class="time-marker">{time}</div>
-                        ))
-                    }
-                </div>
-                <div class="days">
-                    {
-                        days.map(dayDate => {
-                            const lessonsForDay = mockJson.filter(lesson => {
-                                const lessonDate = new Date(lesson.timestamp);
-                                return lessonDate.getFullYear() == dayDate[0].getFullYear() &&
-                                    lessonDate.getMonth() == dayDate[0].getMonth() &&
-                                    lessonDate.getDate() == dayDate[0].getDate();
-                            });
-
-                            return (
-                                <div class='day-holder'>
-                                    <div class="date">
-                                        <p class="date-num">{dayDate[0].getDate()}</p>
-                                        <p class="date-day">{dayDate[1]}</p>
-                                    </div>
-                                    <div class="events">
-                                        {
-                                            lessonsForDay.map(lesson => (
-                                                <div class="event start-1 end-4 ent-law">
-                                                    <p class="title">{lesson.heading}</p>
-                                                    <p class="time">{lesson.timestamp}</p>
-                                                    <p class="description">{lesson.description}</p>
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-                                </div>
-                            );
-                        })
-                    }
-                </div> */}
             </div>
         </div>
     );
