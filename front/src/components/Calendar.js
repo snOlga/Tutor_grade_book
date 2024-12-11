@@ -5,8 +5,26 @@ import '../styles/calendar_style.css'
 const mockJson = [
     {
         "id": "1",
-        "students_participator": ["Kyle", "Mike"],
-        "tutors_participator": ["Ms March", "Mr Brown"],
+        "students_participator": [
+            {
+                "name": "Kyle",
+                "user_id": "1"
+            },
+            {
+                "name": "Mike",
+                "user_id": "2"
+            }
+        ],
+        "tutors_participator": [
+            {
+                "name": "Ms March",
+                "user_id": "3"
+            },
+            {
+                "name": "Mr Brown",
+                "user_id": "4"
+            }
+        ],
         "timestamp": "November 22, 2024 11:00:00",
         "duration": "1",
         "heading": "SomeCoolLesson",
@@ -14,8 +32,26 @@ const mockJson = [
     },
     {
         "id": "2",
-        "students_participator": ["Kyle", "Mike"],
-        "tutors_participator": ["Ms March", "Mr Brown"],
+        "students_participator": [
+            {
+                "name": "Kyle",
+                "user_id": "1"
+            },
+            {
+                "name": "Mike",
+                "user_id": "2"
+            }
+        ],
+        "tutors_participator": [
+            {
+                "name": "Ms March",
+                "user_id": "3"
+            },
+            {
+                "name": "Mr Brown",
+                "user_id": "4"
+            }
+        ],
         "timestamp": "November 20, 2024 10:00:00",
         "duration": "1",
         "heading": "Foo",
@@ -23,14 +59,34 @@ const mockJson = [
     },
     {
         "id": "3",
-        "students_participator": ["Kyle", "Mike"],
-        "tutors_participator": ["Ms March", "Mr Brown"],
+        "students_participator": [
+            {
+                "name": "Kyle",
+                "user_id": "1"
+            },
+            {
+                "name": "Mike",
+                "user_id": "2"
+            }
+        ],
+        "tutors_participator": [
+            {
+                "name": "Ms March",
+                "user_id": "3"
+            },
+            {
+                "name": "Mr Brown",
+                "user_id": "4"
+            }
+        ],
         "timestamp": "November 20, 2024 11:00:00",
         "duration": "1",
         "heading": "Foo",
         "description": "you will be interested at this lesson!"
     }
 ]
+
+const ANOTHER_TUTOR_PAGE_API = "/api/get_schedule/tutor"
 
 const Calendar = () => {
     const [currentWeek, setCurrentWeek] = useState(0)
@@ -48,8 +104,8 @@ const Calendar = () => {
             const dateWeekday = [dateNum, weekdays[i]];
             countedDays.push(dateWeekday);
         }
-        setDays(countedDays);
-    }, [currentWeek]);
+        setDays(countedDays)
+    }, [currentWeek])
 
     function nextWeek() {
         setCurrentWeek(currentWeek + 1)
@@ -103,7 +159,7 @@ const Calendar = () => {
                                                     return (
                                                         <div className="lesson" style={{ top: topPositionLesson + 'px' }}>
                                                             <div className="lesson-time">
-                                                                { lessonDate.toLocaleTimeString().substring(0, 5) + " - " + (new Date(lessonDate.getTime() + lesson.duration*60*60*1000)).toLocaleTimeString().substring(0, 5) }
+                                                                {lessonDate.toLocaleTimeString().substring(0, 5) + " - " + (new Date(lessonDate.getTime() + lesson.duration * 60 * 60 * 1000)).toLocaleTimeString().substring(0, 5)}
                                                             </div>
                                                             <div className="lesson-details">
                                                                 <h4 className="lesson-heading">
@@ -113,7 +169,7 @@ const Calendar = () => {
                                                                     {lesson.tutors_participator.map(tutor => {
                                                                         return (
                                                                             <div>
-                                                                                {tutor}
+                                                                                <a href={'/' + tutor.user_id} className='link'>{tutor.name}</a>
                                                                             </div>
                                                                         )
                                                                     })}
