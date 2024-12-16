@@ -52,7 +52,6 @@ public class UserController {
         String token = setUserToSecurity(user);
         setResponse(response, true, token);
         LessonORM lesson = lessonRepository.getById(1L);
-        re
         return response;
     }
 
