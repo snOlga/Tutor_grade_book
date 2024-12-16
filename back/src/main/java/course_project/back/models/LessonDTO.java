@@ -1,6 +1,8 @@
-package main.java.course_project.back.business;
+package course_project.back.models;
 
 import java.sql.Timestamp;
+
+import course_project.back.orms.LessonORM;
 import lombok.Data;
 
 @Data
@@ -14,4 +16,6 @@ public class LessonDTO {
     private Boolean sActive;
     private String description;
     private String humanReadableId;
+
+    public LessonDTO(LessonORM orm) {}
 }

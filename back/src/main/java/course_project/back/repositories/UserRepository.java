@@ -1,11 +1,8 @@
 package course_project.back.repositories;
 
-import course_project.back.business.User;
-import course_project.back.enums.UserRoles;
+import course_project.back.models.User;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import jakarta.persistence.Query;
 

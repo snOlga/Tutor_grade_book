@@ -17,7 +17,7 @@
         <property name="use_sql_comments">true</property>
         <!--<property name="hibernate.hbm2ddl.auto">create</property>-->
 
-        <mapping class="course_project.back.business.User"/>
+        <mapping class="course_project.back.models.User"/>
 
     </session-factory>
 </hibernate-configuration>

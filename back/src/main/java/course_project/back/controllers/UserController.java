@@ -1,10 +1,12 @@
 package course_project.back.controllers;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
+import course_project.back.orms.LessonORM;
+import course_project.back.repositories.LessonRepository;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import course_project.back.security.SecurityUser;
 import course_project.back.security.SecutiryJwtTokenProvider;
 import course_project.back.repositories.UserRepository;
-import course_project.back.business.User;
+import course_project.back.models.User;
 import course_project.back.enums.UserRoles;
 
 @RestController
@@ -28,6 +30,7 @@ public class UserController {
 
     private UserRepository repoUser = new UserRepository();
     private SecutiryJwtTokenProvider jwtProvider = new SecutiryJwtTokenProvider();
+    private LessonRepository lessonRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -48,7 +51,8 @@ public class UserController {
 
         String token = setUserToSecurity(user);
         setResponse(response, true, token);
-
+        LessonORM lesson = lessonRepository.getById(1L);
+        re
         return response;
     }
 

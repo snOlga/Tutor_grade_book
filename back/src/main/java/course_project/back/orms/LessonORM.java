@@ -1,7 +1,9 @@
-package main.java.course_project.back.orms;
+package course_project.back.orms;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
+
+import jakarta.persistence.Entity;
 import lombok.Data;
 
 @Data

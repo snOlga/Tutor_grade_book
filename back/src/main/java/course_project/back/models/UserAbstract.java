@@ -1,4 +1,4 @@
-package course_project.back.business;
+package course_project.back.models;
 
 import java.util.Set;
 
