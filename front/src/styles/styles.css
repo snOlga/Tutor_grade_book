@@ -97,3 +97,13 @@ a {
   color: #555;
   margin-top: 3%;
 }
+
+.link {
+  color: #46a09a;
+  text-decoration: underline;
+}
+
+.link:hover {
+  color: #5ed1c9;
+  text-decoration: underline;
+}
