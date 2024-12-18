@@ -1,8 +1,10 @@
 package course_project.back.controllers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import course_project.back.business.CalendarDTO;
+import course_project.back.services.CalendarService;
+import course_project.back.services.LessonServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,21 +18,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import course_project.back.business.LessonDTO;
-import course_project.back.services.LessonService;
 
 
 @RestController
 @RequestMapping("/lessons")
 public class LessonController {
 
-    private final LessonService lessonService;
+    private final LessonServiceImpl lessonService;
+    private final CalendarService calendarService;
 
     @Autowired
-    public LessonController(LessonService lessonService) {
+    public LessonController(LessonServiceImpl lessonService, CalendarService calendarService) {
         this.lessonService = lessonService;
+        this.calendarService = calendarService;
     }
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<List<LessonDTO>> getAllLessons() {
         System.out.println("В бд стучатся за всеми уроками");
         return new ResponseEntity<>(lessonService.findAll(), HttpStatus.OK);
@@ -59,6 +62,18 @@ public class LessonController {
     public ResponseEntity<Void> deleteLesson(@PathVariable Long id) {
         boolean deleted = lessonService.deleteById(id);
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/with_user/{hr_id}")
+    public ResponseEntity<List<LessonDTO>> getAllUserLessons(@PathVariable String hr_id) {
+        System.out.println("В бд стучатся за всеми уроками");
+        return new ResponseEntity<>(lessonService.findAllByUserId(hr_id), HttpStatus.OK);
+    }
+
+    @GetMapping("/calendar/{hr_id}")
+    public ResponseEntity<List<CalendarDTO>> getCalendar(@PathVariable String hr_id) {
+
+        return new ResponseEntity<>(calendarService.getCalendarByHRId(hr_id), HttpStatus.OK);
     }
 }
 

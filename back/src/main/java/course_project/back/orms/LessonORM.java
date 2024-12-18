@@ -1,11 +1,13 @@
 package course_project.back.orms;
 
 import course_project.back.business.LessonDTO;
+import course_project.back.business.User;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 import lombok.*;
-import org.postgresql.util.PGInterval;
 
 @Setter
 @Getter
@@ -58,4 +60,7 @@ public class LessonORM {
 
     @Column(name = "heading")
     private String heading;
+
+    @OneToMany(mappedBy = "id.lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UsersLessonsORM> usersLessons;
 }

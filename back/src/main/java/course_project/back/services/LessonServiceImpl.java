@@ -62,5 +62,10 @@ public class LessonServiceImpl implements LessonService {
             return false;
         }
     }
+
+    public List<LessonDTO> findAllByUserId(String humanReadableId) {
+        List<LessonORM> res = lessonRepository.findByHumanReadableId(humanReadableId);
+        return res.stream().map(LessonDTO::new).toList();
+    }
 }
 

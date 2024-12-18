@@ -1,17 +1,13 @@
 package course_project.back.business;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import course_project.back.enums.UserRoles;
+import course_project.back.orms.LessonORM;
+import course_project.back.orms.UsersLessonsORM;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 
 @MappedSuperclass
 public abstract class UserAbstract {
@@ -41,6 +37,9 @@ public abstract class UserAbstract {
     @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role_id")
     private Set<UserRoles> roles;
+
+    @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UsersLessonsORM> usersLessons;
 
     public UserAbstract() {
     }
