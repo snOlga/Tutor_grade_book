@@ -88,13 +88,22 @@ const mockJson = [
 
 const ANOTHER_TUTOR_PAGE_API = "/api/get_schedule/tutor"
 
-const Calendar = () => {
+function Calendar() {
     const [currentWeek, setCurrentWeek] = useState(0)
     const [days, setDays] = useState([[new Date(), ""]])
     const [weekdays] = useState(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
     const [time] = useState(['08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'])
+    const [lessons, setLessons] = useState([])
 
     useEffect(() => {
+        setDaysOnLoading()
+    }, [currentWeek])
+
+    useEffect(() => {
+        loadLessons()
+    }, [])
+
+    function setDaysOnLoading() {
         const curr = new Date();
         const countedDays = [];
         for (let i = 0; i < 7; i++) {
@@ -105,7 +114,21 @@ const Calendar = () => {
             countedDays.push(dateWeekday);
         }
         setDays(countedDays)
-    }, [currentWeek])
+    }
+
+    function loadLessons() {
+        fetch('http://localhost:18018/lessons', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                setLessons(data)
+            })
+    }
 
     function nextWeek() {
         setCurrentWeek(currentWeek + 1)
@@ -116,14 +139,14 @@ const Calendar = () => {
 
     return (
         <div>
-            <div>
-                <button onClick={weekBefore}>{"<"}</button>
-                <button onClick={nextWeek}>{">"}</button>
-            </div>
-            <div class="calendar">
+            <div className="calendar">
                 <div className='times'>
                     <div className='line-holder'>
                         <div className='half-of-hour'>
+                            <div>
+                                <button onClick={weekBefore}>{"<"}</button>
+                                <button onClick={nextWeek}>{">"}</button>
+                            </div>
                         </div>
                     </div>
                     {
@@ -142,15 +165,15 @@ const Calendar = () => {
                     {
                         days.map(dayDate => {
                             return (
-                                <div class="date">
+                                <div className="date">
                                     <div className='day-header'>
-                                        <p class="date-num">{dayDate[0].getDate()}</p>
-                                        <p class="date-day">{dayDate[1]}</p>
+                                        <p className="date-num">{dayDate[0].getDate()}</p>
+                                        <p className="date-day">{dayDate[1]}</p>
                                     </div>
                                     <div className='day-content'>
                                         {
-                                            mockJson.map(lesson => {
-                                                const lessonDate = new Date(lesson.timestamp)
+                                            lessons.map(lesson => {
+                                                const lessonDate = new Date(lesson.startTime)
                                                 const currentDate = dayDate[0]
                                                 if (lessonDate.getDate() == currentDate.getDate() &&
                                                     lessonDate.getMonth() == currentDate.getMonth() &&
@@ -159,20 +182,20 @@ const Calendar = () => {
                                                     return (
                                                         <div className="lesson" style={{ top: topPositionLesson + 'px' }}>
                                                             <div className="lesson-time">
-                                                                {lessonDate.toLocaleTimeString().substring(0, 5) + " - " + (new Date(lessonDate.getTime() + lesson.duration * 60 * 60 * 1000)).toLocaleTimeString().substring(0, 5)}
+                                                                {lessonDate.toLocaleTimeString().substring(0, 5) + " - " + (new Date(lessonDate.getTime() + lesson.duration  * 60 * 1000)).toLocaleTimeString().substring(0, 5)}
                                                             </div>
                                                             <div className="lesson-details">
                                                                 <h4 className="lesson-heading">
                                                                     {lesson.heading}
                                                                 </h4>
                                                                 <p className="lesson-tutors">
-                                                                    {lesson.tutors_participator.map(tutor => {
+                                                                    {/* {lesson.tutors_participator.map(tutor => {
                                                                         return (
                                                                             <div>
                                                                                 <a href={'/' + tutor.user_id} className='link'>{tutor.name}</a>
                                                                             </div>
                                                                         )
-                                                                    })}
+                                                                    })} */}
                                                                 </p>
                                                             </div>
                                                         </div>

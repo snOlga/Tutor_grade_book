@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 
-const RegistrationForm = () => {
+function RegistrationForm () {
     const [formData, setFormData] = useState({
         username: '',
         secondName: '',
