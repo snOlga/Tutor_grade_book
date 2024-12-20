@@ -1,11 +1,7 @@
 package course_project.back.orms;
 
-import course_project.back.business.LessonDTO;
 import course_project.back.business.User;
 import jakarta.persistence.*;
-import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 
 import lombok.*;
 

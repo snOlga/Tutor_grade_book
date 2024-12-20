@@ -4,10 +4,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
+
 import java.util.Date;
 import javax.crypto.SecretKey;
 
-public class SecutiryJwtTokenProvider {
+public class SecurityJwtTokenProvider {
     private SecretKey key = Keys.hmacShaKeyFor("super_puper_secret_key!!!!!!!!!!!!!!!!!!!!!".getBytes());
     private String adminLogin = "admin";
 
@@ -36,15 +37,6 @@ public class SecutiryJwtTokenProvider {
                 .getBody();
         return claims.getSubject();
     }
-
-    // public String getAuthoritiesFromJWT(String token) {
-    //     Claims claims = Jwts.parserBuilder()
-    //             .setSigningKey(key)
-    //             .build()
-    //             .parseClaimsJws(token)
-    //             .getBody();
-    //     return claims.getSubject();
-    // }
 
     public Boolean validateToken(String token) {
         try {

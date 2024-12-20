@@ -12,12 +12,12 @@ import java.util.ArrayList;
 public class SecurityUser implements UserDetails {
     String ROLE_PREFIX = "ROLE_";
 
-    private String userName;
+    private String email;
     private String password;
     private Set<String> roles;
 
-    public SecurityUser(String username, String password, Set<String> roles) {
-        this.userName = username;
+    public SecurityUser(String email, String password, Set<String> roles) {
+        this.email = email;
         this.password = password;
         this.roles = roles;
     }
@@ -41,6 +41,6 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return email;
     }
 }

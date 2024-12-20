@@ -2,10 +2,8 @@ package course_project.back.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import course_project.back.business.LessonDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import course_project.back.orms.LessonORM;
@@ -16,7 +14,6 @@ public class LessonServiceImpl implements LessonService {
 
     private final LessonRepository lessonRepository;
 
-    @Autowired
     public LessonServiceImpl(LessonRepository lessonRepository) {
         this.lessonRepository = lessonRepository;
     }

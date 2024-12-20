@@ -3,7 +3,6 @@ package course_project.back.services;
 import java.util.List;
 
 import course_project.back.business.LessonDTO;
-import course_project.back.orms.LessonORM;
 
 public interface LessonService {
     List<LessonDTO> findAll();
