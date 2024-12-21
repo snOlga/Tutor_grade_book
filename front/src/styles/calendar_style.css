@@ -7,9 +7,9 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
-    font-family: Arial, sans-serif;
-    background-color: #F1F0E8;
+    /* background: #F1F0E8; */
     color: #89A8B2;
+    margin-top: 70px;
 }
 
 .times {
@@ -101,7 +101,7 @@
 
 .lesson:hover {
     transform: translateY(-4px); 
-    z-index: 100;
+    z-index: 10;
     box-shadow: 0px 0px 10px #33333350;
 }
 

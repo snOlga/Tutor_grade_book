@@ -9,13 +9,11 @@ import course_project.back.orms.UsersLessonsORM;
 import course_project.back.repositories.LessonRepository;
 import course_project.back.repositories.UserRepository;
 import course_project.back.repositories.UsersLessonsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class CalendarService {
@@ -23,7 +21,6 @@ public class CalendarService {
     private final UserRepository userRepository;
     private final UsersLessonsRepository usersLessonsRepository;
 
-    @Autowired
     public CalendarService(LessonRepository lessonRepository,
                            UserRepository userRepository,
                            UsersLessonsRepository usersLessonsRepository) {

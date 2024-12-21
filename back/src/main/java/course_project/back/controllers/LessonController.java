@@ -5,7 +5,6 @@ import java.util.List;
 import course_project.back.business.CalendarDTO;
 import course_project.back.services.CalendarService;
 import course_project.back.services.LessonServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +26,6 @@ public class LessonController {
     private final LessonServiceImpl lessonService;
     private final CalendarService calendarService;
 
-    @Autowired
     public LessonController(LessonServiceImpl lessonService, CalendarService calendarService) {
         this.lessonService = lessonService;
         this.calendarService = calendarService;

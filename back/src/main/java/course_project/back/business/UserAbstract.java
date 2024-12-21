@@ -1,10 +1,8 @@
 package course_project.back.business;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import course_project.back.enums.UserRoles;
-import course_project.back.orms.LessonORM;
 import course_project.back.orms.UsersLessonsORM;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
