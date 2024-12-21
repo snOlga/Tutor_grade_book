@@ -54,10 +54,10 @@ public class CalendarService {
             User curr_user = usersLessonsORM.getId().getUser();
             Set<UserRoles> roles = curr_user.getRoles();
             if (roles.contains(UserRoles.TUTOR)) {
-                tutors.add(new ParticipatorDTO(curr_user.getId(), curr_user.getName()));
+                tutors.add(new ParticipatorDTO(curr_user.getId(), curr_user.getHumanReadableID()));
             }
             if (roles.contains(UserRoles.STUDENT)) {
-                students.add(new ParticipatorDTO(curr_user.getId(), curr_user.getName()));
+                students.add(new ParticipatorDTO(curr_user.getId(), curr_user.getHumanReadableID()));
             }
         }
         for (LessonORM lessonORM: lessonORMS) {
