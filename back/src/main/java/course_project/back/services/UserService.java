@@ -69,12 +69,8 @@ public class UserService {
     }
 
     private boolean userExists(String login) {
-        try {
-            repoUser.findByEmail(login);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        User user = repoUser.findByEmail(login);
+        return user != null;
     }
 
     private Set<String> roleSetToString(Set<UserRoles> currentSet) {
