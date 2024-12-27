@@ -31,9 +31,9 @@ function RegistrationForm () {
         let name = e.target.name
         let valueBefore = formData.roles
         if (name == 'isStudent')
-            setFormData({ ...formData, ["roles"]: [...valueBefore, 'ROLE_STUDENT'] })
+            setFormData({ ...formData, ["roles"]: [...valueBefore, 'STUDENT'] })
         if (name == 'isTutor')
-            setFormData({ ...formData, ["roles"]: [...valueBefore, 'ROLE_TUTOR'] })
+            setFormData({ ...formData, ["roles"]: [...valueBefore, 'TUTOR'] })
 
     }
 

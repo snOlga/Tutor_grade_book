@@ -7,8 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,8 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import course_project.back.business.User;
-import course_project.back.enums.UserRoles;
+import course_project.back.entity.UserEntity;
 import course_project.back.repositories.UserRepository;
 
 @Component
@@ -46,14 +43,13 @@ public class SecurityJwtTokenValidator extends OncePerRequestFilter {
 
             if (isValid) {
                 String userEmail = jwtProvider.getUsernameFromJWT(jwt);
-                User user = repoUser.findByEmail(userEmail);
+                UserEntity user = repoUser.findByEmail(userEmail);
                 SecurityUser securityUser = new SecurityUser(user.getEmail(), user.getPassword(),
-                        roleSetToString(user.getRoles()));
+                        user.getRoles());
                 Authentication authentication = new UsernamePasswordAuthenticationToken(securityUser, null,
                         securityUser.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-            else {
+            } else {
                 throw new SecurityException();
             }
         }
@@ -68,13 +64,5 @@ public class SecurityJwtTokenValidator extends OncePerRequestFilter {
                 return cookie.getValue();
         }
         return null;
-    }
-
-    private Set<String> roleSetToString(Set<UserRoles> currentSet) {
-        Set<String> rolesStrSet = new HashSet<String>();
-        for (UserRoles role : currentSet) {
-            rolesStrSet.add(role.getRoleName());
-        }
-        return rolesStrSet;
     }
 }

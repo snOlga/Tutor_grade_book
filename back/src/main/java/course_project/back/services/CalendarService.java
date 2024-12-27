@@ -2,10 +2,9 @@ package course_project.back.services;
 
 import course_project.back.business.CalendarDTO;
 import course_project.back.business.ParticipatorDTO;
-import course_project.back.business.User;
-import course_project.back.enums.UserRoles;
-import course_project.back.orms.LessonORM;
-import course_project.back.orms.UsersLessonsORM;
+import course_project.back.entity.LessonORM;
+import course_project.back.entity.UserEntity;
+import course_project.back.entity.UsersLessonsORM;
 import course_project.back.repositories.LessonRepository;
 import course_project.back.repositories.UserRepository;
 import course_project.back.repositories.UsersLessonsRepository;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class CalendarService {
@@ -30,7 +28,7 @@ public class CalendarService {
     }
 
     public List<CalendarDTO> getCalendarByHRId(String user_hr_id) {
-        User user = userRepository.findByHumanReadableID(user_hr_id);
+        UserEntity user = userRepository.findByHumanReadableID(user_hr_id);
         System.out.println(user.getId() + " " + user.getName());
         List<UsersLessonsORM> lessons_of_user = usersLessonsRepository.findById_User_Id(user.getId());
         System.out.println(lessons_of_user);
@@ -47,16 +45,16 @@ public class CalendarService {
 
         List<CalendarDTO> result = new ArrayList<>();
 
-        for (UsersLessonsORM usersLessonsORM: users_in_lessons) {
-            User curr_user = usersLessonsORM.getId().getUser();
-            Set<UserRoles> roles = curr_user.getRoles();
-            if (roles.contains(UserRoles.TUTOR)) {
-                tutors.add(new ParticipatorDTO(curr_user.getId(), curr_user.getHumanReadableID()));
-            }
-            if (roles.contains(UserRoles.STUDENT)) {
-                students.add(new ParticipatorDTO(curr_user.getId(), curr_user.getHumanReadableID()));
-            }
-        }
+        // for (UsersLessonsORM usersLessonsORM: users_in_lessons) {
+        //     UserEntity curr_user = usersLessonsORM.getId().getUser();
+        //     Set<UserRoles> roles = curr_user.getRoles();
+        //     if (roles.contains(UserRoles.TUTOR)) {
+        //         tutors.add(new ParticipatorDTO(curr_user.getId(), curr_user.getHumanReadableID()));
+        //     }
+        //     if (roles.contains(UserRoles.STUDENT)) {
+        //         students.add(new ParticipatorDTO(curr_user.getId(), curr_user.getHumanReadableID()));
+        //     }
+        // }
         for (LessonORM lessonORM: lessonORMS) {
             result.add(
                     new CalendarDTO(

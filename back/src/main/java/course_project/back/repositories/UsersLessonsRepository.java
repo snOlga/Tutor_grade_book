@@ -1,10 +1,11 @@
 package course_project.back.repositories;
 
-import course_project.back.orms.UsersLessonsId;
-import course_project.back.orms.UsersLessonsORM;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.stereotype.Repository;
+
+import course_project.back.entity.UsersLessonsId;
+import course_project.back.entity.UsersLessonsORM;
 
 import java.util.List;
 

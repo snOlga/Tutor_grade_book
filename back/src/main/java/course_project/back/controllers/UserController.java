@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import course_project.back.DTO.UserDTO;
 import course_project.back.services.UserService;
-import course_project.back.business.User;
 
 @RestController
 @RequestMapping("/auth")
@@ -27,7 +27,7 @@ public class UserController {
         Map<String, String> response = defaultResponse();
 
         json.get("password")[0] = passwordEncoder.encode(json.get("password")[0]);
-        User user = new User(json);
+        UserDTO user = new UserDTO(json);
 
         String token = userService.signUser(user);
         setResponse(response, true, token);

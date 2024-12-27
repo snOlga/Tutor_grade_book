@@ -22,9 +22,9 @@ function App() {
         let isTutor = false
         if (Array.isArray(authorities)) {
             authorities.forEach((auth) => {
-                if (auth.authority == 'ROLE_STUDENT')
+                if (auth.authority == 'STUDENT')
                     isStudent = true
-                if (auth.authority == 'ROLE_TUTOR')
+                if (auth.authority == 'TUTOR')
                     isTutor = true
             });
         }

@@ -1,6 +1,5 @@
-package course_project.back.orms;
+package course_project.back.entity;
 
-import course_project.back.business.User;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -17,7 +16,7 @@ public class UsersLessonsORM {
     private UsersLessonsId id;
     // Связь с Use
 
-    public UsersLessonsORM(User user, LessonORM lesson) {
+    public UsersLessonsORM(UserEntity user, LessonORM lesson) {
         this.id = new UsersLessonsId(user, lesson);
     }
 }

@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import course_project.back.business.LessonDTO;
+import course_project.back.entity.LessonORM;
+
 import org.springframework.stereotype.Service;
 
-import course_project.back.orms.LessonORM;
 import course_project.back.repositories.LessonRepository;
 
 @Service

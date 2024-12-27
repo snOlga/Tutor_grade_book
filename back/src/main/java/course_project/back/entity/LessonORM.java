@@ -1,4 +1,4 @@
-package course_project.back.orms;
+package course_project.back.entity;
 
 import course_project.back.business.LessonDTO;
 import jakarta.persistence.*;

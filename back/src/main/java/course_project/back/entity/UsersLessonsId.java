@@ -1,8 +1,7 @@
-package course_project.back.orms;
+package course_project.back.entity;
 
 import java.io.Serializable;
 
-import course_project.back.business.*;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -12,7 +11,7 @@ import lombok.*;
 public class UsersLessonsId implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "lesson_id")
@@ -22,7 +21,7 @@ public class UsersLessonsId implements Serializable {
 
     public UsersLessonsId() {}
 
-    public UsersLessonsId(User user, LessonORM lesson) {
+    public UsersLessonsId(UserEntity user, LessonORM lesson) {
         this.user = user;
         this.lesson = lesson;
     }

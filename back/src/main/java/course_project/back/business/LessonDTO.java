@@ -2,7 +2,7 @@ package course_project.back.business;
 
 import java.sql.Timestamp;
 
-import course_project.back.orms.LessonORM;
+import course_project.back.entity.LessonORM;
 import lombok.*;
 
 @Setter
