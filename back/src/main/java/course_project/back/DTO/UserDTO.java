@@ -1,6 +1,5 @@
 package course_project.back.DTO;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,11 +27,7 @@ public class UserDTO {
         this.password = json.get("password")[0];
         this.humanReadableID = "";
 
-        Set<String> roles = new HashSet<>();
-        String[] rolesStr = json.get("roles");
-        for (String role : rolesStr) {
-            roles.add(role);
-        }
+        Set<String> roles = Set.of(json.get("roles"));
         this.setRoles(roles);
     }
 }

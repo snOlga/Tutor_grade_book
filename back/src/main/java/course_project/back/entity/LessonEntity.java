@@ -13,12 +13,12 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "lessons")
-public class LessonORM {
+public class LessonEntity {
 
-    public LessonORM(LessonDTO lessonDTO) {
+    public LessonEntity(LessonDTO lessonDTO) {
         this.id = lessonDTO.getId();
         this.startTime = lessonDTO.getStartTime();
-        this.duration = lessonDTO.getDuration();
+        this.durationInMinutes = lessonDTO.getDuration();
         this.subjectId = lessonDTO.getSubjectId();
         this.homework = lessonDTO.getHomework();
         this.isOpen = lessonDTO.getIsOpen();
@@ -35,8 +35,7 @@ public class LessonORM {
     private Timestamp startTime;
 
     @Column(name = "duration")
-    private Integer duration;
-    // В минутах
+    private Integer durationInMinutes;
 
     @Column(name = "subject_id")
     private Long subjectId; // Предполагаем, что это внешний ключ
@@ -59,6 +58,8 @@ public class LessonORM {
     @Column(name = "heading")
     private String heading;
 
-    @OneToMany(mappedBy = "id.lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<UsersLessonsORM> usersLessons;
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "users_lessons", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "lesson_id") })
+    private Set<UserEntity> users;
 }

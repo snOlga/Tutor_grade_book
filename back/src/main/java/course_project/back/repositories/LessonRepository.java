@@ -6,16 +6,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import course_project.back.entity.LessonORM;
+import course_project.back.entity.LessonEntity;
 
 import java.util.List;
 
 @Repository
-public interface LessonRepository extends JpaRepository<LessonORM, Long> {
-    List<LessonORM> findByHumanReadableId(String humanReadableId);
+public interface LessonRepository extends JpaRepository<LessonEntity, Long> {
+    List<LessonEntity> findByHumanReadableId(String humanReadableId);
 
-    @Query("SELECT l.usersLessons FROM LessonORM l WHERE l.humanReadableId = :hr_id")
-    List<LessonORM> findLessonsByUserHumanReadableId(@Param("hr_id") String hr_id);
+    @Query(nativeQuery = true, value ="SELECT l.* FROM lessons l JOIN users_lessons ul ON l.id = ul.lesson_id JOIN users_tutor_grade_book u ON ul.user_id = u.id WHERE u.email = ?1")
+    List<LessonEntity> findAllByUserEmail(@Param("email") String email);
 
-    List<LessonORM> findByIdIn(List<Long> ids);
+
+    List<LessonEntity> findByIdIn(List<Long> ids);
 }

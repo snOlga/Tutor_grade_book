@@ -2,7 +2,7 @@ package course_project.back.business;
 
 import java.sql.Timestamp;
 
-import course_project.back.entity.LessonORM;
+import course_project.back.entity.LessonEntity;
 import lombok.*;
 
 @Setter
@@ -21,10 +21,10 @@ public class LessonDTO {
     private String humanReadableId;
     private String heading;
 
-    public LessonDTO(LessonORM lessonORM) {
+    public LessonDTO(LessonEntity lessonORM) {
         this.id = lessonORM.getId();
         this.startTime = lessonORM.getStartTime();
-        this.duration = lessonORM.getDuration();
+        this.duration = lessonORM.getDurationInMinutes();
         this.subjectId = lessonORM.getSubjectId();
         this.homework = lessonORM.getHomework();
         this.isOpen = lessonORM.getIsOpen();

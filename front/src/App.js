@@ -17,6 +17,8 @@ function App() {
         if (currentToken == '')
             return
         let decodedBody = jwtDecode(currentToken)
+        let subject = decodedBody.sub
+        localStorage.setItem("subject", subject)
         let authorities = decodedBody.authorities
         let isStudent = false
         let isTutor = false

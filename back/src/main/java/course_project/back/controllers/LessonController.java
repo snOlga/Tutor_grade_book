@@ -2,9 +2,9 @@ package course_project.back.controllers;
 
 import java.util.List;
 
-import course_project.back.business.CalendarDTO;
-import course_project.back.services.CalendarService;
-import course_project.back.services.LessonServiceImpl;
+import course_project.back.services.LessonService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,13 +23,8 @@ import course_project.back.business.LessonDTO;
 @RequestMapping("/lessons")
 public class LessonController {
 
-    private final LessonServiceImpl lessonService;
-    private final CalendarService calendarService;
-
-    public LessonController(LessonServiceImpl lessonService, CalendarService calendarService) {
-        this.lessonService = lessonService;
-        this.calendarService = calendarService;
-    }
+    @Autowired
+    private LessonService lessonService;
 
     @GetMapping()
     public ResponseEntity<List<LessonDTO>> getAllLessons() {
@@ -62,16 +57,10 @@ public class LessonController {
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/with_user/{hr_id}")
-    public ResponseEntity<List<LessonDTO>> getAllUserLessons(@PathVariable String hr_id) {
+    @GetMapping("/with_user/{email}")
+    public ResponseEntity<List<LessonDTO>> getAllUserLessons(@PathVariable String email) {
         System.out.println("В бд стучатся за всеми уроками");
-        return new ResponseEntity<>(lessonService.findAllByUserId(hr_id), HttpStatus.OK);
-    }
-
-    @GetMapping("/calendar/{hr_id}")
-    public ResponseEntity<List<CalendarDTO>> getCalendar(@PathVariable String hr_id) {
-
-        return new ResponseEntity<>(calendarService.getCalendarByHRId(hr_id), HttpStatus.OK);
+        return new ResponseEntity<>(lessonService.findAllByUserEmail(email), HttpStatus.OK);
     }
 }
 

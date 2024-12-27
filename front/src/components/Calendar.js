@@ -2,90 +2,6 @@ import React from 'react';
 import { useEffect, useState } from 'react'
 import '../styles/calendar_style.css'
 
-const mockJson = [
-    {
-        "id": "1",
-        "students_participator": [
-            {
-                "name": "Kyle",
-                "user_id": "1"
-            },
-            {
-                "name": "Mike",
-                "user_id": "2"
-            }
-        ],
-        "tutors_participator": [
-            {
-                "name": "Ms March",
-                "user_id": "3"
-            },
-            {
-                "name": "Mr Brown",
-                "user_id": "4"
-            }
-        ],
-        "timestamp": "November 22, 2024 11:00:00",
-        "duration": "1",
-        "heading": "SomeCoolLesson",
-        "description": "you will be interested at this lesson!"
-    },
-    {
-        "id": "2",
-        "students_participator": [
-            {
-                "name": "Kyle",
-                "user_id": "1"
-            },
-            {
-                "name": "Mike",
-                "user_id": "2"
-            }
-        ],
-        "tutors_participator": [
-            {
-                "name": "Ms March",
-                "user_id": "3"
-            },
-            {
-                "name": "Mr Brown",
-                "user_id": "4"
-            }
-        ],
-        "timestamp": "November 20, 2024 10:00:00",
-        "duration": "1",
-        "heading": "Foo",
-        "description": "you will be interested at this lesson!"
-    },
-    {
-        "id": "3",
-        "students_participator": [
-            {
-                "name": "Kyle",
-                "user_id": "1"
-            },
-            {
-                "name": "Mike",
-                "user_id": "2"
-            }
-        ],
-        "tutors_participator": [
-            {
-                "name": "Ms March",
-                "user_id": "3"
-            },
-            {
-                "name": "Mr Brown",
-                "user_id": "4"
-            }
-        ],
-        "timestamp": "November 20, 2024 11:00:00",
-        "duration": "1",
-        "heading": "Foo",
-        "description": "you will be interested at this lesson!"
-    }
-]
-
 const ANOTHER_TUTOR_PAGE_API = "/api/get_schedule/tutor"
 
 function Calendar() {
@@ -117,7 +33,7 @@ function Calendar() {
     }
 
     function loadLessons() {
-        fetch('http://localhost:18018/lessons', {
+        fetch('http://localhost:18018/lessons/with_user/' + localStorage.getItem("subject"), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

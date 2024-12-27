@@ -40,24 +40,8 @@ public class UserEntity {
             @JoinColumn(name = "role_id") })
     private Set<RoleEntity> roles;
 
-    @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<UsersLessonsORM> usersLessons;
-
     public void setDefaultHumanRedableID() {
         setHumanReadableID(getName() + "_" + getSecondName() + "_" + getId());
-    }
-
-    public UserEntity(String name, String secondName, String email, String phone, String description,
-            String humanReadableID, String password, Set<RoleEntity> roles, Set<UsersLessonsORM> usersLessons) {
-        this.name = name;
-        this.secondName = secondName;
-        this.email = email;
-        this.phone = phone;
-        this.description = description;
-        this.humanReadableID = humanReadableID;
-        this.password = password;
-        this.roles = roles;
-        this.usersLessons = usersLessons;
     }
 
     public UserEntity(String name, String secondName, String email, String phone, String description,
