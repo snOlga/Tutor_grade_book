@@ -1,4 +1,4 @@
-package course_project.back.controllers;
+package course_project.back.controller;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import course_project.back.DTO.UserDTO;
-import course_project.back.services.UserService;
+import course_project.back.service.UserService;
 
 @RestController
 @RequestMapping("/auth")

@@ -1,14 +1,13 @@
-package course_project.back.services;
+package course_project.back.service;
 
 import java.util.List;
 import java.util.Optional;
 
-import course_project.back.business.LessonDTO;
+import course_project.back.DTO.LessonDTO;
 import course_project.back.entity.LessonEntity;
+import course_project.back.repository.LessonRepository;
 
 import org.springframework.stereotype.Service;
-
-import course_project.back.repositories.LessonRepository;
 
 @Service
 public class LessonService {
@@ -28,7 +27,6 @@ public class LessonService {
 
     public LessonDTO findById(Long id) {
         Optional<LessonEntity> lesson = lessonRepository.findById(id);
-        // Возвращаем null, если урок не найден
         return lesson.map(LessonDTO::new).orElse(null);
 
     }
@@ -40,10 +38,7 @@ public class LessonService {
     }
 
     public LessonDTO update(LessonDTO lessonDTO) {
-        LessonEntity lessonORM = new LessonEntity(lessonDTO);
-        LessonEntity save_result = lessonRepository.save(lessonORM);
-        return new LessonDTO(save_result);
-        // JpaRepository.save()  обрабатывает как создание, так и обновление
+        return create(lessonDTO);
     }
 
     public boolean deleteById(Long id) {

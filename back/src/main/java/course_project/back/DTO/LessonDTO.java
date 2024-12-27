@@ -1,4 +1,4 @@
-package course_project.back.business;
+package course_project.back.DTO;
 
 import java.sql.Timestamp;
 
@@ -13,7 +13,7 @@ public class LessonDTO {
     private Long id;
     private Timestamp startTime;
     private Integer duration;
-    private Long subjectId;
+    private SubjectDTO subject;
     private String homework;
     private Boolean isOpen;
     private Boolean isDeleted;
@@ -25,7 +25,7 @@ public class LessonDTO {
         this.id = lessonORM.getId();
         this.startTime = lessonORM.getStartTime();
         this.duration = lessonORM.getDurationInMinutes();
-        this.subjectId = lessonORM.getSubjectId();
+        this.subject = new SubjectDTO(lessonORM.getSubject());
         this.homework = lessonORM.getHomework();
         this.isOpen = lessonORM.getIsOpen();
         this.isDeleted = lessonORM.getIsDeleted();

@@ -1,8 +1,9 @@
-package course_project.back.controllers;
+package course_project.back.controller;
 
 import java.util.List;
 
-import course_project.back.services.LessonService;
+import course_project.back.DTO.LessonDTO;
+import course_project.back.service.LessonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import course_project.back.business.LessonDTO;
-
 
 @RestController
 @RequestMapping("/lessons")
@@ -25,19 +24,6 @@ public class LessonController {
 
     @Autowired
     private LessonService lessonService;
-
-    @GetMapping()
-    public ResponseEntity<List<LessonDTO>> getAllLessons() {
-        System.out.println("В бд стучатся за всеми уроками");
-        return new ResponseEntity<>(lessonService.findAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<LessonDTO> getLessonById(@PathVariable Long id) {
-        LessonDTO lessonDTO = lessonService.findById(id);
-        return lessonDTO != null ? new ResponseEntity<>(lessonDTO, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
 
     @PostMapping
     public ResponseEntity<LessonDTO> createLesson(@RequestBody LessonDTO lessonDTO) {

@@ -1,4 +1,4 @@
-package course_project.back.repositories;
+package course_project.back.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -17,21 +17,28 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
     @Nonnull
     @Column(name = "name")
     private String name;
+
     @Column(name = "second_name")
     private String secondName;
+
     @Nonnull
     @Column(name = "email", unique = true)
     private String email;
+
     @Column(name = "phone")
     private String phone;
+
     @Column(name = "description")
     private String description;
+
     @Nonnull
     @Column(name = "human_readable_id", unique = true)
     private String humanReadableID;
+
     @Nonnull
     @Column(name = "password")
     private String password;

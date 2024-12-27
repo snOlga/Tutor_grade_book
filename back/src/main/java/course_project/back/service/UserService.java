@@ -1,4 +1,4 @@
-package course_project.back.services;
+package course_project.back.service;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import course_project.back.DTO.UserDTO;
 import course_project.back.entity.RoleEntity;
 import course_project.back.entity.UserEntity;
-import course_project.back.repositories.RolesRepository;
-import course_project.back.repositories.UserRepository;
+import course_project.back.repository.RolesRepository;
+import course_project.back.repository.UserRepository;
 import course_project.back.security.SecurityJwtTokenProvider;
 import course_project.back.security.SecurityUser;
 

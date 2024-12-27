@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import course_project.back.entity.UserEntity;
-import course_project.back.repositories.UserRepository;
+import course_project.back.repository.UserRepository;
 
 @Component
 public class SecurityJwtTokenValidator extends OncePerRequestFilter {

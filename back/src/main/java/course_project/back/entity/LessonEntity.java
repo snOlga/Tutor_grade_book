@@ -1,10 +1,10 @@
 package course_project.back.entity;
 
-import course_project.back.business.LessonDTO;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
 
+import course_project.back.DTO.LessonDTO;
 import lombok.*;
 
 @Setter
@@ -19,7 +19,7 @@ public class LessonEntity {
         this.id = lessonDTO.getId();
         this.startTime = lessonDTO.getStartTime();
         this.durationInMinutes = lessonDTO.getDuration();
-        this.subjectId = lessonDTO.getSubjectId();
+        this.subject = new SubjectEntity(lessonDTO.getSubject());
         this.homework = lessonDTO.getHomework();
         this.isOpen = lessonDTO.getIsOpen();
         this.isDeleted = lessonDTO.getIsDeleted();
@@ -37,8 +37,9 @@ public class LessonEntity {
     @Column(name = "duration")
     private Integer durationInMinutes;
 
-    @Column(name = "subject_id")
-    private Long subjectId; // Предполагаем, что это внешний ключ
+    @ManyToOne
+    @JoinColumn(name = "subject_id")
+    private SubjectEntity subject;
 
     @Column(name = "homework")
     private String homework;
