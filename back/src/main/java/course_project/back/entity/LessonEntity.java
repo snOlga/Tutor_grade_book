@@ -1,5 +1,6 @@
 package course_project.back.entity;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
@@ -14,6 +15,54 @@ import lombok.*;
 @Entity
 @Table(name = "lessons")
 public class LessonEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Nonnull
+    @Column(name = "start_time")
+    private Timestamp startTime;
+
+    @Nonnull
+    @Column(name = "duration")
+    private Integer durationInMinutes;
+
+    @Nonnull
+    @ManyToOne
+    @JoinColumn(name = "subject_id")
+    private SubjectEntity subject;
+
+    @Column(name = "homework")
+    private String homework;
+
+    @Nonnull
+    @Column(name = "is_open")
+    private Boolean isOpen;
+
+    @Nonnull
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "human_readable_id")
+    private String humanReadableId;
+
+    @Nonnull
+    @Column(name = "heading")
+    private String heading;
+
+    @Nonnull
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private UserEntity owner;
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "users_lessons", joinColumns = { @JoinColumn(name = "lesson_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "user_id") })
+    private Set<UserEntity> users;
 
     public LessonEntity(LessonDTO lessonDTO) {
         this.id = lessonDTO.getId();
@@ -26,41 +75,4 @@ public class LessonEntity {
         this.heading = lessonDTO.getHeading();
         this.humanReadableId = lessonDTO.getHumanReadableId();
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "start_time")
-    private Timestamp startTime;
-
-    @Column(name = "duration")
-    private Integer durationInMinutes;
-
-    @ManyToOne
-    @JoinColumn(name = "subject_id")
-    private SubjectEntity subject;
-
-    @Column(name = "homework")
-    private String homework;
-
-    @Column(name = "is_open")
-    private Boolean isOpen;
-
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
-
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "human_readable_id")
-    private String humanReadableId;
-
-    @Column(name = "heading")
-    private String heading;
-
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(name = "users_lessons", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
-            @JoinColumn(name = "lesson_id") })
-    private Set<UserEntity> users;
 }

@@ -52,7 +52,7 @@ public class LessonService {
     }
 
     public List<LessonDTO> findAllByUserEmail(String email) {
-        List<LessonEntity> res = lessonRepository.findAllByUserEmail(email);
+        List<LessonEntity> res = lessonRepository.findByUsers_Email(email);
         return res.stream().map(LessonDTO::new).toList();
     }
 }

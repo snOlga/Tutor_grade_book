@@ -16,21 +16,46 @@ function CreateLessonModal() {
     )
 
     function submitForm() {
-        fetch('http://localhost:18018/send_lesson', { // TODO: api naming?? 
+        fetch('http://localhost:18018/lessons/send_lesson', { // TODO: api naming?? 
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: {
-                title: newLesson.title,
-                description: newLesson.description,
-                startTime: (new Date(newLesson.startDate + " " + newLesson.startTime)),
-                duration: (new Date(newLesson.startDate + " " + (newLesson.endTime - newLesson.startDate)).getMinutes()),
-                isOpen: newLesson.isOpen,
-                studentParticipators: newLesson.studentParticipators,
-                tutorParticipators: newLesson.tutorParticipators
-            }
+            body: JSON.stringify({
+                "id": 0,
+                "startTime": "2024-12-28T18:31:04.786Z",
+                "duration": 0,
+                "subject": {
+                    "id": 0,
+                    "name": "string",
+                    "analogyNames": "string"
+                },
+                "homework": "string",
+                "isOpen": true,
+                "isDeleted": true,
+                "description": "string",
+                "humanReadableId": "string",
+                "heading": "string",
+                "owner": {
+                    "name": "string",
+                    "secondName": "string",
+                    "email": "string",
+                    "phone": "string",
+                    "description": "string",
+                    "humanReadableID": "string"
+                },
+                "users": [
+                    {
+                        "name": "string",
+                        "secondName": "string",
+                        "email": "string",
+                        "phone": "string",
+                        "description": "string",
+                        "humanReadableID": "string"
+                    }
+                ]
+            })
         })
             .then(response => response.json())
             .then(data => {
@@ -40,13 +65,20 @@ function CreateLessonModal() {
     //"startTime": "December 20, 2024 11:00:00",
 
     console.log({
-        title: newLesson.title,
+        heading: newLesson.title,
         description: newLesson.description,
         startTime: (new Date(newLesson.startDate + " " + newLesson.startTime)),
-        duration: (new Date(newLesson.startDate + " " + (newLesson.endTime - newLesson.startDate)).getMinutes()),
-        isOpen: newLesson.isOpen,
-        studentParticipators: newLesson.studentParticipators,
-        tutorParticipators: newLesson.tutorParticipators
+        duration: 30,
+        isOpen: "true",
+        isDeleted: "false",
+        homework: "",
+        owner: "thisUser",
+        subject: {
+            analogyNames: "Math;Maths;Mathematics",
+            id: "1",
+            name: "Mathematics"
+        },
+        users: []
     })
 
     return (
@@ -70,6 +102,9 @@ function CreateLessonModal() {
                             <input name="date" type="date" value={newLesson.startDate} onChange={(e) => setNewLesson({ ...newLesson, startDate: e.target.value })} required />
                         </div>
                         <div className='field-holder'>
+                            <label>Subject</label>
+                        </div>
+                        <div className='field-holder'>
                             <p>
                                 Time
                             </p>
@@ -91,7 +126,7 @@ function CreateLessonModal() {
                         </div>
                     </div>
                     <div className='buttons'>
-                        <button type='submit'>Create</button>
+                        <button type='submit' onClick={submitForm}>Create</button>
                         <button>Exit</button>
                     </div>
                 </div>

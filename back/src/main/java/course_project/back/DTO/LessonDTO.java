@@ -1,6 +1,7 @@
 package course_project.back.DTO;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import course_project.back.entity.LessonEntity;
 import lombok.*;
@@ -20,6 +21,8 @@ public class LessonDTO {
     private String description;
     private String humanReadableId;
     private String heading;
+    private ParticipatorDTO owner;
+    private List<ParticipatorDTO> users;
 
     public LessonDTO(LessonEntity lessonORM) {
         this.id = lessonORM.getId();
@@ -32,6 +35,8 @@ public class LessonDTO {
         this.description = lessonORM.getDescription();
         this.humanReadableId = lessonORM.getHumanReadableId();
         this.heading = lessonORM.getHeading();
+        this.owner = new ParticipatorDTO(lessonORM.getOwner());
+        this.users = lessonORM.getUsers().stream().map(ParticipatorDTO::new).toList();
     }
 
 }

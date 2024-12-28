@@ -16,15 +16,6 @@ function RegistrationForm () {
     const handleChange = (e) => {
         const { name, value } = e.target
         setFormData({ ...formData, [name]: value })
-
-        console.log(JSON.stringify({
-            name: [formData.username],
-            secondName: [formData.secondName],
-            phone: [formData.phone],
-            email: [formData.email],
-            password: [formData.password],
-            roles: formData.roles
-        }))
     }
 
     const setRole = (e) => {

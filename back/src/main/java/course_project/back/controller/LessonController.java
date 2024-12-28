@@ -25,7 +25,7 @@ public class LessonController {
     @Autowired
     private LessonService lessonService;
 
-    @PostMapping
+    @PostMapping("/send_lesson")
     public ResponseEntity<LessonDTO> createLesson(@RequestBody LessonDTO lessonDTO) {
         LessonDTO createdLessonDTO = lessonService.create(lessonDTO);
         return new ResponseEntity<>(createdLessonDTO, HttpStatus.CREATED);
