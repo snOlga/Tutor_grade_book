@@ -42,7 +42,7 @@ h1 {
   margin-bottom: 5px;
 }
 
-input:not([type="checkbox"]), textarea {
+input:not([type="checkbox"], [type="radio"]), textarea {
   width: 90%;
   padding: 10px;
   font-size: 16px;
@@ -54,6 +54,10 @@ input:not([type="checkbox"]), textarea {
 input:focus, textarea:focus {
   border-color: #89A8B2;
   outline: none;
+}
+
+input[type="radio"] {
+  accent-color: #B5E4E8;
 }
 
 .submit-button {
@@ -110,4 +114,8 @@ a {
 .link:hover {
   color: #5ed1c9;
   text-decoration: underline;
+}
+
+label {
+  margin-left: 10px;
 }

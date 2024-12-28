@@ -13,7 +13,7 @@ function TutorCalendar() {
                 <Header openChat={openChat} openLessonCreationModal={openLessonCreationModal} />
                 <Calendar />
                 {
-                    isLessonCreationOpen && <CreateLessonModal />
+                    isLessonCreationOpen && <CreateLessonModal closeModal={openLessonCreationModal} />
                 }
                 {/* {
                     isChatOpen && <ChatHolder />
