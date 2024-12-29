@@ -11,16 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import course_project.back.DTO.UserDTO;
-import course_project.back.service.UserService;
+import course_project.back.service.UserAuthService;
 
 @RestController
 @RequestMapping("/auth")
-public class UserController {
+public class UserAuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private UserService userService;
+    private UserAuthService userService;
 
     @PostMapping("/sign_up")
     public Map<String, String> signUp(@RequestBody UserDTO userDTO) {

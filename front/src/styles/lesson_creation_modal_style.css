@@ -10,6 +10,7 @@
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     position: absolute;
+    padding-bottom: 5%;
 }
 
 .content {
@@ -33,6 +34,8 @@
     position: absolute;
     bottom: 5%;
     right: 5%;
+    display: flex;
+    gap: 1em;
 }
 
 .left-part {
@@ -43,6 +46,14 @@
 
 .field-holder {
     margin-bottom: 5%;
+    display: grid;
+    gap: 0.5em;
+}
+
+.field-holder-flex {
+    margin-bottom: 5%;
+    display: flex;
+    gap: 0.5em;
 }
 
 .toggle-switch {

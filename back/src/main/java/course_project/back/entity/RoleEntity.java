@@ -11,6 +11,10 @@ import lombok.*;
 @Entity
 @Table(name = "roles")
 public class RoleEntity {
+    public static String ROLE_ADMIN = "ADMIN";
+    public static String ROLE_TUTOR = "TUTOR";
+    public static String ROLE_STUDENT = "STUDENT";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

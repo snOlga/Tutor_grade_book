@@ -19,7 +19,7 @@ import course_project.back.security.SecurityJwtTokenProvider;
 import course_project.back.security.SecurityUser;
 
 @Service
-public class UserService {
+public class UserAuthService {
     private SecurityJwtTokenProvider jwtProvider = new SecurityJwtTokenProvider();
 
     @Autowired
