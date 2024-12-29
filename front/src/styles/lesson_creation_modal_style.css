@@ -1,3 +1,13 @@
+.all-window {
+    min-width: 100%;
+    min-height: 100%;
+    z-index: 49;
+    background-image: linear-gradient(#55555588, rgba(255, 255, 255, 0));
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .modal-holder {
     top: 10%;
     left: 10%;
@@ -105,14 +115,4 @@
 .radio-holder {
     display: flex;
     gap: 1px !important; 
-}
-
-.all-window {
-    min-width: 100%;
-    min-height: 100%;
-    z-index: 49;
-    background-image: linear-gradient(#55555588, rgba(255, 255, 255, 0));
-    position: absolute;
-    top: 0;
-    left: 0;
 }

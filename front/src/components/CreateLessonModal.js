@@ -46,7 +46,7 @@ function CreateLessonModal({ closeModal }) {
         })
         let chosenSubject = {}
         allSubjects.forEach(subject => {
-            if(subject.name == chosenID)
+            if (subject.name == chosenID)
                 chosenSubject = subject
         })
         return chosenSubject
@@ -64,7 +64,7 @@ function CreateLessonModal({ closeModal }) {
             },
             body: JSON.stringify({
                 startTime: startTimestamp,
-                duration: Math.round(duration / 60000),
+                durationInMinutes: Math.round(duration / 60000),
                 subject: getSubjectFromForm(),
                 isOpen: newLesson.isOpen,
                 isDeleted: false,
@@ -217,7 +217,7 @@ function CreateLessonModal({ closeModal }) {
                                     <input name="toggle" type="checkbox" />
                                     <span className="slider"></span>
                                 </label>
-                                <label htmlFor="toggle">Make lesson closed</label>
+                                <label htmlFor="toggle">Make lesson open for everyone!</label>
                             </div>
                         </div>
                         <div className='buttons'>
@@ -227,7 +227,7 @@ function CreateLessonModal({ closeModal }) {
                     </div>
                 </form>
             </div>
-        </div>
+        </div >
     );
 };
 

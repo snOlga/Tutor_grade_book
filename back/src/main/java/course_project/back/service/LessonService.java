@@ -52,10 +52,12 @@ public class LessonService {
 
     public boolean deleteById(Long id) {
         try {
-            lessonRepository.deleteById(id);
+            LessonEntity lessonEntity = lessonRepository.findById(id).get(); // unexcpected behaviour of hibernate of deleting by id, logged in file
+            lessonEntity.setIsDeleted(true);
+            lessonRepository.save(lessonEntity);
             return true;
         } catch (Exception e) {
-            System.out.println("Не удалось обновить");
+            System.out.println("Cannot delete");
             return false;
         }
     }

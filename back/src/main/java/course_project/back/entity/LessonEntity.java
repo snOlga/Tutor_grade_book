@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
 
+import org.hibernate.annotations.Where;
+
 import course_project.back.DTO.LessonDTO;
 import lombok.*;
 
@@ -13,6 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Where(clause = "is_deleted = false")
 @Table(name = "lessons")
 public class LessonEntity {
     @Id
@@ -25,7 +28,7 @@ public class LessonEntity {
     private Timestamp startTime;
 
     @Nonnull
-    @Column(name = "duration")
+    @Column(name = "duration_in_minutes")
     private Integer durationInMinutes;
 
     @Nonnull
@@ -67,7 +70,7 @@ public class LessonEntity {
     public LessonEntity(LessonDTO lessonDTO) {
         this.id = lessonDTO.getId();
         this.startTime = lessonDTO.getStartTime();
-        this.durationInMinutes = lessonDTO.getDuration();
+        this.durationInMinutes = lessonDTO.getDurationInMinutes();
         this.subject = new SubjectEntity(lessonDTO.getSubject());
         this.homework = lessonDTO.getHomework();
         this.isOpen = lessonDTO.getIsOpen();

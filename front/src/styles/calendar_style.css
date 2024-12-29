@@ -119,6 +119,7 @@
     font-weight: bold;
     color: #555; 
     margin-bottom: 4px; 
+    display: flex;
 }
 
 .lesson-details {
@@ -139,3 +140,21 @@
     margin: 4px 0;
 }
 
+.week-buttons {
+    display: flex;
+    gap: 5px;
+    padding: 5px;
+}
+
+.delete-button {
+    background-color: #EB7C6C;
+}
+
+.delete-button:hover {
+    background-color: #eb6b57;
+}
+
+.deletion-modal-buttons {
+    display: flex;
+    gap: 0.5em;
+}

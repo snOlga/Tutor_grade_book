@@ -1,5 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react'
+import LessonsCards from './Cards/LessonsCards';
 import '../styles/calendar_style.css'
 
 const ANOTHER_TUTOR_PAGE_API = "/api/get_schedule/tutor"
@@ -59,7 +60,7 @@ function Calendar() {
                 <div className='times'>
                     <div className='line-holder'>
                         <div className='half-of-hour'>
-                            <div>
+                            <div className='week-buttons'>
                                 <button onClick={weekBefore}>{"<"}</button>
                                 <button onClick={nextWeek}>{">"}</button>
                             </div>
@@ -87,38 +88,7 @@ function Calendar() {
                                         <p className="date-day">{dayDate[1]}</p>
                                     </div>
                                     <div className='day-content'>
-                                        {
-                                            lessons.map(lesson => {
-                                                const lessonDate = new Date(lesson.startTime)
-                                                const currentDate = dayDate[0]
-                                                if (lessonDate.getDate() == currentDate.getDate() &&
-                                                    lessonDate.getMonth() == currentDate.getMonth() &&
-                                                    lessonDate.getFullYear() == currentDate.getFullYear()) {
-                                                    const topPositionLesson = (lessonDate.getHours() - 7) * 60 + lessonDate.getMinutes() + 10;
-                                                    return (
-                                                        <div className="lesson" style={{ top: topPositionLesson + 'px' }}>
-                                                            <div className="lesson-time">
-                                                                {lessonDate.toLocaleTimeString().substring(0, 5) + " - " + (new Date(lessonDate.getTime() + lesson.duration  * 60 * 1000)).toLocaleTimeString().substring(0, 5)}
-                                                            </div>
-                                                            <div className="lesson-details">
-                                                                <h4 className="lesson-heading">
-                                                                    {lesson.heading}
-                                                                </h4>
-                                                                <p className="lesson-tutors">
-                                                                    {/* {lesson.tutors_participator.map(tutor => {
-                                                                        return (
-                                                                            <div>
-                                                                                <a href={'/' + tutor.user_id} className='link'>{tutor.name}</a>
-                                                                            </div>
-                                                                        )
-                                                                    })} */}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                }
-                                            })
-                                        }
+                                        <LessonsCards lessons={lessons} currentDate={dayDate[0]}/>
                                         {
                                             time.map(oneTime => {
                                                 const topPosition = (oneTime - 7) * 60 + 10
@@ -130,7 +100,6 @@ function Calendar() {
                                     </div>
                                 </div>
                             )
-
                         })
                     }
                 </div>

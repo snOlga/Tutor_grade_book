@@ -13,7 +13,7 @@ import lombok.*;
 public class LessonDTO {
     private Long id;
     private Timestamp startTime;
-    private Integer duration;
+    private Integer durationInMinutes;
     private SubjectDTO subject;
     private String homework;
     private Boolean isOpen;
@@ -27,7 +27,7 @@ public class LessonDTO {
     public LessonDTO(LessonEntity lessonORM) {
         this.id = lessonORM.getId();
         this.startTime = lessonORM.getStartTime();
-        this.duration = lessonORM.getDurationInMinutes();
+        this.durationInMinutes = lessonORM.getDurationInMinutes();
         this.subject = new SubjectDTO(lessonORM.getSubject());
         this.homework = lessonORM.getHomework();
         this.isOpen = lessonORM.getIsOpen();
