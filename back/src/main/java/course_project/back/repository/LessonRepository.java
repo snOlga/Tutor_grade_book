@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface LessonRepository extends JpaRepository<LessonEntity, Long> {
-    List<LessonEntity> findByHumanReadableId(String humanReadableId);
+    LessonEntity findByHumanReadableId(String humanReadableId);
 
     List<LessonEntity> findByUsers_Email(String email);
 

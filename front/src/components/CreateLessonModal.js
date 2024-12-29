@@ -52,8 +52,6 @@ function CreateLessonModal({ closeModal }) {
         return chosenSubject
     }
 
-    console.log(getSubjectFromForm())
-
     function submitForm() {
         let startTimestamp = (newLesson.startDate + "T" + newLesson.startTime)
         let endTimeStamp = (newLesson.startDate + "T" + newLesson.endTime)

@@ -1,22 +1,29 @@
 package course_project.back.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 import course_project.back.DTO.LessonDTO;
 import course_project.back.entity.LessonEntity;
+import course_project.back.entity.SubjectEntity;
+import course_project.back.entity.UserEntity;
 import course_project.back.repository.LessonRepository;
+import course_project.back.repository.SubjectRepository;
+import course_project.back.repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LessonService {
 
-    private final LessonRepository lessonRepository;
-
-    public LessonService(LessonRepository lessonRepository) {
-        this.lessonRepository = lessonRepository;
-    }
+    @Autowired
+    private LessonRepository lessonRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private SubjectRepository subjectRepository;
 
     public List<LessonDTO> findAll() {
         System.out.println("Иду в бд за всеми уроками...");
@@ -32,9 +39,11 @@ public class LessonService {
     }
 
     public LessonDTO create(LessonDTO lessonDTO) {
-        LessonEntity lessonORM = new LessonEntity(lessonDTO);
-        LessonEntity save_result = lessonRepository.save(lessonORM);
-        return new LessonDTO(save_result);
+        LessonEntity lessonEntity = prepareLessonEntityFromDTO(lessonDTO);
+        LessonEntity result = lessonRepository.save(lessonEntity);
+        result.setHumanReadableId(result.getHeading() + "_" + result.getOwner().getName() + "_" + result.getId());
+        LessonEntity returnedResult = lessonRepository.save(result);
+        return new LessonDTO(returnedResult);
     }
 
     public LessonDTO update(LessonDTO lessonDTO) {
@@ -55,5 +64,20 @@ public class LessonService {
         List<LessonEntity> res = lessonRepository.findByUsers_Email(email);
         return res.stream().map(LessonDTO::new).toList();
     }
-}
 
+    private LessonEntity prepareLessonEntityFromDTO(LessonDTO lessonDTO) {
+        UserEntity owner = userRepository.findByEmail(lessonDTO.getOwner().getEmail());
+        lessonDTO.getUsers().add(lessonDTO.getOwner());
+        List<UserEntity> participators = lessonDTO.getUsers().stream()
+                .map(user -> userRepository.findByEmail(user.getEmail())).toList();
+        SubjectEntity subject = subjectRepository.findByName(lessonDTO.getSubject().getName());
+
+        LessonEntity lessonEntity = new LessonEntity(lessonDTO);
+        lessonEntity.setOwner(owner);
+        lessonEntity.setUsers(new HashSet<>(participators));
+        lessonEntity.setSubject(subject);
+        lessonEntity.setHumanReadableId("");
+
+        return lessonEntity;
+    }
+}
