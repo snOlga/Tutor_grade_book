@@ -43,36 +43,36 @@ function CreateLessonModal({ closeModal }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                "id": 0,
-                "startTime": "2024-12-28T18:31:04.786Z",
-                "duration": 0,
-                "subject": {
-                    "id": 0,
-                    "name": "string",
-                    "analogyNames": "string"
+                id: 0,
+                startTime: "2024-12-28T18:31:04.786Z",
+                duration: 0,
+                subject: {
+                    id: 0,
+                    name: "string",
+                    analogyNames: "string"
                 },
-                "homework": "",
-                "isOpen": newLesson.isOpen,
-                "isDeleted": false,
-                "description": newLesson.description,
-                "humanReadableId": "string",
-                "heading": newLesson.title,
-                "owner": {
-                    "name": "string",
-                    "secondName": "string",
-                    "email": "string",
-                    "phone": "string",
-                    "description": "string",
-                    "humanReadableID": "string"
+                homework: "",
+                isOpen: newLesson.isOpen,
+                isDeleted: false,
+                description: newLesson.description,
+                humanReadableId: "string",
+                heading: newLesson.title,
+                owner: {
+                    name: "string",
+                    secondName: "string",
+                    email: "string",
+                    phone: "string",
+                    description: "string",
+                    humanReadableID: "string"
                 },
-                "users": [
+                users: [
                     {
-                        "name": "string",
-                        "secondName": "string",
-                        "email": "string",
-                        "phone": "string",
-                        "description": "string",
-                        "humanReadableID": "string"
+                        name: "string",
+                        secondName: "string",
+                        email: "string",
+                        phone: "string",
+                        description: "string",
+                        humanReadableID: "string"
                     }
                 ]
             })

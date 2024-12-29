@@ -1,7 +1,6 @@
 package course_project.back.service;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import course_project.back.DTO.UserDTO;
 import course_project.back.entity.RoleEntity;
@@ -44,10 +42,10 @@ public class UserService {
         return token;
     }
 
-    public String logUser(@RequestBody Map<String, String> json) {
+    public String logUser(UserDTO userDTO) {
         String token = "";
-        if (validateUser(json.get("email"), json.get("password"))) {
-            UserEntity user = repoUser.findByEmail(json.get("email"));
+        if (validateUser(userDTO.getEmail(), userDTO.getPassword())) {
+            UserEntity user = repoUser.findByEmail(userDTO.getEmail());
             token = setUserToSecurity(user);
         }
         return token;

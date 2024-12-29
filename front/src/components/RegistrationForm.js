@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 
-function RegistrationForm () {
+function RegistrationForm() {
     const [formData, setFormData] = useState({
         username: '',
         secondName: '',
@@ -41,21 +41,19 @@ function RegistrationForm () {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    name: [formData.username],
-                    secondName: [formData.secondName],
-                    phone: [formData.phone],
-                    email: [formData.email],
-                    password: [formData.password],
+                    name: formData.username,
+                    secondName: formData.secondName,
+                    email: formData.email,
+                    phone: formData.phone,
+                    password: formData.password,
                     roles: formData.roles
                 })
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.isSuccessful === "true") {
-                        let expires = (new Date(Date.now() + 86400 * 1000)).toUTCString();
-                        document.cookie = "token=" + data.token + "; expires=" + expires
-                        window.location.reload();
-                    }
+                    let expires = (new Date(Date.now() + 86400 * 1000)).toUTCString();
+                    document.cookie = "token=" + data.token + "; expires=" + expires
+                    window.location.reload();
                 })
         }
     }

@@ -23,22 +23,20 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/sign_up")
-    public Map<String, String> signUp(@RequestBody Map<String, String[]> json) {
+    public Map<String, String> signUp(@RequestBody UserDTO userDTO) {
         Map<String, String> response = defaultResponse();
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
-        json.get("password")[0] = passwordEncoder.encode(json.get("password")[0]);
-        UserDTO user = new UserDTO(json);
-
-        String token = userService.signUser(user);
+        String token = userService.signUser(userDTO);
         setResponse(response, true, token);
 
         return response;
     }
 
     @PostMapping("/log_in")
-    public Map<String, String> logIn(@RequestBody Map<String, String> json) {
+    public Map<String, String> logIn(@RequestBody UserDTO userDTO) {
         Map<String, String> response = defaultResponse();
-        String token = userService.logUser(json);
+        String token = userService.logUser(userDTO);
         setResponse(response, true, token);
         return response;
     }
