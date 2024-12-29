@@ -13,9 +13,15 @@ public class ParticipatorService {
     @Autowired
     private UserRepository repoUser;
 
-    public ParticipatorDTO getStudentBuHumanReadableID(String humanReadableID) {
+    public ParticipatorDTO getStudentByHumanReadableID(String humanReadableID) {
         UserEntity user = repoUser.findByHumanReadableID(humanReadableID);
         boolean isStudent = user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEntity.ROLE_STUDENT));
+        return isStudent ? new ParticipatorDTO(user) : null;
+    }
+
+    public ParticipatorDTO getTutorByHumanReadableID(String humanReadableID) {
+        UserEntity user = repoUser.findByHumanReadableID(humanReadableID);
+        boolean isStudent = user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEntity.ROLE_TUTOR));
         return isStudent ? new ParticipatorDTO(user) : null;
     }
 }

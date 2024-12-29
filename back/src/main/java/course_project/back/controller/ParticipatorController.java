@@ -20,7 +20,14 @@ public class ParticipatorController {
 
     @GetMapping("/students/{id}")
     public ResponseEntity<ParticipatorDTO> getStudentByHumanReadableID(@PathVariable String id) {
-        ParticipatorDTO participatorDTO = participatorService.getStudentBuHumanReadableID(id);
+        ParticipatorDTO participatorDTO = participatorService.getStudentByHumanReadableID(id);
+        return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/tutors/{id}")
+    public ResponseEntity<ParticipatorDTO> getTutorByHumanReadableID(@PathVariable String id) {
+        ParticipatorDTO participatorDTO = participatorService.getTutorByHumanReadableID(id);
         return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

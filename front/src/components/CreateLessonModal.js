@@ -15,6 +15,7 @@ function CreateLessonModal({ closeModal }) {
         }
     )
     const [studentParticipator, setStudentParticipator] = useState([])
+    const [tutorParticipator, setTutorParticipator] = useState([])
 
     const [allSubjects, setAllSubjects] = useState([])
 
@@ -36,7 +37,22 @@ function CreateLessonModal({ closeModal }) {
             })
     }
 
-    console.log(newLesson.studentParticipators.concat(newLesson.tutorParticipators))
+    function getSubjectFromForm() {
+        let radios = document.getElementsByName("subject")
+        let chosenID = ""
+        radios.forEach(radio => {
+            if (radio.checked)
+                chosenID = radio.id
+        })
+        let chosenSubject = {}
+        allSubjects.forEach(subject => {
+            if(subject.name == chosenID)
+                chosenSubject = subject
+        })
+        return chosenSubject
+    }
+
+    console.log(getSubjectFromForm())
 
     function submitForm() {
         let startTimestamp = (newLesson.startDate + "T" + newLesson.startTime)
@@ -51,11 +67,7 @@ function CreateLessonModal({ closeModal }) {
             body: JSON.stringify({
                 startTime: startTimestamp,
                 duration: Math.round(duration / 60000),
-                subject: {
-                    id: 0,
-                    name: "string",
-                    analogyNames: "string"
-                },
+                subject: getSubjectFromForm(),
                 isOpen: newLesson.isOpen,
                 isDeleted: false,
                 description: newLesson.description,
@@ -63,13 +75,7 @@ function CreateLessonModal({ closeModal }) {
                 owner: {
                     email: localStorage.getItem("subject")
                 },
-                users: [
-                    {
-                        name: "string",
-                        secondName: "string",
-                        humanReadableID: "string"
-                    }
-                ]
+                users: newLesson.studentParticipators.concat(newLesson.tutorParticipators)
             })
         })
             .then(response => response.json())
@@ -89,6 +95,20 @@ function CreateLessonModal({ closeModal }) {
             .then(response => response.json())
             .then(data => {
                 setNewLesson({ ...newLesson, studentParticipators: [...newLesson.studentParticipators, data] })
+            })
+    }
+
+    function getTutorParticipator() {
+        fetch('http://localhost:18018/participator/tutors/' + tutorParticipator, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                setNewLesson({ ...newLesson, tutorParticipators: [...newLesson.tutorParticipators, data] })
             })
     }
 
@@ -123,8 +143,8 @@ function CreateLessonModal({ closeModal }) {
                                     allSubjects.map(subject => {
                                         return (
                                             <div className='radio-holder'>
-                                                <input type="radio" name="subject" id={"subject_" + subject.name} />
-                                                <label htmlFor={"subject_" + subject.name}>{subject.name}</label>
+                                                <input type="radio" name="subject" id={subject.name} />
+                                                <label htmlFor={subject.name}>{subject.name}</label>
                                             </div>
                                         )
                                     })
@@ -162,10 +182,19 @@ function CreateLessonModal({ closeModal }) {
                                 <label htmlFor="invite_tutors">Invite another tutors</label>
                                 <input
                                     name="invite_tutors"
-                                    type="text" />
+                                    type="text"
+                                    onChange={(e) => setTutorParticipator(e.target.value)} />
                                 <button
                                     type='button'
-                                    className='third-class-button'>Invite</button>
+                                    className='third-class-button'
+                                    onClick={getTutorParticipator}>Invite</button>
+                                {
+                                    newLesson.tutorParticipators.map(tutor =>
+                                        <div>
+                                            <a href={'/' + tutor.humanReadableID} className='link'>{(tutor.name + " " + tutor.secondName)}</a>
+                                        </div>
+                                    )
+                                }
                             </div>
                             <div className='field-holder'>
                                 <label htmlFor="invite_students">Invite students</label>
