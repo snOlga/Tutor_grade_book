@@ -56,6 +56,12 @@ function CreateLessonModal({ closeModal }) {
         let startTimestamp = (newLesson.startDate + "T" + newLesson.startTime)
         let endTimeStamp = (newLesson.startDate + "T" + newLesson.endTime)
         let duration = (new Date(endTimeStamp)) - (new Date(startTimestamp))
+
+        let timeZoneOffset = Math.round(new Date().getTimezoneOffset() / 60)
+        let absTimeZoneOffset = Math.abs(timeZoneOffset)
+        let timeZoneStr = String(absTimeZoneOffset).padStart(2, '0')
+        let localeISOtimestamp = (newLesson.startDate + "T" + newLesson.startTime + ":00.000" + (timeZoneOffset > 0 ? "-" : "+") + timeZoneStr + ":00")
+        let zeroISOtimestamp = new Date(localeISOtimestamp).toISOString()
         fetch('http://localhost:18018/lessons/create', {
             method: 'POST',
             headers: {
@@ -63,7 +69,7 @@ function CreateLessonModal({ closeModal }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                startTime: startTimestamp,
+                startTime: zeroISOtimestamp,
                 durationInMinutes: Math.round(duration / 60000),
                 subject: getSubjectFromForm(),
                 isOpen: newLesson.isOpen,
@@ -76,9 +82,8 @@ function CreateLessonModal({ closeModal }) {
                 users: newLesson.studentParticipators.concat(newLesson.tutorParticipators)
             })
         })
-            .then(response => response.json())
-            .then(data => {
-                //setLessons(data)
+            .then(response => {
+                window.location.reload()
             })
     }
 
