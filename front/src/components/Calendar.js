@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react'
 import LessonsCards from './Cards/LessonsCards';
 import '../styles/calendar_style.css'
 
-const ANOTHER_TUTOR_PAGE_API = "/api/get_schedule/tutor"
-
 function Calendar() {
     const [currentWeek, setCurrentWeek] = useState(0)
     const [days, setDays] = useState([[new Date(), ""]])

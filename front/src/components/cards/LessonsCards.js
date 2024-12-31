@@ -23,7 +23,11 @@ function LessonsCards({ lessons, currentDate }) {
                         }
                         else {
                             return (
-                                <Card lesson={lesson} lessonDate={lessonDate} openDeletionModal={openDeletionModal} setLessonToDelete={setLessonToDelete} />
+                                <Card 
+                                lesson={lesson} 
+                                lessonDate={lessonDate} 
+                                openDeletionModal={openDeletionModal} 
+                                setLessonToDelete={setLessonToDelete} />
                             )
                         }
                     }

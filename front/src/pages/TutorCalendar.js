@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Calendar from "../components/Calendar";
 import Header from '../components/Header';
 import ChatHolder from '../components/ChatHolder';
-import CreateLessonModal from '../components/CreateLessonModal';
+import CreateLessonModal from '../components/modals/CreateLessonModal';
+import InfoLessonModal from '../components/modals/InfoLessonModal';
 
 function TutorCalendar() {
     const [isChatOpen, openChat] = useState(false)

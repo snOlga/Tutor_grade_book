@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/lesson_creation_modal_style.css'
+import '../../styles/lesson_creation_modal_style.css'
 
 function CreateLessonModal({ closeModal }) {
     const [newLesson, setNewLesson] = useState(
