@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import InfoLessonModal from '../modals/InfoLessonModal';
 import '../../styles/chat_style.css'
 
-function Card({ lesson, lessonDate, openDeletionModal, setLessonToDelete }) {
-    const [isLessonInfoOpen, openLessonInfoModal] = useState(false)
+function Card({ lesson, lessonDate, openDeletionModal, setLessonToDelete, setLessonInfoModalState }) {
 
     const topPositionLesson = (lessonDate.getHours() - 7) * 60 + lessonDate.getMinutes() + 10;
 
     return (
         <>
-            <div className="lesson" style={{ top: topPositionLesson + 'px' }} onClick={() => openLessonInfoModal(true)}>
+            <div className="lesson" style={{ top: topPositionLesson + 'px' }} onClick={() => setLessonInfoModalState({ isOpen: true, lesson: lesson })}>
                 <div className="lesson-time">
                     <div>
                         {lessonDate.toLocaleTimeString().substring(0, 5) + " - " + (new Date(lessonDate.getTime() + lesson.durationInMinutes * 60 * 1000)).toLocaleTimeString().substring(0, 5)}
@@ -36,10 +35,6 @@ function Card({ lesson, lessonDate, openDeletionModal, setLessonToDelete }) {
                 </p> */}
                 </div>
             </div>
-
-            {
-                isLessonInfoOpen && <InfoLessonModal closeModal={openLessonInfoModal} currentLesson={lesson} />
-            }
         </>
     );
 };

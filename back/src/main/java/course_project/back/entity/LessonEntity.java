@@ -75,6 +75,7 @@ public class LessonEntity {
         this.homework = lessonDTO.getHomework();
         this.isOpen = lessonDTO.getIsOpen();
         this.isDeleted = lessonDTO.getIsDeleted();
+        this.description = lessonDTO.getDescription();
         this.heading = lessonDTO.getHeading();
         this.humanReadableId = lessonDTO.getHumanReadableId();
     }

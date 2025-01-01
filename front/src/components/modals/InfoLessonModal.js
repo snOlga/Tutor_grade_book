@@ -5,6 +5,9 @@ import '../../styles/lesson_info_modal_style.css'
 function InfoLessonModal({ currentLesson, closeModal }) {
     const lessonDate = new Date(currentLesson.startTime)
     console.log(currentLesson.users)
+    currentLesson.users.map(user => {
+        console.log(user.name)
+    })
 
     return (
         <div className='all-window' onClick={() => closeModal(false)}>
@@ -59,12 +62,11 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 <label htmlFor="users">Participators</label>
                                 <div name="users">
                                     {currentLesson.users.map(user => {
-                                        <div>
-                                            {
-                                                user.name
-                                            }
-                                            {/* <a href={'/' + user.humanReadableID} className='link'>{(user.name + " " + user.secondName)}</a> */}
-                                        </div>
+                                        return (
+                                            <div>
+                                                <a href={'/' + user.humanReadableID} className='link'>{(user.name + " " + user.secondName)}</a>
+                                            </div>
+                                        )
                                     })}
                                 </div>
                             </div>

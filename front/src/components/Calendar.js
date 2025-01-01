@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import LessonsCards from './Cards/LessonsCards';
 import '../styles/calendar_style.css'
 
-function Calendar() {
+function Calendar({ setLessonInfoModalState }) {
     const [currentWeek, setCurrentWeek] = useState(0)
     const [days, setDays] = useState([[new Date(), ""]])
     const [weekdays] = useState(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
@@ -86,7 +86,7 @@ function Calendar() {
                                         <p className="date-day">{dayDate[1]}</p>
                                     </div>
                                     <div className='day-content'>
-                                        <LessonsCards lessons={lessons} currentDate={dayDate[0]}/>
+                                        <LessonsCards lessons={lessons} currentDate={dayDate[0]} setLessonInfoModalState={setLessonInfoModalState} />
                                         {
                                             time.map(oneTime => {
                                                 const topPosition = (oneTime - 7) * 60 + 10
