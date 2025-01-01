@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/lessons")
 public class LessonController {
@@ -34,7 +33,8 @@ public class LessonController {
     @PutMapping("/{id}")
     public ResponseEntity<LessonDTO> updateLesson(@PathVariable Long id, @RequestBody LessonDTO lessonDTO) {
         LessonDTO updatedLessonDTO = lessonService.update(lessonDTO);
-        return updatedLessonDTO != null ? new ResponseEntity<>(updatedLessonDTO, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return updatedLessonDTO != null ? new ResponseEntity<>(updatedLessonDTO, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
@@ -45,8 +45,7 @@ public class LessonController {
 
     @GetMapping("/with_user/{email}")
     public ResponseEntity<List<LessonDTO>> getAllUserLessons(@PathVariable String email) {
-        System.out.println("В бд стучатся за всеми уроками");
-        return new ResponseEntity<>(lessonService.findAllByUserEmail(email), HttpStatus.OK);
+        List<LessonDTO> allLessons = lessonService.findAllByUserEmail(email);
+        return new ResponseEntity<>(allLessons, HttpStatus.OK);
     }
 }
-

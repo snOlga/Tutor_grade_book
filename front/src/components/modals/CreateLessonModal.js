@@ -52,16 +52,26 @@ function CreateLessonModal({ closeModal }) {
         return chosenSubject
     }
 
-    function submitForm() {
-        let startTimestamp = (newLesson.startDate + "T" + newLesson.startTime)
-        let endTimeStamp = (newLesson.startDate + "T" + newLesson.endTime)
-        let duration = (new Date(endTimeStamp)) - (new Date(startTimestamp))
-
+    function prepareStartTime() {
         let timeZoneOffset = Math.round(new Date().getTimezoneOffset() / 60)
         let absTimeZoneOffset = Math.abs(timeZoneOffset)
         let timeZoneStr = String(absTimeZoneOffset).padStart(2, '0')
         let localeISOtimestamp = (newLesson.startDate + "T" + newLesson.startTime + ":00.000" + (timeZoneOffset > 0 ? "-" : "+") + timeZoneStr + ":00")
         let zeroISOtimestamp = new Date(localeISOtimestamp).toISOString()
+        return zeroISOtimestamp
+    }
+
+    function prepareDuration() {
+        let startTimestamp = (newLesson.startDate + "T" + newLesson.startTime)
+        let endTimeStamp = (newLesson.startDate + "T" + newLesson.endTime)
+        let duration = (new Date(endTimeStamp)) - (new Date(startTimestamp))
+        return (Math.round(duration / 60000))
+    }
+
+    function submitForm() {
+        let time = prepareStartTime()
+        let duration = prepareDuration()
+        let subject = getSubjectFromForm()
         fetch('http://localhost:18018/lessons/create', {
             method: 'POST',
             headers: {
@@ -69,9 +79,9 @@ function CreateLessonModal({ closeModal }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                startTime: zeroISOtimestamp,
-                durationInMinutes: Math.round(duration / 60000),
-                subject: getSubjectFromForm(),
+                startTime: time,
+                durationInMinutes: duration,
+                subject: subject,
                 isOpen: newLesson.isOpen,
                 isDeleted: false,
                 description: newLesson.description,

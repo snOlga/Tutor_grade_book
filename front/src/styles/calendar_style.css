@@ -78,7 +78,6 @@
     color: #555;
     border-radius: 0px 4px 4px  0px;
     font-size: 0.9em;
-    cursor: pointer;
     z-index: 5;
     transition: 0.2s;
     background-color: #f9f9f9;
@@ -124,6 +123,7 @@
 
 .lesson-details {
     text-align: left;
+    cursor: pointer;
 }
 
 .lesson-heading {

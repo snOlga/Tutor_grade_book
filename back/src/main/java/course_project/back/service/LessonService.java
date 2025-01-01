@@ -67,8 +67,11 @@ public class LessonService {
     }
 
     public List<LessonDTO> findAllByUserEmail(String email) {
-        List<LessonEntity> res = lessonRepository.findByUsers_Email(email);
-        return res.stream().map(LessonDTO::new).toList();
+        List<LessonEntity> result = lessonRepository.findByUsers_Email(email);
+        result.sort((lesson1, lesson2) -> {
+            return (lesson1.getStartTime().compareTo(lesson2.getStartTime()));
+        });
+        return result.stream().map(LessonDTO::new).toList();
     }
 
     private LessonEntity prepareLessonEntityFromDTO(LessonDTO lessonDTO) {
