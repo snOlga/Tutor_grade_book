@@ -17,5 +17,4 @@ public class SubjectDTO {
         this.name = subjectEntity.getName();
         this.analogyNames = subjectEntity.getAnalogyNames();
     }
-
 }

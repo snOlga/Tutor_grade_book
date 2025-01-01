@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import InfoLessonModal from '../modals/InfoLessonModal';
 import '../../styles/chat_style.css'
 
-function Card({ lesson, lessonDate, openDeletionModal, setLessonToDelete, setLessonInfoModalState }) {
+function InvitationCard({ lesson, lessonDate, openDeletionModal, setLessonToDelete, setLessonInfoModalState }) {
 
     const topPositionLesson = (lessonDate.getHours() - 7) * 60 + lessonDate.getMinutes() + 10;
 
@@ -24,19 +23,10 @@ function Card({ lesson, lessonDate, openDeletionModal, setLessonToDelete, setLes
                     <h4 className="lesson-heading">
                         {lesson.heading}
                     </h4>
-                    {/* <p className="lesson-tutors">
-                    {lesson.tutors_participator.map(tutor => {
-                        return (
-                            <div>
-                                <a href={'/' + tutor.user_id} className='link'>{tutor.name}</a>
-                            </div>
-                        )
-                    })}
-                </p> */}
                 </div>
             </div>
         </>
     );
 };
 
-export default Card;
+export default InvitationCard;

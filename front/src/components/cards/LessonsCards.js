@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../../styles/calendar_style.css'
 import '../../styles/card_style.css'
 import DeletionModal from './DeletionModal';
-import Card from './Card';
+import LessonCard from './LessonCard';
 
 function LessonsCards({ lessons, currentDate, setLessonInfoModalState }) {
     const [isDeletionModalOpen, openDeletionModal] = useState(false)
@@ -23,7 +23,7 @@ function LessonsCards({ lessons, currentDate, setLessonInfoModalState }) {
                         }
                         else {
                             return (
-                                <Card
+                                <LessonCard
                                     lesson={lesson}
                                     lessonDate={lessonDate}
                                     openDeletionModal={openDeletionModal}

@@ -24,19 +24,18 @@ public class LessonDTO {
     private ParticipatorDTO owner;
     private List<ParticipatorDTO> users;
 
-    public LessonDTO(LessonEntity lessonORM) {
-        this.id = lessonORM.getId();
-        this.startTime = lessonORM.getStartTime();
-        this.durationInMinutes = lessonORM.getDurationInMinutes();
-        this.subject = new SubjectDTO(lessonORM.getSubject());
-        this.homework = lessonORM.getHomework();
-        this.isOpen = lessonORM.getIsOpen();
-        this.isDeleted = lessonORM.getIsDeleted();
-        this.description = lessonORM.getDescription();
-        this.humanReadableId = lessonORM.getHumanReadableId();
-        this.heading = lessonORM.getHeading();
-        this.owner = new ParticipatorDTO(lessonORM.getOwner());
-        this.users = lessonORM.getUsers().stream().map(ParticipatorDTO::new).toList();
+    public LessonDTO(LessonEntity lessonEntity) {
+        this.id = lessonEntity.getId();
+        this.startTime = lessonEntity.getStartTime();
+        this.durationInMinutes = lessonEntity.getDurationInMinutes();
+        this.subject = new SubjectDTO(lessonEntity.getSubject());
+        this.homework = lessonEntity.getHomework();
+        this.isOpen = lessonEntity.getIsOpen();
+        this.isDeleted = lessonEntity.getIsDeleted();
+        this.description = lessonEntity.getDescription();
+        this.humanReadableId = lessonEntity.getHumanReadableId();
+        this.heading = lessonEntity.getHeading();
+        this.owner = new ParticipatorDTO(lessonEntity.getOwner());
+        this.users = lessonEntity.getUsers().stream().map(ParticipatorDTO::new).toList();
     }
-
 }

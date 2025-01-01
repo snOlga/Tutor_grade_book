@@ -24,6 +24,8 @@ public class LessonService {
     private UserRepository userRepository;
     @Autowired
     private SubjectRepository subjectRepository;
+    @Autowired
+    private LessonRequestService lessonRequestService;
 
     public List<LessonDTO> findAll() {
         System.out.println("Иду в бд за всеми уроками...");
@@ -40,10 +42,11 @@ public class LessonService {
 
     public LessonDTO create(LessonDTO lessonDTO) {
         LessonEntity lessonEntity = prepareLessonEntityFromDTO(lessonDTO);
-        LessonEntity result = lessonRepository.save(lessonEntity);
-        result.setHumanReadableId(result.getHeading() + "_" + result.getOwner().getName() + "_" + result.getId());
-        LessonEntity returnedResult = lessonRepository.save(result);
-        return new LessonDTO(returnedResult);
+        LessonEntity result = setHumanReadableIdAndSave(lessonEntity);
+        LessonDTO resultDTO = new LessonDTO(result);
+        resultDTO.setUsers(lessonDTO.getUsers());
+        lessonRequestService.inviteParticipators(resultDTO);
+        return resultDTO;
     }
 
     public LessonDTO update(LessonDTO lessonDTO) {
@@ -52,7 +55,8 @@ public class LessonService {
 
     public boolean deleteById(Long id) {
         try {
-            LessonEntity lessonEntity = lessonRepository.findById(id).get(); // unexcpected behaviour of hibernate of deleting by id, logged in file
+            LessonEntity lessonEntity = lessonRepository.findById(id).get(); // unexcpected behaviour of hibernate of
+                                                                             // deleting by id, logged in file
             lessonEntity.setIsDeleted(true);
             lessonRepository.save(lessonEntity);
             return true;
@@ -69,17 +73,23 @@ public class LessonService {
 
     private LessonEntity prepareLessonEntityFromDTO(LessonDTO lessonDTO) {
         UserEntity owner = userRepository.findByEmail(lessonDTO.getOwner().getEmail());
-        lessonDTO.getUsers().add(lessonDTO.getOwner());
-        List<UserEntity> participators = lessonDTO.getUsers().stream()
-                .map(user -> userRepository.findByEmail(user.getEmail())).toList();
+        HashSet<UserEntity> participators = new HashSet<>();
+        participators.add(owner);
         SubjectEntity subject = subjectRepository.findByName(lessonDTO.getSubject().getName());
 
         LessonEntity lessonEntity = new LessonEntity(lessonDTO);
         lessonEntity.setOwner(owner);
-        lessonEntity.setUsers(new HashSet<>(participators));
+        lessonEntity.setUsers(participators);
         lessonEntity.setSubject(subject);
         lessonEntity.setHumanReadableId("");
 
         return lessonEntity;
+    }
+
+    private LessonEntity setHumanReadableIdAndSave(LessonEntity lessonEntity) {
+        LessonEntity result = lessonRepository.save(lessonEntity);
+        result.setHumanReadableId(result.getHeading() + "_" + result.getOwner().getName() + "_" + result.getId());
+        LessonEntity returnedResult = lessonRepository.save(result);
+        return returnedResult;
     }
 }
