@@ -229,7 +229,7 @@ function CreateLessonModal({ closeModal }) {
                             </div>
                             <div className="field-holder-flex">
                                 <label className="toggle-switch">
-                                    <input name="toggle" type="checkbox" />
+                                    <input name="toggle" type="checkbox" onChange={() => setNewLesson({ ...newLesson, isOpen: (!newLesson.isOpen) })} />
                                     <span className="slider"></span>
                                 </label>
                                 <label htmlFor="toggle">Make lesson open for everyone!</label>
