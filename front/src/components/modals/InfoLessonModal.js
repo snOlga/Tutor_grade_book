@@ -4,6 +4,7 @@ import '../../styles/lesson_info_modal_style.css'
 
 function InfoLessonModal({ currentLesson, closeModal }) {
     const lessonDate = new Date(currentLesson.startTime)
+    const [lessonDTO, setLessonDTO] = useState(currentLesson)
     const [isEditState, setEdit] = useState(
         {
             title: false,
@@ -13,20 +14,22 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             startTime: false,
             endTime: false,
             isOpen: false,
-            users: false
+            users: false,
+            subject: false
         }
     )
     const [newLesson, setNewLesson] = useState(
         {
-            title: currentLesson.heading,
-            humanReadableId: currentLesson.humanReadableId,
-            description: currentLesson.description,
+            title: lessonDTO.heading,
+            humanReadableId: lessonDTO.humanReadableId,
+            description: lessonDTO.description,
             startDate: lessonDate.toISOString().substring(0, 10) + "",
             startTime: lessonDate.toLocaleTimeString().substring(0, 5),
-            endTime: (new Date(lessonDate.getTime() + currentLesson.durationInMinutes * 60 * 1000)).toLocaleTimeString().substring(0, 5),
-            isOpen: currentLesson.isOpen,
-            studentParticipators: currentLesson.users.filter(user => user.roles.includes('STUDENT')),
-            tutorParticipators: currentLesson.users.filter(user => user.roles.includes('TUTOR'))
+            endTime: (new Date(lessonDate.getTime() + lessonDTO.durationInMinutes * 60 * 1000)).toLocaleTimeString().substring(0, 5),
+            isOpen: lessonDTO.isOpen,
+            studentParticipators: lessonDTO.users.filter(user => user.roles.includes('STUDENT')),
+            tutorParticipators: lessonDTO.users.filter(user => user.roles.includes('TUTOR')),
+            subject: lessonDTO.subject.name
         }
     )
     const [allSubjects, setAllSubjects] = useState([])
@@ -79,8 +82,54 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             })
     }
 
+    function getSubjectFromForm() {
+        let radios = document.getElementsByName("subject")
+        let chosenID = ""
+        radios.forEach(radio => {
+            if (radio.checked)
+                chosenID = radio.id
+        })
+        let chosenSubject = {}
+        allSubjects.forEach(subject => {
+            if (subject.name == chosenID)
+                chosenSubject = subject
+        })
+        return chosenSubject
+    }
+
+    function prepareStartTime() {
+        let timeZoneOffset = Math.round(new Date().getTimezoneOffset() / 60)
+        let absTimeZoneOffset = Math.abs(timeZoneOffset)
+        let timeZoneStr = String(absTimeZoneOffset).padStart(2, '0')
+        let localeISOtimestamp = (newLesson.startDate + "T" + newLesson.startTime + ":00.000" + (timeZoneOffset > 0 ? "-" : "+") + timeZoneStr + ":00")
+        let zeroISOtimestamp = new Date(localeISOtimestamp).toISOString()
+        return zeroISOtimestamp
+    }
+
+    function prepareDuration() {
+        let startTimestamp = (newLesson.startDate + "T" + newLesson.startTime)
+        let endTimeStamp = (newLesson.startDate + "T" + newLesson.endTime)
+        let duration = (new Date(endTimeStamp)) - (new Date(startTimestamp))
+        return (Math.round(duration / 60000))
+    }
+
+    function submitForm(structure) {
+        fetch('http://localhost:18018/lessons/create', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(structure)
+        })
+            .then(response => response.json())
+            .then(data => {
+                setLessonDTO(data)
+            })
+    }
+
     return (
-        <div className='all-window' onClick={() => closeModal(false)}>
+        <div className='all-window' onClick={() => window.location.reload()}>
             <div className='modal-holder' onClick={e => e.stopPropagation()}>
                 <div className='heading'>
                     <div>
@@ -102,7 +151,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 }
                             </label>
                             {
-                                !isEditState.title && <div name="title" className='plain-text'>{currentLesson.heading}</div>
+                                !isEditState.title && <div name="title" className='plain-text'>{lessonDTO.heading}</div>
                             }
                             {
                                 isEditState.title &&
@@ -111,10 +160,13 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                         name="title"
                                         type="text"
                                         onChange={(e) => setNewLesson({ ...newLesson, title: e.target.value })}
-                                        placeholder={currentLesson.heading}
+                                        placeholder={lessonDTO.heading}
                                         required />
                                     <div className='edit-holder-buttons'>
-                                        <button>
+                                        <button onClick={() => {
+                                            submitForm({ ...lessonDTO, heading: newLesson.title })
+                                            setEdit({ ...isEditState, title: false })
+                                        }}>
                                             Submit
                                         </button>
                                         <button onClick={() => setEdit({ ...isEditState, title: false })}>
@@ -130,34 +182,9 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 <div>
                                     Lesson ID
                                 </div>
-                                {
-                                    !isEditState.humanReadableId &&
-                                    <button className='button-no-style' onClick={() => setEdit({ ...isEditState, humanReadableId: true })}>
-                                        <EditIcon />
-                                    </button>
-                                }
                             </label>
                             {
-                                !isEditState.humanReadableId && <div name="humanReadableId" className='plain-text'>{currentLesson.humanReadableId}</div>
-                            }
-                            {
-                                isEditState.humanReadableId &&
-                                <div className='edit-holder'>
-                                    <input
-                                        name="humanReadableId"
-                                        type="text"
-                                        onChange={(e) => setNewLesson({ ...newLesson, humanReadableId: e.target.value })}
-                                        placeholder={currentLesson.humanReadableId}
-                                        required />
-                                    <div className='edit-holder-buttons'>
-                                        <button>
-                                            Submit
-                                        </button>
-                                        <button onClick={() => setEdit({ ...isEditState, humanReadableId: false })}>
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </div>
+                                !isEditState.humanReadableId && <div name="humanReadableId" className='plain-text'>{lessonDTO.humanReadableId}</div>
                             }
                         </div>
 
@@ -174,7 +201,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 }
                             </label>
                             {
-                                !isEditState.description && <div name="description" className='plain-text'>{currentLesson.description}</div>
+                                !isEditState.description && <div name="description" className='plain-text'>{lessonDTO.description}</div>
                             }
                             {
                                 isEditState.description &&
@@ -184,9 +211,12 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                         cols="30"
                                         rows="10"
                                         onChange={(e) => setNewLesson({ ...newLesson, description: e.target.value })}
-                                        placeholder={currentLesson.description} />
+                                        placeholder={lessonDTO.description} />
                                     <div className='edit-holder-buttons'>
-                                        <button>
+                                        <button onClick={() => {
+                                            submitForm({ ...lessonDTO, description: newLesson.description })
+                                            setEdit({ ...isEditState, description: false })
+                                        }}>
                                             Submit
                                         </button>
                                         <button onClick={() => setEdit({ ...isEditState, description: false })}>
@@ -210,7 +240,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 }
                             </label>
                             {
-                                !isEditState.subject && <div name="subject" className='plain-text'>{currentLesson.subject.name}</div>
+                                !isEditState.subject && <div name="subject" className='plain-text'>{lessonDTO.subject.name}</div>
                             }
                             {
                                 isEditState.subject &&
@@ -219,14 +249,22 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                         allSubjects.map(subject => {
                                             return (
                                                 <div className='radio-holder'>
-                                                    <input type="radio" name="subject" id={subject.name} checked={currentLesson.subject.name == subject.name} />
+                                                    <input
+                                                        type="radio"
+                                                        name="subject"
+                                                        id={subject.name}
+                                                        checked={newLesson.subject == subject.name}
+                                                        onChange={() => setNewLesson({ ...newLesson, subject: subject.name })} />
                                                     <label htmlFor={subject.name}>{subject.name}</label>
                                                 </div>
                                             )
                                         })
                                     }
                                     <div className='edit-holder-buttons'>
-                                        <button>
+                                        <button onClick={() => {
+                                            submitForm({ ...lessonDTO, subject: { name: newLesson.subject } })
+                                            setEdit({ ...isEditState, subject: false })
+                                        }}>
                                             Submit
                                         </button>
                                         <button onClick={() => setEdit({ ...isEditState, subject: false })}>
@@ -336,8 +374,8 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                             </label>
                             {
                                 !isEditState.isOpen && <div name="isOpen" className='plain-text'>
-                                    {currentLesson.isOpen && <YesIcon />}
-                                    {!currentLesson.isOpen && <NoIcon />}
+                                    {lessonDTO.isOpen && <YesIcon />}
+                                    {!lessonDTO.isOpen && <NoIcon />}
                                 </div>
                             }
                             {
@@ -347,8 +385,8 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                         <input
                                             name="toggle"
                                             type="checkbox"
-                                            onChange={() => setNewLesson({ ...newLesson, isOpen: (!newLesson.isOpen) })} 
-                                            checked={newLesson.isOpen}/>
+                                            onChange={() => setNewLesson({ ...newLesson, isOpen: (!newLesson.isOpen) })}
+                                            checked={newLesson.isOpen} />
                                         <span className="slider"></span>
                                     </label>
                                     <label htmlFor="toggle">Make lesson open for everyone!</label>
@@ -455,6 +493,17 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                     }
                                 </div>
                             }
+                            {
+                                isEditState.users &&
+                                <div className='edit-holder-buttons'>
+                                    <button>
+                                        Submit
+                                    </button>
+                                    <button onClick={() => setEdit({ ...isEditState, time: false })}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            }
                         </div>
 
                         <div className='field-holder'>
@@ -464,12 +513,12 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 </div>
                             </label>
                             <div name="owner">
-                                <a href={'/' + currentLesson.owner.humanReadableID} className='link'>{(currentLesson.owner.name + " " + currentLesson.owner.secondName)}</a>
+                                <a href={'/' + lessonDTO.owner.humanReadableID} className='link'>{(lessonDTO.owner.name + " " + lessonDTO.owner.secondName)}</a>
                             </div>
                         </div>
                     </div>
                     <div className='buttons'>
-                        <button type='button' onClick={() => closeModal(false)}>Exit</button>
+                        <button type='button' onClick={() => window.location.reload()}>Exit</button>
                     </div>
                 </div>
             </div>
