@@ -3,6 +3,7 @@ import '../../styles/lesson_creation_modal_style.css'
 import '../../styles/lesson_info_modal_style.css'
 
 function InfoLessonModal({ currentLesson, closeModal }) {
+    const lessonDate = new Date(currentLesson.startTime)
     const [isEditState, setEdit] = useState(
         {
             title: false,
@@ -12,26 +13,25 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             startTime: false,
             endTime: false,
             isOpen: false,
-            studentParticipators: false,
-            tutorParticipators: false
+            users: false
         }
     )
     const [newLesson, setNewLesson] = useState(
         {
-            title: "",
-            humanReadableId: "",
-            description: "",
-            startDate: new Date().toISOString().substring(0, 10) + "",
-            startTime: "",
-            endTime: "",
-            isOpen: false,
-            studentParticipators: [],
-            tutorParticipators: []
+            title: currentLesson.heading,
+            humanReadableId: currentLesson.humanReadableId,
+            description: currentLesson.description,
+            startDate: lessonDate.toISOString().substring(0, 10) + "",
+            startTime: lessonDate.toLocaleTimeString().substring(0, 5),
+            endTime: (new Date(lessonDate.getTime() + currentLesson.durationInMinutes * 60 * 1000)).toLocaleTimeString().substring(0, 5),
+            isOpen: currentLesson.isOpen,
+            studentParticipators: currentLesson.users.filter(user => user.roles.includes('STUDENT')),
+            tutorParticipators: currentLesson.users.filter(user => user.roles.includes('TUTOR'))
         }
     )
     const [allSubjects, setAllSubjects] = useState([])
-
-    console.log(currentLesson)
+    const [studentParticipator, setStudentParticipator] = useState([])
+    const [tutorParticipator, setTutorParticipator] = useState([])
 
     useEffect(() => {
         fetchSubjects()
@@ -51,7 +51,33 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             })
     }
 
-    const lessonDate = new Date(currentLesson.startTime)
+    function getTutorParticipator() {
+        fetch('http://localhost:18018/participator/tutors/' + tutorParticipator, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                setNewLesson({ ...newLesson, tutorParticipators: [...newLesson.tutorParticipators, data] })
+            })
+    }
+
+    function getStudentParticipator() {
+        fetch('http://localhost:18018/participator/students/' + studentParticipator, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                setNewLesson({ ...newLesson, studentParticipators: [...newLesson.studentParticipators, data] })
+            })
+    }
 
     return (
         <div className='all-window' onClick={() => closeModal(false)}>
@@ -224,7 +250,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 }
                             </label>
                             {
-                                !isEditState.date && <div name="date" className='plain-text'>{lessonDate.toDateString()}</div>
+                                !isEditState.date && <div name="date" className='plain-text'>{newLesson.startDate}</div>
                             }
                             {
                                 isEditState.date &&
@@ -232,7 +258,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                     <input
                                         name="date"
                                         type="date"
-                                        value={lessonDate.toISOString().substring(0, 10) + ""}
+                                        value={newLesson.startDate}
                                         onChange={(e) => setNewLesson({ ...newLesson, startDate: e.target.value })}
                                         required />
                                     <div className='edit-holder-buttons'>
@@ -261,7 +287,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                             </label>
                             {
                                 !isEditState.time && <div name="time" className='plain-text'>
-                                    {lessonDate.toLocaleTimeString().substring(0, 5) + " - " + (new Date(lessonDate.getTime() + currentLesson.durationInMinutes * 60 * 1000)).toLocaleTimeString().substring(0, 5)}
+                                    {newLesson.startTime + " - " + newLesson.endTime}
                                 </div>
                             }
                             {
@@ -272,14 +298,14 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                         name="from"
                                         type="time"
                                         onChange={(e) => setNewLesson({ ...newLesson, startTime: e.target.value })}
-                                        value={lessonDate.toLocaleTimeString().substring(0, 5)}
+                                        value={newLesson.startTime}
                                         required />
                                     <label htmlFor="till">Till</label>
                                     <input
                                         name="till"
                                         type="time"
                                         onChange={(e) => setNewLesson({ ...newLesson, endTime: e.target.value })}
-                                        value={(new Date(lessonDate.getTime() + currentLesson.durationInMinutes * 60 * 1000)).toLocaleTimeString().substring(0, 5)}
+                                        value={newLesson.endTime}
                                         required />
                                     <div className='edit-holder-buttons'>
                                         <button>
@@ -321,8 +347,8 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                         <input
                                             name="toggle"
                                             type="checkbox"
-                                            onChange={() => setNewLesson({ ...newLesson, isOpen: (!newLesson.isOpen) })}
-                                            checked={newLesson.isOpen} />
+                                            onChange={() => setNewLesson({ ...newLesson, isOpen: (!newLesson.isOpen) })} 
+                                            checked={newLesson.isOpen}/>
                                         <span className="slider"></span>
                                     </label>
                                     <label htmlFor="toggle">Make lesson open for everyone!</label>
@@ -339,32 +365,103 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                         </div>
 
                         <div className='field-holder'>
-                            <label className='info-edit-label' htmlFor="users">
+                            <label className='info-edit-label' htmlFor="invite_tutors">
                                 <div>
                                     Participators
                                 </div>
-                                <button className='button-no-style'>
-                                    <EditIcon />
-                                </button>
+                                {
+                                    !isEditState.users &&
+                                    <button className='button-no-style' onClick={() => setEdit({ ...isEditState, users: true })}>
+                                        <EditIcon />
+                                    </button>
+                                }
                             </label>
-                            <div name="users">
-                                {currentLesson.users.map(user => {
-                                    return (
-                                        <div>
-                                            <a href={'/' + user.humanReadableID} className='link'>{(user.name + " " + user.secondName)}</a>
-                                        </div>
-                                    )
-                                })}
-                            </div>
+                            {
+                                !isEditState.users &&
+                                <div className='field-holder'>
+                                    {
+                                        newLesson.tutorParticipators.map(user => {
+                                            return (
+                                                <div>
+                                                    <a href={'/' + user.humanReadableID} className='link'>{(user.name + " " + user.secondName)}</a>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                    {
+                                        newLesson.studentParticipators.map(user => {
+                                            return (
+                                                <div>
+                                                    <a href={'/' + user.humanReadableID} className='link'>{(user.name + " " + user.secondName)}</a>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            }
+                            {
+                                isEditState.users &&
+                                <div className='field-holder'>
+                                    <label htmlFor="invite_tutors">Invite another tutors</label>
+                                    <input
+                                        name="invite_tutors"
+                                        type="text"
+                                        onChange={(e) => setTutorParticipator(e.target.value)} />
+                                    <button
+                                        type='button'
+                                        className='third-class-button'
+                                        onClick={getTutorParticipator}>Invite</button>
+                                    {
+                                        newLesson.tutorParticipators.map(tutor =>
+                                            <div className='participator-holder'>
+                                                <div>
+                                                    <a href={'/' + tutor.humanReadableID} className='link'>{(tutor.name + " " + tutor.secondName)}</a>
+                                                </div>
+                                                <a onClick={() => {
+                                                    setNewLesson({ ...newLesson, tutorParticipators: newLesson.tutorParticipators.filter(participator => participator != tutor) })
+                                                }}>
+                                                    <svg stroke="currentColor" fill="#EB7C6C" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5-1-1h-5l-1 1H5v2h14V4z"></path></svg>
+                                                </a>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                            }
+                            {
+                                isEditState.users &&
+                                <div className='field-holder'>
+                                    <label htmlFor="invite_students">Invite students</label>
+                                    <input
+                                        name="invite_students"
+                                        type="text"
+                                        onChange={(e) => setStudentParticipator(e.target.value)} />
+                                    <button
+                                        type='button'
+                                        className='third-class-button'
+                                        onClick={getStudentParticipator}>Invite</button>
+                                    {
+                                        newLesson.studentParticipators.map(student =>
+                                            <div className='participator-holder'>
+                                                <div>
+                                                    <a href={'/' + student.humanReadableID} className='link'>{(student.name + " " + student.secondName)}</a>
+                                                </div>
+                                                <a onClick={() => {
+                                                    setNewLesson({ ...newLesson, studentParticipators: newLesson.studentParticipators.filter(participator => participator != student) })
+                                                }}>
+                                                    <svg stroke="currentColor" fill="#EB7C6C" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5-1-1h-5l-1 1H5v2h14V4z"></path></svg>
+                                                </a>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                            }
                         </div>
+
                         <div className='field-holder'>
                             <label className='info-edit-label' htmlFor="owner">
                                 <div>
                                     Lesson owner
                                 </div>
-                                <button className='button-no-style'>
-                                    <EditIcon />
-                                </button>
                             </label>
                             <div name="owner">
                                 <a href={'/' + currentLesson.owner.humanReadableID} className='link'>{(currentLesson.owner.name + " " + currentLesson.owner.secondName)}</a>

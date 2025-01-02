@@ -1,5 +1,7 @@
 package course_project.back.DTO;
 
+import java.util.List;
+
 import course_project.back.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +19,7 @@ public class ParticipatorDTO {
     private String phone;
     private String description;
     private String humanReadableID;
+    private List<String> roles;
 
     public ParticipatorDTO(UserEntity userEntity) {
         this.name = userEntity.getName();
@@ -25,5 +28,6 @@ public class ParticipatorDTO {
         this.phone = userEntity.getPhone();
         this.description = userEntity.getDescription();
         this.humanReadableID = userEntity.getHumanReadableID();
+        this.roles = userEntity.getRoles().stream().map(role -> role.getName()).toList();
     }
 }
