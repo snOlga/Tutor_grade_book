@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/lesson_creation_modal_style.css'
 import '../../styles/lesson_info_modal_style.css'
+import { toBeDisabled } from '@testing-library/jest-dom/matchers';
 
 function InfoLessonModal({ currentLesson, closeModal }) {
     const lessonDate = new Date(currentLesson.startTime)
@@ -35,10 +36,15 @@ function InfoLessonModal({ currentLesson, closeModal }) {
     const [allSubjects, setAllSubjects] = useState([])
     const [studentParticipator, setStudentParticipator] = useState([])
     const [tutorParticipator, setTutorParticipator] = useState([])
+    const [isTimeOk, setTimeState] = useState(true)
 
     useEffect(() => {
         fetchSubjects()
     }, [])
+
+    useEffect(() => {
+        checkTime()
+    }, [newLesson.startTime, newLesson.endTime])
 
     function fetchSubjects() {
         fetch('http://localhost:18018/subjects', {
@@ -82,21 +88,6 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             })
     }
 
-    function getSubjectFromForm() {
-        let radios = document.getElementsByName("subject")
-        let chosenID = ""
-        radios.forEach(radio => {
-            if (radio.checked)
-                chosenID = radio.id
-        })
-        let chosenSubject = {}
-        allSubjects.forEach(subject => {
-            if (subject.name == chosenID)
-                chosenSubject = subject
-        })
-        return chosenSubject
-    }
-
     function prepareStartTime() {
         let timeZoneOffset = Math.round(new Date().getTimezoneOffset() / 60)
         let absTimeZoneOffset = Math.abs(timeZoneOffset)
@@ -126,6 +117,16 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             .then(data => {
                 setLessonDTO(data)
             })
+    }
+
+    function checkTime() {
+        let startTimestamp = (newLesson.startDate + "T" + newLesson.startTime)
+        let endTimeStamp = (newLesson.startDate + "T" + newLesson.endTime)
+        let duration = (new Date(endTimeStamp)) - (new Date(startTimestamp))
+        console.log(Math.round(duration / 60000))
+        console.log(newLesson.startDate + "T" + newLesson.startTime)
+        console.log(newLesson.startDate + "T" + newLesson.endTime)
+        setTimeState(duration > 0)
     }
 
     return (
@@ -300,7 +301,10 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                         onChange={(e) => setNewLesson({ ...newLesson, startDate: e.target.value })}
                                         required />
                                     <div className='edit-holder-buttons'>
-                                        <button>
+                                        <button onClick={() => {
+                                            submitForm({ ...lessonDTO, startTime: prepareStartTime() })
+                                            setEdit({ ...isEditState, date: false })
+                                        }}>
                                             Submit
                                         </button>
                                         <button onClick={() => setEdit({ ...isEditState, date: false })}>
@@ -346,7 +350,11 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                         value={newLesson.endTime}
                                         required />
                                     <div className='edit-holder-buttons'>
-                                        <button>
+                                        <button onClick={() => {
+                                            submitForm({ ...lessonDTO, startTime: prepareStartTime(), durationInMinutes: prepareDuration() })
+                                            setEdit({ ...isEditState, time: false })
+                                        }}
+                                            disabled={!isTimeOk}>
                                             Submit
                                         </button>
                                         <button onClick={() => setEdit({ ...isEditState, time: false })}>
@@ -391,7 +399,10 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                     </label>
                                     <label htmlFor="toggle">Make lesson open for everyone!</label>
                                     <div className='edit-holder-buttons'>
-                                        <button>
+                                        <button onClick={() => {
+                                            submitForm({ ...lessonDTO, isOpen: newLesson.isOpen })
+                                            setEdit({ ...isEditState, isOpen: false })
+                                        }}>
                                             Submit
                                         </button>
                                         <button onClick={() => setEdit({ ...isEditState, isOpen: false })}>
@@ -496,10 +507,13 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                             {
                                 isEditState.users &&
                                 <div className='edit-holder-buttons'>
-                                    <button>
+                                    <button onClick={() => {
+                                        submitForm({ ...lessonDTO, users: newLesson.studentParticipators.concat(newLesson.tutorParticipators) })
+                                        setEdit({ ...isEditState, users: false })
+                                    }}>
                                         Submit
                                     </button>
-                                    <button onClick={() => setEdit({ ...isEditState, time: false })}>
+                                    <button onClick={() => setEdit({ ...isEditState, users: false })}>
                                         Cancel
                                     </button>
                                 </div>

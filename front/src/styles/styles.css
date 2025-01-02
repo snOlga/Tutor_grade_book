@@ -131,6 +131,11 @@ button:hover {
   background-color: #72DAD3;
 }
 
+button:disabled {
+  background-color: #ddd;
+  color: #555;
+}
+
 .third-class-button {
   background-color: #46a09a00;
   border: 1px solid #555;
