@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../styles/header_style.css'
 import { getRoles, ROLES } from '../App';
 
-function Header({ openLessonCreationModal, openNotifications }) {
+function Header({ openLessonCreationModal, openLessonsRequests }) {
 
     return (
         <div className='header'>
@@ -16,7 +16,7 @@ function Header({ openLessonCreationModal, openNotifications }) {
                 {
                     getRoles().includes(ROLES.TUTOR) && <button onClick={() => openLessonCreationModal(true)}>Create Lesson</button>
                 }
-                <button onClick={() => openNotifications(true)}>Notifications</button>
+                <button onClick={() => openLessonsRequests(true)}>LessonsRequests</button>
                 {/* <button onClick={openChatFromHeader}>chat</button> */}
             </div>
         </div>

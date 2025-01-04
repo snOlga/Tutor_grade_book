@@ -70,7 +70,7 @@ export function getRoles() {
         return []
 }
 
-export function getSubject() {
+export function getCurrentUserEmail() {
     const currentToken = getCookie("token")
     if (currentToken == '')
         return ""

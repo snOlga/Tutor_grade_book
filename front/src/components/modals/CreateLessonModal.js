@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/lesson_creation_modal_style.css'
-import { getSubject } from '../../App'
+import { getCurrentUserEmail } from '../../App'
 
 function CreateLessonModal({ closeModal }) {
     const [newLesson, setNewLesson] = useState(
@@ -38,7 +38,7 @@ function CreateLessonModal({ closeModal }) {
             })
     }
 
-    function getSubjectFromForm() {
+    function getCurrentUserEmailFromForm() {
         let radios = document.getElementsByName("subject")
         let chosenID = ""
         radios.forEach(radio => {
@@ -72,7 +72,7 @@ function CreateLessonModal({ closeModal }) {
     function submitForm() {
         let time = prepareStartTime()
         let duration = prepareDuration()
-        let subject = getSubjectFromForm()
+        let subject = getCurrentUserEmailFromForm()
         fetch('http://localhost:18018/lessons/create', {
             method: 'POST',
             headers: {
@@ -88,7 +88,7 @@ function CreateLessonModal({ closeModal }) {
                 description: newLesson.description,
                 heading: newLesson.title,
                 owner: {
-                    email: getSubject()
+                    email: getCurrentUserEmail()
                 },
                 users: newLesson.studentParticipators.concat(newLesson.tutorParticipators)
             })

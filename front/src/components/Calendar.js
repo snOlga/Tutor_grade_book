@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react'
 import LessonsCards from './cards/LessonsCards.js';
 import '../styles/calendar_style.css'
-import { getSubject } from '../App.js'
+import { getCurrentUserEmail } from '../App.js'
 
 function Calendar({ setLessonInfoModalState }) {
     const [currentWeek, setCurrentWeek] = useState(0)
@@ -33,7 +33,7 @@ function Calendar({ setLessonInfoModalState }) {
     }
 
     function loadLessons() {
-        fetch('http://localhost:18018/lessons/with_user/' + getSubject(), {
+        fetch('http://localhost:18018/lessons/with_user/' + getCurrentUserEmail(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
