@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { jwtDecode } from "jwt-decode"
 import Enter from './pages/Enter'
-import TutorCalendar from './pages/TutorCalendar'
+import PageCalendar from './pages/PageCalendar'
+
+export const ROLES = {
+    TUTOR: 'TUTOR',
+    STUDENT: 'STUDENT'
+}
 
 function App() {
     const [isTutor, setTutorRole] = useState(false);
@@ -13,41 +18,8 @@ function App() {
     }, [])
 
     function checkRoles() {
-        let currentToken = getCookie("token")
-        if (currentToken == '')
-            return
-        let decodedBody = jwtDecode(currentToken)
-        let subject = decodedBody.sub
-        localStorage.setItem("subject", subject)
-        let authorities = decodedBody.authorities
-        let isStudent = false
-        let isTutor = false
-        if (Array.isArray(authorities)) {
-            authorities.forEach((auth) => {
-                if (auth.authority == 'STUDENT')
-                    isStudent = true
-                if (auth.authority == 'TUTOR')
-                    isTutor = true
-            });
-        }
-        setTutorRole(isTutor)
-        setStudentRole(isStudent)
-    }
-
-    function getCookie(cname) {
-        let name = cname + "=";
-        let decodedCookie = decodeURIComponent(document.cookie);
-        let ca = decodedCookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
+        setTutorRole(getRoles().includes(ROLES.TUTOR))
+        setStudentRole(getRoles().includes(ROLES.STUDENT))
     }
 
     return (
@@ -59,13 +31,7 @@ function App() {
                             !isStudent && !isTutor && <Route path="/" element={<Enter />} />
                         }
                         {
-                            isTutor && isStudent && <Route path="/" element={<TutorCalendar />} />
-                        }
-                        {
-                            isStudent && <Route path="/" element={<Enter />} />
-                        }
-                        {
-                            isTutor && <Route path="/" element={<TutorCalendar />} />
+                            (isTutor || isStudent) && <Route path="/" element={<PageCalendar />} />
                         }
                     </Routes>
                 </Router>
@@ -75,3 +41,39 @@ function App() {
 }
 
 export default App;
+
+export function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+export function getRoles() {
+    const currentToken = getCookie("token")
+    if (currentToken == '')
+        return []
+    const decodedBody = jwtDecode(currentToken)
+    const authorities = decodedBody.authorities
+    if (Array.isArray(authorities))
+        return authorities.map(auth => auth.authority)
+    else
+        return []
+}
+
+export function getSubject() {
+    const currentToken = getCookie("token")
+    if (currentToken == '')
+        return ""
+    const decodedBody = jwtDecode(currentToken)
+    return decodedBody.sub
+}

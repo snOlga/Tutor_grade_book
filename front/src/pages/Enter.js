@@ -4,8 +4,8 @@ import LoginForm from '../components/LoginForm';
 import '../styles/styles.css';
 
 function Enter() {
-    const [isRegstration, showRegistration] = useState(true)
-    const [isLogin, showLogin] = useState(false)
+    const [isRegstration, showRegistration] = useState(false)
+    const [isLogin, showLogin] = useState(true)
 
     function resetForm() {
         showRegistration(!isRegstration)

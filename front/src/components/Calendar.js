@@ -1,7 +1,8 @@
 import React from 'react';
 import { useEffect, useState } from 'react'
-import LessonsCards from './Cards/LessonsCards';
+import LessonsCards from './cards/LessonsCards.js';
 import '../styles/calendar_style.css'
+import { getSubject } from '../App.js'
 
 function Calendar({ setLessonInfoModalState }) {
     const [currentWeek, setCurrentWeek] = useState(0)
@@ -32,7 +33,7 @@ function Calendar({ setLessonInfoModalState }) {
     }
 
     function loadLessons() {
-        fetch('http://localhost:18018/lessons/with_user/' + localStorage.getItem("subject"), {
+        fetch('http://localhost:18018/lessons/with_user/' + getSubject(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

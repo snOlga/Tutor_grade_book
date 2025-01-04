@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import { ROLES } from '../App';
 
 function RegistrationForm() {
     const [formData, setFormData] = useState({
@@ -22,9 +23,9 @@ function RegistrationForm() {
         let name = e.target.name
         let valueBefore = formData.roles
         if (name == 'isStudent')
-            setFormData({ ...formData, ["roles"]: [...valueBefore, 'STUDENT'] })
+            setFormData({ ...formData, roles: [...valueBefore, ROLES.STUDENT] })
         if (name == 'isTutor')
-            setFormData({ ...formData, ["roles"]: [...valueBefore, 'TUTOR'] })
+            setFormData({ ...formData, roles: [...valueBefore, ROLES.TUTOR] })
 
     }
 

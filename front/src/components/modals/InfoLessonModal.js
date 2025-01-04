@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/lesson_creation_modal_style.css'
 import '../../styles/lesson_info_modal_style.css'
-import { toBeDisabled } from '@testing-library/jest-dom/matchers';
+import { getRoles, ROLES } from '../../App';
 
 function InfoLessonModal({ currentLesson, closeModal }) {
     const lessonDate = new Date(currentLesson.startTime)
@@ -9,7 +9,6 @@ function InfoLessonModal({ currentLesson, closeModal }) {
     const [isEditState, setEdit] = useState(
         {
             title: false,
-            humanReadableId: false,
             description: false,
             startDate: false,
             startTime: false,
@@ -28,8 +27,8 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             startTime: lessonDate.toLocaleTimeString().substring(0, 5),
             endTime: (new Date(lessonDate.getTime() + lessonDTO.durationInMinutes * 60 * 1000)).toLocaleTimeString().substring(0, 5),
             isOpen: lessonDTO.isOpen,
-            studentParticipators: lessonDTO.users.filter(user => user.roles.includes('STUDENT')),
-            tutorParticipators: lessonDTO.users.filter(user => user.roles.includes('TUTOR')),
+            studentParticipators: lessonDTO.users.filter(user => user.roles.includes(ROLES.STUDENT)),
+            tutorParticipators: lessonDTO.users.filter(user => user.roles.includes(ROLES.TUTOR)),
             subject: lessonDTO.subject.name
         }
     )
@@ -37,6 +36,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
     const [studentParticipator, setStudentParticipator] = useState([])
     const [tutorParticipator, setTutorParticipator] = useState([])
     const [isTimeOk, setTimeState] = useState(true)
+    const isTutor = getRoles().includes(ROLES.TUTOR)
 
     useEffect(() => {
         fetchSubjects()
@@ -120,13 +120,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
     }
 
     function checkTime() {
-        let startTimestamp = (newLesson.startDate + "T" + newLesson.startTime)
-        let endTimeStamp = (newLesson.startDate + "T" + newLesson.endTime)
-        let duration = (new Date(endTimeStamp)) - (new Date(startTimestamp))
-        console.log(Math.round(duration / 60000))
-        console.log(newLesson.startDate + "T" + newLesson.startTime)
-        console.log(newLesson.startDate + "T" + newLesson.endTime)
-        setTimeState(duration > 0)
+        setTimeState(prepareDuration() > 0)
     }
 
     return (
@@ -144,8 +138,8 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 <div>
                                     Lesson Title
                                 </div>
-                                {
-                                    !isEditState.title &&
+                                { // TODO: check it
+                                    (!isEditState.title && isTutor) &&
                                     <button className='button-no-style' onClick={() => setEdit({ ...isEditState, title: true })}>
                                         <EditIcon />
                                     </button>
@@ -155,7 +149,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 !isEditState.title && <div name="title" className='plain-text'>{lessonDTO.heading}</div>
                             }
                             {
-                                isEditState.title &&
+                                (isEditState.title && isTutor) &&
                                 <div className='edit-holder'>
                                     <input
                                         name="title"
@@ -184,9 +178,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                     Lesson ID
                                 </div>
                             </label>
-                            {
-                                !isEditState.humanReadableId && <div name="humanReadableId" className='plain-text'>{lessonDTO.humanReadableId}</div>
-                            }
+                            <div name="humanReadableId" className='plain-text'>{lessonDTO.humanReadableId}</div>
                         </div>
 
                         <div className='field-holder'>
@@ -195,7 +187,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                     Description
                                 </div>
                                 {
-                                    !isEditState.description &&
+                                    (!isEditState.description && isTutor) &&
                                     <button className='button-no-style' onClick={() => setEdit({ ...isEditState, description: true })}>
                                         <EditIcon />
                                     </button>
@@ -205,7 +197,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 !isEditState.description && <div name="description" className='plain-text'>{lessonDTO.description}</div>
                             }
                             {
-                                isEditState.description &&
+                                (isEditState.description && isTutor) &&
                                 <div className='edit-holder'>
                                     <textarea
                                         name="description"
@@ -234,7 +226,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                     Subject
                                 </div>
                                 {
-                                    !isEditState.subject &&
+                                    (!isEditState.subject && isTutor) &&
                                     <button className='button-no-style' onClick={() => setEdit({ ...isEditState, subject: true })}>
                                         <EditIcon />
                                     </button>
@@ -244,7 +236,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 !isEditState.subject && <div name="subject" className='plain-text'>{lessonDTO.subject.name}</div>
                             }
                             {
-                                isEditState.subject &&
+                                (isEditState.subject && isTutor) &&
                                 <div className='edit-holder'>
                                     {
                                         allSubjects.map(subject => {
@@ -282,7 +274,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                     Date
                                 </div>
                                 {
-                                    !isEditState.date &&
+                                    (!isEditState.date && isTutor) &&
                                     <button className='button-no-style' onClick={() => setEdit({ ...isEditState, date: true })}>
                                         <EditIcon />
                                     </button>
@@ -292,7 +284,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 !isEditState.date && <div name="date" className='plain-text'>{newLesson.startDate}</div>
                             }
                             {
-                                isEditState.date &&
+                                (isEditState.date && isTutor) &&
                                 <div className='edit-holder'>
                                     <input
                                         name="date"
@@ -321,7 +313,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                     Time
                                 </div>
                                 {
-                                    !isEditState.time &&
+                                    (!isEditState.time && isTutor) &&
                                     <button className='button-no-style' onClick={() => setEdit({ ...isEditState, time: true })}>
                                         <EditIcon />
                                     </button>
@@ -333,7 +325,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 </div>
                             }
                             {
-                                isEditState.time &&
+                                (isEditState.time && isTutor) &&
                                 <div className='edit-holder'>
                                     <label htmlFor="from">From</label>
                                     <input
@@ -374,7 +366,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                     Is lesson opened for everyone?
                                 </div>
                                 {
-                                    !isEditState.isOpen &&
+                                    (!isEditState.isOpen && isTutor) &&
                                     <button className='button-no-style' onClick={() => setEdit({ ...isEditState, isOpen: true })}>
                                         <EditIcon />
                                     </button>
@@ -387,7 +379,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 </div>
                             }
                             {
-                                isEditState.isOpen &&
+                                (isEditState.isOpen && isTutor) &&
                                 <div className='edit-holder'>
                                     <label className="toggle-switch">
                                         <input
@@ -419,7 +411,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                     Participators
                                 </div>
                                 {
-                                    !isEditState.users &&
+                                    (!isEditState.users && isTutor) &&
                                     <button className='button-no-style' onClick={() => setEdit({ ...isEditState, users: true })}>
                                         <EditIcon />
                                     </button>
@@ -449,7 +441,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 </div>
                             }
                             {
-                                isEditState.users &&
+                                (isEditState.users && isTutor) &&
                                 <div className='field-holder'>
                                     <label htmlFor="invite_tutors">Invite another tutors</label>
                                     <input
@@ -477,7 +469,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 </div>
                             }
                             {
-                                isEditState.users &&
+                                (isEditState.users && isTutor) &&
                                 <div className='field-holder'>
                                     <label htmlFor="invite_students">Invite students</label>
                                     <input
@@ -505,7 +497,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 </div>
                             }
                             {
-                                isEditState.users &&
+                                (isEditState.users && isTutor) &&
                                 <div className='edit-holder-buttons'>
                                     <button onClick={() => {
                                         submitForm({ ...lessonDTO, users: newLesson.studentParticipators.concat(newLesson.tutorParticipators) })

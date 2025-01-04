@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/lesson_creation_modal_style.css'
+import { getSubject } from '../../App'
 
 function CreateLessonModal({ closeModal }) {
     const [newLesson, setNewLesson] = useState(
@@ -87,13 +88,13 @@ function CreateLessonModal({ closeModal }) {
                 description: newLesson.description,
                 heading: newLesson.title,
                 owner: {
-                    email: localStorage.getItem("subject")
+                    email: getSubject()
                 },
                 users: newLesson.studentParticipators.concat(newLesson.tutorParticipators)
             })
         })
             .then(response => {
-                window.location.reload()
+                // window.location.reload()
             })
     }
 

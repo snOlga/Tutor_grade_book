@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import ChatHolder from '../components/ChatHolder';
 import CreateLessonModal from '../components/modals/CreateLessonModal';
 import InfoLessonModal from '../components/modals/InfoLessonModal';
+import NotificationsHolder from '../components/NotificationsHolder';
 
 function TutorCalendar() {
     const [isChatOpen, openChat] = useState(false)
@@ -12,21 +13,25 @@ function TutorCalendar() {
         isOpen: false,
         lesson: {}
     })
+    const [isNotificationsOpen, openNotifications] = useState(false)
 
     function openLessonInfoModal(state) {
-        setLessonInfoModalState({...lessonInfoModalState, isOpen:state})
+        setLessonInfoModalState({ ...lessonInfoModalState, isOpen: state })
     }
 
     return (
         <>
             <div className="min-h-screen">
-                <Header openChat={openChat} openLessonCreationModal={openLessonCreationModal} />
+                <Header openLessonCreationModal={openLessonCreationModal} openNotifications={openNotifications} />
                 <Calendar setLessonInfoModalState={setLessonInfoModalState} />
                 {
                     isLessonCreationOpen && <CreateLessonModal closeModal={openLessonCreationModal} />
                 }
                 {
                     lessonInfoModalState.isOpen && <InfoLessonModal closeModal={openLessonInfoModal} currentLesson={lessonInfoModalState.lesson} />
+                }
+                {
+                    isNotificationsOpen && <NotificationsHolder />
                 }
                 {/* {
                     isChatOpen && <ChatHolder />

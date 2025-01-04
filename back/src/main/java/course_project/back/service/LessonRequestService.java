@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import course_project.back.DTO.LessonDTO;
+import course_project.back.DTO.LessonRequestDTO;
 import course_project.back.entity.LessonEntity;
 import course_project.back.entity.LessonRequestEntity;
 import course_project.back.entity.UserEntity;
@@ -23,6 +24,30 @@ public class LessonRequestService {
     @Autowired
     private LessonRepository lessonRepository;
 
+    public List<LessonRequestDTO> findAllIncomeByUserEmail(String email) {
+        List<LessonRequestEntity> lessonRequestEntities = lessonRequestRepository.findAllByReciever_Email(email);
+        return lessonRequestEntities.stream().map(LessonRequestDTO::new).toList();
+    }
+
+    public List<LessonRequestDTO> findAllOutcomeByUserEmail(String email) {
+        List<LessonRequestEntity> lessonRequestEntities = lessonRequestRepository.findAllBySender_Email(email);
+        return lessonRequestEntities.stream().map(LessonRequestDTO::new).toList();
+    }
+
+    public LessonRequestDTO updateApproving(LessonRequestDTO lessonRequestDTO) {
+        if (lessonRequestDTO.getIsApproved())
+            return approveLessonRequest(lessonRequestDTO);
+        else
+            return deleteLessonRequest(lessonRequestDTO);
+    }
+
+    public LessonRequestDTO deleteLessonRequest(LessonRequestDTO lessonRequestDTO) {
+        LessonRequestEntity lessonRequestEntity = lessonRequestRepository.findById(lessonRequestDTO.getId()).get();
+        lessonRequestEntity.setIsDeleted(true);
+        lessonRequestRepository.save(lessonRequestEntity);
+        return new LessonRequestDTO(lessonRequestEntity);
+    }
+
     public void inviteParticipators(LessonDTO lessonDTO) {
         if (lessonDTO.getUsers().size() == 0)
             return;
@@ -34,7 +59,7 @@ public class LessonRequestService {
         UserEntity owner = userRepository.findByEmail(lessonDTO.getOwner().getEmail());
         LessonEntity lessonEntity = lessonRepository.findById(lessonDTO.getId()).get();
 
-        return new LessonRequestEntity(false, false, owner, lessonEntity);
+        return new LessonRequestEntity(owner, lessonEntity);
     }
 
     private void inviteEveryParticipator(LessonRequestEntity sheme, LessonDTO lessonDTO) {
@@ -45,5 +70,12 @@ public class LessonRequestService {
             lessonRequestEntity.setReciever(participator);
             lessonRequestRepository.save(lessonRequestEntity);
         });
+    }
+
+    private LessonRequestDTO approveLessonRequest(LessonRequestDTO lessonRequestDTO) {
+        LessonRequestEntity lessonRequestEntity = lessonRequestRepository.findById(lessonRequestDTO.getId()).get();
+        lessonRequestEntity.setIsApproved(true);
+        lessonRequestRepository.save(lessonRequestEntity);
+        return new LessonRequestDTO(lessonRequestEntity);
     }
 }

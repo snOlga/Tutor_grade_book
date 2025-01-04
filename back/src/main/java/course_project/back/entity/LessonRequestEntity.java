@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Where(clause = "is_approved = false AND is_deleted = false")
+@Where(clause = "is_deleted = false")
 @Table(name = "lessons_requests")
 public class LessonRequestEntity {
     @Id
@@ -44,11 +44,10 @@ public class LessonRequestEntity {
         this.lesson = new LessonEntity(lessonRequestDTO.getLesson());
     }
 
-    public LessonRequestEntity(Boolean isApproved, Boolean isDeleted, UserEntity sender, LessonEntity lesson) {
-        this.isApproved = isApproved;
+    public LessonRequestEntity(UserEntity sender, LessonEntity lesson) {
         this.sender = sender;
         this.lesson = lesson;
-        this.isDeleted = isDeleted;
+        this.isDeleted = false;
     }
 
     @Override

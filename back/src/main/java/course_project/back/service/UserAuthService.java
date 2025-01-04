@@ -86,7 +86,8 @@ public class UserAuthService {
         }
 
         UserEntity userEntity = new UserEntity(userDTO.getName(), userDTO.getSecondName(), userDTO.getEmail(),
-                userDTO.getPhone(), userDTO.getDescription(), userDTO.getHumanReadableID(), userDTO.getPassword(),
+                userDTO.getPhone(), userDTO.getDescription(),
+                userDTO.getHumanReadableID() == null ? "" : userDTO.getHumanReadableID(), userDTO.getPassword(),
                 roles);
         return userEntity;
     }
