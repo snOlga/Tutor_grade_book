@@ -43,6 +43,13 @@ public class LessonRequestService {
         return new LessonRequestDTO(lessonRequestEntity);
     }
 
+    public Boolean deleteById(Long id) {
+        LessonRequestEntity lessonRequestEntity = lessonRequestRepository.findById(id).get();
+        lessonRequestEntity.setIsDeleted(true);
+        lessonRequestRepository.save(lessonRequestEntity);
+        return lessonRequestEntity != null;
+    }
+
     public void inviteParticipators(LessonDTO lessonDTO) {
         if (lessonDTO.getUsers().size() == 0)
             return;

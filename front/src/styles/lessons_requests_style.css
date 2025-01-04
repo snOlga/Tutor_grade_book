@@ -20,7 +20,7 @@
 }
 
 .card {
-    width: 45%;
+    min-width: 15em;
     padding: 5px;
     background-color: #ddd;
     color: #555;
@@ -44,4 +44,18 @@
     margin-bottom: 4px;
     margin-top: 0.5em !important;
     cursor: pointer;
+}
+
+.requests-cards {
+    display: grid;
+    gap: 1em;
+}
+
+.outcome-position {
+    position: absolute;
+    right: 5%;
+}
+
+.card-w-bin-header {
+    display: flex;
 }
