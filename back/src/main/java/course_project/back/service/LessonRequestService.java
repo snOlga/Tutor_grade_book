@@ -34,17 +34,12 @@ public class LessonRequestService {
         return lessonRequestEntities.stream().map(LessonRequestDTO::new).toList();
     }
 
-    public LessonRequestDTO updateApproving(LessonRequestDTO lessonRequestDTO) {
-        if (lessonRequestDTO.getIsApproved())
-            return approveLessonRequest(lessonRequestDTO);
-        else
-            return deleteLessonRequest(lessonRequestDTO);
-    }
-
-    public LessonRequestDTO deleteLessonRequest(LessonRequestDTO lessonRequestDTO) {
-        LessonRequestEntity lessonRequestEntity = lessonRequestRepository.findById(lessonRequestDTO.getId()).get();
-        lessonRequestEntity.setIsDeleted(true);
+    public LessonRequestDTO updateApprovement(Long id, LessonRequestDTO lessonRequestDTO) {
+        LessonRequestEntity lessonRequestEntity = lessonRequestRepository.findById(id).get();
+        lessonRequestEntity.setIsApproved(lessonRequestDTO.getIsApproved());
         lessonRequestRepository.save(lessonRequestEntity);
+        if (lessonRequestDTO.getIsApproved())
+            addUserToLesson(lessonRequestEntity);
         return new LessonRequestDTO(lessonRequestEntity);
     }
 
@@ -72,10 +67,10 @@ public class LessonRequestService {
         });
     }
 
-    private LessonRequestDTO approveLessonRequest(LessonRequestDTO lessonRequestDTO) {
-        LessonRequestEntity lessonRequestEntity = lessonRequestRepository.findById(lessonRequestDTO.getId()).get();
-        lessonRequestEntity.setIsApproved(true);
-        lessonRequestRepository.save(lessonRequestEntity);
-        return new LessonRequestDTO(lessonRequestEntity);
+    private void addUserToLesson(LessonRequestEntity lessonRequestEntity) {
+        LessonEntity lessonEntity = lessonRequestEntity.getLesson();
+        lessonEntity.getUsers().add(lessonRequestEntity.getReciever());
+        lessonEntity.getUsers().add(lessonRequestEntity.getSender());
+        lessonRepository.save(lessonEntity);
     }
 }

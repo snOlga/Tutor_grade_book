@@ -34,10 +34,10 @@ public class LessonRequestController {
         return new ResponseEntity<>(allRequests, HttpStatus.OK);
     }
 
-    @PutMapping("/approve/{id}")
-    public ResponseEntity<LessonRequestDTO> approveRequest(@PathVariable String id,
+    @PutMapping("/update_approvement/{id}")
+    public ResponseEntity<LessonRequestDTO> approveRequest(@PathVariable Long id,
             @RequestBody LessonRequestDTO lessonRequestDTO) {
-        LessonRequestDTO updatedLessonRequestDTO = lessonRequestService.updateApproving(lessonRequestDTO);
+        LessonRequestDTO updatedLessonRequestDTO = lessonRequestService.updateApprovement(id, lessonRequestDTO);
         return updatedLessonRequestDTO != null ? new ResponseEntity<>(updatedLessonRequestDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

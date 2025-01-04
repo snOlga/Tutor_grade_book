@@ -16,7 +16,7 @@ function Header({ openLessonCreationModal, openLessonsRequests }) {
                 {
                     getRoles().includes(ROLES.TUTOR) && <button onClick={() => openLessonCreationModal(true)}>Create Lesson</button>
                 }
-                <button onClick={() => openLessonsRequests(true)}>LessonsRequests</button>
+                <button onClick={() => openLessonsRequests(true)}>Lessons Requests</button>
                 {/* <button onClick={openChatFromHeader}>chat</button> */}
             </div>
         </div>

@@ -41,6 +41,40 @@ function LessonsRequestsHolder({ openLessonInfo }) {
             })
     }
 
+    function approveRequest(request) {
+        fetch("http://localhost:18018/lesson_requests/update_approvement/" + request.id, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ...request, isApproved: true
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+    }
+
+    function rejectRequest(request) {
+        fetch("http://localhost:18018/lesson_requests/update_approvement/" + request.id, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ...request, isApproved: false
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+    }
+
     return (
         <div className='lessons-requests-holder'>
             <div className='lessons-requests-content'>
@@ -60,10 +94,10 @@ function LessonsRequestsHolder({ openLessonInfo }) {
                                     <br />
                                     {(request.isApproved == null) &&
                                         <div className='requests-buttons'>
-                                            <button>
+                                            <button onClick={() => approveRequest(request)}>
                                                 Approve
                                             </button>
-                                            <button>
+                                            <button onClick={() => rejectRequest(request)}>
                                                 Reject
                                             </button>
                                         </div>}
