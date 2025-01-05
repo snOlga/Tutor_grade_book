@@ -1,0 +1,23 @@
+.filters {
+    margin-top: 70px;
+    display: flex;
+    gap: 1em;
+}
+
+.filter {
+    padding: 5px 10px;
+    background-color: #b5e4e800;
+    border: 1px solid #72DAD3;
+    color: #72DAD3;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: 0.3s;
+    max-width: fit-content;
+}
+
+.filter:hover {
+    background-color: #B5E4E8;
+    color: #333;
+    border: 1px solid #333;
+}

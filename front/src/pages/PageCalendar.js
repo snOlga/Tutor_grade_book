@@ -5,6 +5,7 @@ import ChatHolder from '../components/ChatHolder';
 import CreateLessonModal from '../components/modals/CreateLessonModal';
 import InfoLessonModal from '../components/modals/InfoLessonModal';
 import LessonsRequestsHolder from '../components/LessonsRequestsHolder';
+import SubjectFilters from '../components/SubjectFilters';
 
 function TutorCalendar() {
     const [isChatOpen, openChat] = useState(false)
@@ -23,6 +24,7 @@ function TutorCalendar() {
         <>
             <div className="min-h-screen">
                 <Header openLessonCreationModal={openLessonCreationModal} openLessonsRequests={openLessonsRequests} />
+                <SubjectFilters />
                 <Calendar setLessonInfoModalState={setLessonInfoModalState} />
                 {
                     isLessonCreationOpen && <CreateLessonModal closeModal={openLessonCreationModal} />

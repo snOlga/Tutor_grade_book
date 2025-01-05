@@ -28,16 +28,13 @@ public class LessonService {
     private LessonRequestService lessonRequestService;
 
     public List<LessonDTO> findAll() {
-        System.out.println("Иду в бд за всеми уроками...");
         List<LessonEntity> res = lessonRepository.findAll();
-        System.out.println(res.get(0) + " сущность");
         return res.stream().map(LessonDTO::new).toList();
     }
 
     public LessonDTO findById(Long id) {
         Optional<LessonEntity> lesson = lessonRepository.findById(id);
         return lesson.map(LessonDTO::new).orElse(null);
-
     }
 
     public LessonDTO create(LessonDTO lessonDTO) {
@@ -68,6 +65,14 @@ public class LessonService {
 
     public List<LessonDTO> findAllByUserEmail(String email) {
         List<LessonEntity> result = lessonRepository.findByUsers_Email(email);
+        result.sort((lesson1, lesson2) -> {
+            return (lesson1.getStartTime().compareTo(lesson2.getStartTime()));
+        });
+        return result.stream().map(LessonDTO::new).toList();
+    }
+
+    public List<LessonDTO> findAllBySubject(Long id) {
+        List<LessonEntity> result = lessonRepository.findAllBySubject(id);
         result.sort((lesson1, lesson2) -> {
             return (lesson1.getStartTime().compareTo(lesson2.getStartTime()));
         });

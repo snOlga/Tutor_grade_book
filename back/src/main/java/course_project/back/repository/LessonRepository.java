@@ -15,4 +15,6 @@ public interface LessonRepository extends JpaRepository<LessonEntity, Long> {
     List<LessonEntity> findByUsers_Email(String email);
 
     List<LessonEntity> findByIdIn(List<Long> ids);
+
+    List<LessonEntity> findAllBySubject(Long subject);
 }

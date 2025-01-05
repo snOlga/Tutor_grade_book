@@ -6,6 +6,7 @@
     height: 100%;
     width: 40%;
     z-index: 40;
+    overflow-y: scroll;
 }
 
 .lessons-requests-content {
@@ -20,9 +21,8 @@
 }
 
 .card {
-    min-width: 15em;
+    width: 15em;
     padding: 5px;
-    background-color: #ddd;
     color: #555;
     border-radius: 0px 4px 4px 0px;
     font-size: 0.9em;

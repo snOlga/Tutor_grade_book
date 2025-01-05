@@ -38,7 +38,8 @@ function LessonsRequestsHolder({ openLessonInfo }) {
         })
             .then(response => response.json())
             .then(data => {
-                setIncome(income.map(request => request.id == data ? data : request))
+                console.log(data)
+                setIncome(data)
             })
     }
 
@@ -97,11 +98,13 @@ function LessonsRequestsHolder({ openLessonInfo }) {
                     <button onClick={() => {
                         setShowIncome(!showIncome)
                         setShowOutcome(!showOutcome)
+                        fetchIncomeRequests()
                     }}
                         disabled={showIncome}>Income Requests</button>
                     <button onClick={() => {
                         setShowIncome(!showIncome)
                         setShowOutcome(!showOutcome)
+                        fetchOutcomeRequests()
                     }} className='outcome-position'
                         disabled={showOutcome}>Outcome Requests</button>
                 </div>
