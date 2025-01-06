@@ -4,20 +4,15 @@ import LessonsCards from './cards/LessonsCards.js';
 import '../styles/calendar_style.css'
 import { getCurrentUserEmail } from '../App.js'
 
-function Calendar({ setLessonInfoModalState }) {
+function Calendar({ lessons, setLessonInfoModalState }) {
     const [currentWeek, setCurrentWeek] = useState(0)
     const [days, setDays] = useState([[new Date(), ""]])
     const [weekdays] = useState(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
     const [time] = useState(['08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'])
-    const [lessons, setLessons] = useState([])
 
     useEffect(() => {
         setDaysOnLoading()
     }, [currentWeek])
-
-    useEffect(() => {
-        loadLessons()
-    }, [])
 
     function setDaysOnLoading() {
         const curr = new Date();
@@ -30,20 +25,6 @@ function Calendar({ setLessonInfoModalState }) {
             countedDays.push(dateWeekday);
         }
         setDays(countedDays)
-    }
-
-    function loadLessons() {
-        fetch('http://localhost:18018/lessons/with_user/' + getCurrentUserEmail(), {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                setLessons(data)
-            })
     }
 
     function nextWeek() {

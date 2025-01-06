@@ -41,7 +41,6 @@ public class LessonRequestEntity {
         this.id = lessonRequestDTO.getId();
         this.isApproved = lessonRequestDTO.getIsApproved();
         this.isDeleted = lessonRequestDTO.getIsDeleted();
-        this.lesson = new LessonEntity(lessonRequestDTO.getLesson());
     }
 
     public LessonRequestEntity(UserEntity sender, LessonEntity lesson) {

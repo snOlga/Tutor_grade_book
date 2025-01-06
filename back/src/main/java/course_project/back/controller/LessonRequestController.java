@@ -15,6 +15,7 @@ import course_project.back.DTO.LessonRequestDTO;
 import course_project.back.service.LessonRequestService;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/lesson_requests")
@@ -44,8 +45,15 @@ public class LessonRequestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRequest(@PathVariable Long id) {
+    public ResponseEntity<LessonRequestDTO> deleteRequest(@PathVariable Long id) {
         boolean deleted = lessonRequestService.deleteById(id);
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<LessonRequestDTO> createLessonRequest(@RequestBody LessonRequestDTO lessonRequestDTO) {
+        LessonRequestDTO createdLessonDTO = lessonRequestService.create(lessonRequestDTO);
+        return new ResponseEntity<>(createdLessonDTO, HttpStatus.CREATED);
+    }
+
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/subject_filters_style.css'
 
-function SubjectFilters() {
+function SubjectFilters({ setLessons }) {
     const [allSubjects, setAllSubjects] = useState([])
 
     useEffect(() => {
@@ -22,12 +22,26 @@ function SubjectFilters() {
             })
     }
 
+    function fetchLessonsBySubjects(subject) {
+        fetch('http://localhost:18018/lessons/with_subject/' + subject.id, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                setLessons(data)
+            })
+    }
+
     return (
         <div className='filters'>
             {
                 allSubjects.map(subject => {
-                    return(
-                        <div className='filter'>
+                    return (
+                        <div className='filter' onClick={() => fetchLessonsBySubjects(subject)}>
                             {subject.name}
                         </div>
                     )

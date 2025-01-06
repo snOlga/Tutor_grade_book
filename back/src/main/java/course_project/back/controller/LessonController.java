@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/lessons")
@@ -50,8 +49,8 @@ public class LessonController {
         return new ResponseEntity<>(allLessons, HttpStatus.OK);
     }
 
-    @GetMapping("/with_subject/{id}")
-    public ResponseEntity<List<LessonDTO>> getAllSubjectLessons(@RequestParam Long subjectId) {
+    @GetMapping("/with_subject/{subjectId}")
+    public ResponseEntity<List<LessonDTO>> getAllSubjectLessons(@PathVariable Long subjectId) {
         List<LessonDTO> allLessons = lessonService.findAllBySubject(subjectId);
         return new ResponseEntity<>(allLessons, HttpStatus.OK);
     }

@@ -24,6 +24,15 @@ public class LessonRequestService {
     @Autowired
     private LessonRepository lessonRepository;
 
+    public LessonRequestDTO create(LessonRequestDTO lessonRequestDTO) {
+        LessonRequestEntity lessonRequestEntity = new LessonRequestEntity(lessonRequestDTO);
+        lessonRequestEntity.setSender(userRepository.findByEmail(lessonRequestDTO.getSender().getEmail()));
+        lessonRequestEntity.setReciever(userRepository.findByEmail(lessonRequestDTO.getReciever().getEmail()));
+        lessonRequestEntity.setLesson(lessonRepository.findById(lessonRequestDTO.getLesson().getId()).get());
+        LessonRequestEntity result = lessonRequestRepository.save(lessonRequestEntity);
+        return new LessonRequestDTO(result);
+    }
+
     public List<LessonRequestDTO> findAllIncomeByUserEmail(String email) {
         List<LessonRequestEntity> lessonRequestEntities = lessonRequestRepository.findAllByReciever_Email(email);
         return lessonRequestEntities.stream().map(LessonRequestDTO::new).toList();

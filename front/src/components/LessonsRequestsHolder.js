@@ -38,7 +38,6 @@ function LessonsRequestsHolder({ openLessonInfo }) {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 setIncome(data)
             })
     }
@@ -92,96 +91,98 @@ function LessonsRequestsHolder({ openLessonInfo }) {
     }
 
     return (
-        <div className='lessons-requests-holder'>
-            <div className='lessons-requests-content'>
-                <div className='requests-buttons'>
-                    <button onClick={() => {
-                        setShowIncome(!showIncome)
-                        setShowOutcome(!showOutcome)
-                        fetchIncomeRequests()
-                    }}
-                        disabled={showIncome}>Income Requests</button>
-                    <button onClick={() => {
-                        setShowIncome(!showIncome)
-                        setShowOutcome(!showOutcome)
-                        fetchOutcomeRequests()
-                    }} className='outcome-position'
-                        disabled={showOutcome}>Outcome Requests</button>
-                </div>
-                <div>
-                    <div className='requests-cards'>
-                        {showIncome && income.map(request => {
-                            return (
-                                <div className='card'>
-                                    <h4 className="card-heading" onClick={() => openLessonInfo({ lesson: request.lesson, isOpen: true })}>
-                                        {request.lesson.heading}
-                                    </h4>
-                                    <div>
-                                        Is Approved?
-                                        <br />
-                                        {(request.isApproved == null) &&
-                                            <div className='requests-buttons'>
-                                                <button onClick={() => approveRequest(request)}>
-                                                    Approve
-                                                </button>
-                                                <button onClick={() => rejectRequest(request)}>
-                                                    Reject
-                                                </button>
-                                            </div>}
-                                        {
-                                            request.isApproved && <YesIcon />
-                                        }
-                                        {
-                                            (!request.isApproved && request.isApproved != null) && <NoIcon />
-                                        }
-                                        <br />
-                                        Who sent:
-                                        <br />
-                                        <div>
-                                            <a href={'/' + request.sender.humanReadableID} className='link'>{(request.sender.name + " " + request.sender.secondName)}</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        })}
+        <div className='all-window' onClick={() => window.location.reload()}>
+            <div className='lessons-requests-holder' onClick={e => e.stopPropagation()}>
+                <div className='lessons-requests-content'>
+                    <div className='requests-buttons'>
+                        <button onClick={() => {
+                            setShowIncome(!showIncome)
+                            setShowOutcome(!showOutcome)
+                            fetchIncomeRequests()
+                        }}
+                            disabled={showIncome}>Income Requests</button>
+                        <button onClick={() => {
+                            setShowIncome(!showIncome)
+                            setShowOutcome(!showOutcome)
+                            fetchOutcomeRequests()
+                        }} className='outcome-position'
+                            disabled={showOutcome}>Outcome Requests</button>
                     </div>
-                    <div className='requests-cards outcome-position'>
-                        {showOutcome && outcome.map(request => {
-                            return (
-                                <div className='card'>
-                                    <div className='card-w-bin-header'>
+                    <div>
+                        <div className='requests-cards'>
+                            {showIncome && income.map(request => {
+                                return (
+                                    <div className='card'>
                                         <h4 className="card-heading" onClick={() => openLessonInfo({ lesson: request.lesson, isOpen: true })}>
                                             {request.lesson.heading}
                                         </h4>
-                                        <a onClick={() => {
-                                            deleteRequest(request)
-                                        }} >
-                                            <svg stroke="currentColor" fill="#EB7C6C" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5-1-1h-5l-1 1H5v2h14V4z"></path></svg>
-                                        </a>
-                                    </div>
-                                    <div>
-                                        Is Approved?
-                                        <br />
-                                        {(request.isApproved == null) &&
-                                            <div>
-                                                Not seen yet...
-                                            </div>}
-                                        {
-                                            request.isApproved && <YesIcon />
-                                        }
-                                        {
-                                            (!request.isApproved && request.isApproved != null) && <NoIcon />
-                                        }
-                                        <br />
-                                        Who got:
-                                        <br />
                                         <div>
-                                            <a href={'/' + request.reciever.humanReadableID} className='link'>{(request.reciever.name + " " + request.reciever.secondName)}</a>
+                                            Is Approved?
+                                            <br />
+                                            {(request.isApproved == null) &&
+                                                <div className='requests-buttons'>
+                                                    <button onClick={() => approveRequest(request)}>
+                                                        Approve
+                                                    </button>
+                                                    <button onClick={() => rejectRequest(request)}>
+                                                        Reject
+                                                    </button>
+                                                </div>}
+                                            {
+                                                request.isApproved && <YesIcon />
+                                            }
+                                            {
+                                                (!request.isApproved && request.isApproved != null) && <NoIcon />
+                                            }
+                                            <br />
+                                            Who sent:
+                                            <br />
+                                            <div>
+                                                <a href={'/' + request.sender.humanReadableID} className='link'>{(request.sender.name + " " + request.sender.secondName)}</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            )
-                        })}
+                                )
+                            })}
+                        </div>
+                        <div className='requests-cards outcome-position'>
+                            {showOutcome && outcome.map(request => {
+                                return (
+                                    <div className='card'>
+                                        <div className='card-w-bin-header'>
+                                            <h4 className="card-heading" onClick={() => openLessonInfo({ lesson: request.lesson, isOpen: true })}>
+                                                {request.lesson.heading}
+                                            </h4>
+                                            <a onClick={() => {
+                                                deleteRequest(request)
+                                            }} >
+                                                <svg stroke="currentColor" fill="#EB7C6C" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5-1-1h-5l-1 1H5v2h14V4z"></path></svg>
+                                            </a>
+                                        </div>
+                                        <div>
+                                            Is Approved?
+                                            <br />
+                                            {(request.isApproved == null) &&
+                                                <div>
+                                                    Not seen yet...
+                                                </div>}
+                                            {
+                                                request.isApproved && <YesIcon />
+                                            }
+                                            {
+                                                (!request.isApproved && request.isApproved != null) && <NoIcon />
+                                            }
+                                            <br />
+                                            Who got:
+                                            <br />
+                                            <div>
+                                                <a href={'/' + request.reciever.humanReadableID} className='link'>{(request.reciever.name + " " + request.reciever.secondName)}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
                     </div>
                 </div>
             </div>

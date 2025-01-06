@@ -1,10 +1,40 @@
 import React, { useState } from 'react';
 import '../../styles/chat_style.css'
-import { getRoles, ROLES } from '../../App';
+import { getRoles, ROLES, getCurrentUserEmail } from '../../App';
 
 function LessonCard({ lesson, lessonDate, openDeletionModal, setLessonToDelete, setLessonInfoModalState }) {
 
     const topPositionLesson = (lessonDate.getHours() - 7) * 60 + lessonDate.getMinutes() + 10;
+    const isTutor = getRoles().includes(ROLES.TUTOR)
+    const isStudent = getRoles().includes(ROLES.STUDENT)
+    const isUserOwner = (getCurrentUserEmail() == lesson.owner.email)
+    const isParticipator = (lesson.users.map(user => user.email).includes(getCurrentUserEmail()))
+
+    function participate() {
+        fetch('http://localhost:18018/lesson_requests/create', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                isDeleted: false,
+                sender: {
+                    email: getCurrentUserEmail()
+                },
+                reciever: {
+                    email: lesson.owner.email
+                },
+                lesson: {
+                    id: lesson.id
+                }
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+    }
 
     return (
         <>
@@ -14,7 +44,8 @@ function LessonCard({ lesson, lessonDate, openDeletionModal, setLessonToDelete, 
                         {lessonDate.toLocaleTimeString().substring(0, 5) + " - " + (new Date(lessonDate.getTime() + lesson.durationInMinutes * 60 * 1000)).toLocaleTimeString().substring(0, 5)}
                     </div>
                     {
-                        getRoles().includes(ROLES.TUTOR) &&
+                        (isTutor && isUserOwner)
+                        &&
                         <a onClick={() => {
                             openDeletionModal(true)
                             setLessonToDelete(lesson)
@@ -27,15 +58,10 @@ function LessonCard({ lesson, lessonDate, openDeletionModal, setLessonToDelete, 
                     <h4 className="lesson-heading">
                         {lesson.heading}
                     </h4>
-                    {/* <p className="lesson-tutors">
-                    {lesson.tutors_participator.map(tutor => {
-                        return (
-                            <div>
-                                <a href={'/' + tutor.user_id} className='link'>{tutor.name}</a>
-                            </div>
-                        )
-                    })}
-                </p> */}
+                    {
+                        (isStudent && !isParticipator) &&
+                        <button onClick={participate}>Participate!</button>
+                    }
                 </div>
             </div>
         </>

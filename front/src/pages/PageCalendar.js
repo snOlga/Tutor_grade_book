@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from "../components/Calendar";
 import Header from '../components/Header';
 import ChatHolder from '../components/ChatHolder';
@@ -6,6 +6,7 @@ import CreateLessonModal from '../components/modals/CreateLessonModal';
 import InfoLessonModal from '../components/modals/InfoLessonModal';
 import LessonsRequestsHolder from '../components/LessonsRequestsHolder';
 import SubjectFilters from '../components/SubjectFilters';
+import { getRoles, ROLES, getCurrentUserEmail } from '../App';
 
 function TutorCalendar() {
     const [isChatOpen, openChat] = useState(false)
@@ -15,17 +16,42 @@ function TutorCalendar() {
         lesson: {}
     })
     const [isLessonsRequestsOpen, openLessonsRequests] = useState(false)
+    const [lessons, setLessons] = useState([])
+    const isStudent = getRoles().includes(ROLES.STUDENT)
 
     function openLessonInfoModal(state) {
         setLessonInfoModalState({ ...lessonInfoModalState, isOpen: state })
+    }
+
+    useEffect(() => {
+        loadLessons()
+    }, [])
+
+    function loadLessons() {
+        fetch('http://localhost:18018/lessons/with_user/' + getCurrentUserEmail(), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                setLessons(data)
+            })
     }
 
     return (
         <>
             <div className="min-h-screen">
                 <Header openLessonCreationModal={openLessonCreationModal} openLessonsRequests={openLessonsRequests} />
-                <SubjectFilters />
-                <Calendar setLessonInfoModalState={setLessonInfoModalState} />
+                {
+                    isStudent && <SubjectFilters setLessons={setLessons} />
+                }
+                {
+                    !isStudent && <div className='filters'></div>
+                }
+                <Calendar lessons={lessons} setLessonInfoModalState={setLessonInfoModalState} />
                 {
                     isLessonCreationOpen && <CreateLessonModal closeModal={openLessonCreationModal} />
                 }
