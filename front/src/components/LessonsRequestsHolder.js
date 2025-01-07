@@ -138,7 +138,7 @@ function LessonsRequestsHolder({ openLessonInfo }) {
                                             Who sent:
                                             <br />
                                             <div>
-                                                <a href={'/' + request.sender.humanReadableID} className='link'>{(request.sender.name + " " + request.sender.secondName)}</a>
+                                                <a href={'/account/' + request.sender.humanReadableID} className='link'>{(request.sender.name + " " + request.sender.secondName)}</a>
                                             </div>
                                         </div>
                                     </div>
@@ -176,7 +176,7 @@ function LessonsRequestsHolder({ openLessonInfo }) {
                                             Who got:
                                             <br />
                                             <div>
-                                                <a href={'/' + request.reciever.humanReadableID} className='link'>{(request.reciever.name + " " + request.reciever.secondName)}</a>
+                                                <a href={'/account/' + request.reciever.humanReadableID} className='link'>{(request.reciever.name + " " + request.reciever.secondName)}</a>
                                             </div>
                                         </div>
                                     </div>

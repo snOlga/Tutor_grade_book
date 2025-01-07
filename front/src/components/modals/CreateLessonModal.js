@@ -206,7 +206,7 @@ function CreateLessonModal({ closeModal }) {
                                     newLesson.tutorParticipators.map(tutor =>
                                         <div className='participator-holder'>
                                             <div>
-                                                <a href={'/' + tutor.humanReadableID} className='link'>{(tutor.name + " " + tutor.secondName)}</a>
+                                                <a href={'/account/' + tutor.humanReadableID} className='link'>{(tutor.name + " " + tutor.secondName)}</a>
                                             </div>
                                             <a onClick={() => {
                                                 setNewLesson({ ...newLesson, tutorParticipators: newLesson.tutorParticipators.filter(participator => participator != tutor) })
@@ -231,7 +231,7 @@ function CreateLessonModal({ closeModal }) {
                                     newLesson.studentParticipators.map(student =>
                                         <div className='participator-holder'>
                                             <div>
-                                                <a href={'/' + student.humanReadableID} className='link'>{(student.name + " " + student.secondName)}</a>
+                                                <a href={'/account/' + student.humanReadableID} className='link'>{(student.name + " " + student.secondName)}</a>
                                             </div>
                                             <a onClick={() => {
                                                 setNewLesson({ ...newLesson, studentParticipators: newLesson.studentParticipators.filter(participator => participator != student) })

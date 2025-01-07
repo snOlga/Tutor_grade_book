@@ -31,4 +31,18 @@ public class ParticipatorController {
         return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/with_email/{email}")
+    public ResponseEntity<ParticipatorDTO> getParticipatorByEmail(@PathVariable String email) {
+        ParticipatorDTO participatorDTO = participatorService.getParticipatorByEmail(email);
+        return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{humanReadableId}")
+    public ResponseEntity<ParticipatorDTO> getParticipatorById(@PathVariable String humanReadableId) {
+        ParticipatorDTO participatorDTO = participatorService.getParticipatorByHumanReadableId(humanReadableId);
+        return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }

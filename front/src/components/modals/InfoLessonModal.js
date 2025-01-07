@@ -425,7 +425,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                         newLesson.tutorParticipators.map(user => {
                                             return (
                                                 <div>
-                                                    <a href={'/' + user.humanReadableID} className='link'>{(user.name + " " + user.secondName)}</a>
+                                                    <a href={'/account/' + user.humanReadableID} className='link'>{(user.name + " " + user.secondName)}</a>
                                                 </div>
                                             )
                                         })
@@ -434,7 +434,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                         newLesson.studentParticipators.map(user => {
                                             return (
                                                 <div>
-                                                    <a href={'/' + user.humanReadableID} className='link'>{(user.name + " " + user.secondName)}</a>
+                                                    <a href={'/account/' + user.humanReadableID} className='link'>{(user.name + " " + user.secondName)}</a>
                                                 </div>
                                             )
                                         })
@@ -457,7 +457,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                         newLesson.tutorParticipators.map(tutor =>
                                             <div className='participator-holder'>
                                                 <div>
-                                                    <a href={'/' + tutor.humanReadableID} className='link'>{(tutor.name + " " + tutor.secondName)}</a>
+                                                    <a href={'/account/' + tutor.humanReadableID} className='link'>{(tutor.name + " " + tutor.secondName)}</a>
                                                 </div>
                                                 <a onClick={() => {
                                                     setNewLesson({ ...newLesson, tutorParticipators: newLesson.tutorParticipators.filter(participator => participator != tutor) })
@@ -485,7 +485,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                         newLesson.studentParticipators.map(student =>
                                             <div className='participator-holder'>
                                                 <div>
-                                                    <a href={'/' + student.humanReadableID} className='link'>{(student.name + " " + student.secondName)}</a>
+                                                    <a href={'/account/' + student.humanReadableID} className='link'>{(student.name + " " + student.secondName)}</a>
                                                 </div>
                                                 <a onClick={() => {
                                                     setNewLesson({ ...newLesson, studentParticipators: newLesson.studentParticipators.filter(participator => participator != student) })
@@ -520,7 +520,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                                 </div>
                             </label>
                             <div name="owner">
-                                <a href={'/' + lessonDTO.owner.humanReadableID} className='link'>{(lessonDTO.owner.name + " " + lessonDTO.owner.secondName)}</a>
+                                <a href={'/account/' + lessonDTO.owner.humanReadableID} className='link'>{(lessonDTO.owner.name + " " + lessonDTO.owner.secondName)}</a>
                             </div>
                         </div>
                     </div>
@@ -536,7 +536,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
 export default InfoLessonModal;
 
 
-function EditIcon() {
+export function EditIcon() {
     return (
         <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0z"></path><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path></svg>
     )

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { jwtDecode } from "jwt-decode"
 import Enter from './pages/Enter'
 import PageCalendar from './pages/PageCalendar'
+import Account from './pages/Account'
 
 export const ROLES = {
     TUTOR: 'TUTOR',
@@ -32,6 +33,9 @@ function App() {
                         }
                         {
                             (isTutor || isStudent) && <Route path="/" element={<PageCalendar />} />
+                        }
+                        {
+                            <Route path="/account/:id" element={<Account />} />
                         }
                     </Routes>
                 </Router>

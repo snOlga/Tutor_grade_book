@@ -1,0 +1,20 @@
+.account-content {
+    position: relative;
+    width: 10%;
+    border-right: 1px solid #ddd;
+    padding: 10px 0;
+    text-align: right;
+}
+
+.account-heading {
+    font-size: xx-large;
+    padding-right: 10px;
+}
+
+.data-holder {
+    padding: 10px;
+}
+
+.one-line-data-holder {
+    padding: 5px;
+}

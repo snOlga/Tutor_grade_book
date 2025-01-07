@@ -14,9 +14,13 @@ function Header({ openLessonCreationModal, openLessonsRequests }) {
             </a>
             <div className='right-section'>
                 {
-                    getRoles().includes(ROLES.TUTOR) && <button onClick={() => openLessonCreationModal(true)}>Create Lesson</button>
+                    (getRoles().includes(ROLES.TUTOR) && openLessonCreationModal != null) && 
+                    <button onClick={() => openLessonCreationModal(true)}>Create Lesson</button>
                 }
-                <button onClick={() => openLessonsRequests(true)}>Lessons Requests</button>
+                {
+                    openLessonsRequests != null &&
+                    <button onClick={() => openLessonsRequests(true)}>Lessons Requests</button>
+                }
                 {/* <button onClick={openChatFromHeader}>chat</button> */}
             </div>
         </div>

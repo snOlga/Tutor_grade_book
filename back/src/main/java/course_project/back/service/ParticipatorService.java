@@ -24,4 +24,14 @@ public class ParticipatorService {
         boolean isStudent = user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEntity.ROLE_TUTOR));
         return isStudent ? new ParticipatorDTO(user) : null;
     }
+
+    public ParticipatorDTO getParticipatorByEmail(String email) {
+        UserEntity user = repoUser.findByEmail(email);
+        return new ParticipatorDTO(user);
+    }
+
+    public ParticipatorDTO getParticipatorByHumanReadableId(String humanReadableID) {
+        UserEntity user = repoUser.findByHumanReadableID(humanReadableID);
+        return new ParticipatorDTO(user);
+    }
 }
