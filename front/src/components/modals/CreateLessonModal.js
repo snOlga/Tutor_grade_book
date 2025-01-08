@@ -12,17 +12,23 @@ function CreateLessonModal({ closeModal }) {
             endTime: "",
             isOpen: false,
             studentParticipators: [],
-            tutorParticipators: []
+            tutorParticipators: [],
+            subject: "Other"
         }
     )
     const [studentParticipator, setStudentParticipator] = useState([])
     const [tutorParticipator, setTutorParticipator] = useState([])
 
     const [allSubjects, setAllSubjects] = useState([])
+    const [isTimeOk, setTimeState] = useState(true)
 
     useEffect(() => {
         fetchSubjects()
     }, [])
+
+    useEffect(() => {
+        checkTime()
+    }, [newLesson.startTime, newLesson.endTime])
 
     function fetchSubjects() {
         fetch('http://localhost:18018/subjects', {
@@ -38,7 +44,7 @@ function CreateLessonModal({ closeModal }) {
             })
     }
 
-    function getCurrentUserEmailFromForm() {
+    function getSubject() {
         let radios = document.getElementsByName("subject")
         let chosenID = ""
         radios.forEach(radio => {
@@ -69,10 +75,14 @@ function CreateLessonModal({ closeModal }) {
         return (Math.round(duration / 60000))
     }
 
+    function checkTime() {
+        setTimeState(prepareDuration() > 0)
+    }
+
     function submitForm() {
         let time = prepareStartTime()
         let duration = prepareDuration()
-        let subject = getCurrentUserEmailFromForm()
+        let subject = getSubject()
         fetch('http://localhost:18018/lessons/create', {
             method: 'POST',
             headers: {
@@ -136,11 +146,12 @@ function CreateLessonModal({ closeModal }) {
                     <div className='content'>
                         <div className='left-part'>
                             <div className='field-holder'>
-                                <label htmlFor="title">Lesson Title</label>
+                                <label className="req-label" htmlFor="title">Lesson Title</label>
                                 <input
                                     name="title"
                                     type="text"
                                     onChange={(e) => setNewLesson({ ...newLesson, title: e.target.value })}
+                                    className={newLesson.title != "" ? "" : "error"}
                                     required />
                             </div>
                             <div className='field-holder'>
@@ -152,12 +163,17 @@ function CreateLessonModal({ closeModal }) {
                                     onChange={(e) => setNewLesson({ ...newLesson, description: e.target.value })} />
                             </div>
                             <div className='field-holder'>
-                                <label>Subject</label>
+                                <label className="req-label">Subject</label>
                                 {
                                     allSubjects.map(subject => {
                                         return (
                                             <div className='radio-holder'>
-                                                <input type="radio" name="subject" id={subject.name} />
+                                                <input
+                                                    type="radio"
+                                                    name="subject"
+                                                    id={subject.name}
+                                                    onChange={(e) => setNewLesson({ ...newLesson, subject: subject.name })}
+                                                    checked={newLesson.subject == subject.name} />
                                                 <label htmlFor={subject.name}>{subject.name}</label>
                                             </div>
                                         )
@@ -165,29 +181,31 @@ function CreateLessonModal({ closeModal }) {
                                 }
                             </div>
                             <div className='field-holder'>
-                                <label htmlFor="date">Date</label>
+                                <label className="req-label" htmlFor="date">Date</label>
                                 <input
                                     name="date"
                                     type="date"
                                     value={newLesson.startDate}
-                                    onChange={(e) => setNewLesson({ ...newLesson, startDate: e.target.value })}
+                                    className={newLesson.startDate != "" ? "" : "error"}
                                     required />
                             </div>
                             <div className='field-holder'>
                                 <p>
                                     Time
                                 </p>
-                                <label htmlFor="from">From</label>
+                                <label className="req-label" htmlFor="from">From</label>
                                 <input
                                     name="from"
                                     type="time"
                                     onChange={(e) => setNewLesson({ ...newLesson, startTime: e.target.value })}
+                                    className={isTimeOk ? "" : "error"}
                                     required />
-                                <label htmlFor="till">Till</label>
+                                <label className="req-label" htmlFor="till">Till</label>
                                 <input
                                     name="till"
                                     type="time"
                                     onChange={(e) => setNewLesson({ ...newLesson, endTime: e.target.value })}
+                                    className={isTimeOk ? "" : "error"}
                                     required />
                             </div>
                         </div>
@@ -251,8 +269,13 @@ function CreateLessonModal({ closeModal }) {
                             </div>
                         </div>
                         <div className='buttons'>
-                            <button type='submit' onClick={submitForm}>Create</button>
-                            <button type='button' onClick={() => closeModal(false)}>Exit</button>
+                            <button
+                                type='submit'
+                                onClick={submitForm}
+                                disabled={!isTimeOk || newLesson.title == ""}>Create</button>
+                            <button
+                                type='button'
+                                onClick={() => closeModal(false)}>Exit</button>
                         </div>
                     </div>
                 </form>

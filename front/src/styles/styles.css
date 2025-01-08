@@ -154,3 +154,7 @@ button:disabled {
   cursor: pointer;
   transition: 0.3s;
 }
+
+.error {
+  border: 1px solid #B95567 !important;
+}
