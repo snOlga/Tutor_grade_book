@@ -34,4 +34,16 @@ public class ParticipatorService {
         UserEntity user = repoUser.findByHumanReadableID(humanReadableID);
         return new ParticipatorDTO(user);
     }
+
+    public ParticipatorDTO update(String humanReadableId, ParticipatorDTO participatorDTO) {
+        UserEntity user = repoUser.findByHumanReadableID(humanReadableId);
+        user.setName(participatorDTO.getName());
+        user.setSecondName(participatorDTO.getSecondName());
+        user.setEmail(participatorDTO.getEmail());
+        user.setPhone(participatorDTO.getPhone());
+        user.setDescription(participatorDTO.getDescription());
+        user.setDefaultHumanRedableID();
+        UserEntity result = repoUser.save(user);
+        return new ParticipatorDTO(result);
+    }
 }

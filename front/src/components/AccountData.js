@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/account_page.css'
 import { getCurrentUserEmail } from '../App';
 import { EditIcon } from './modals/InfoLessonModal';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function AccountData({ currentUser }) {
     const isCurrentUser = (getCurrentUserEmail() == currentUser.email)
@@ -14,6 +15,32 @@ function AccountData({ currentUser }) {
             desciption: false
         }
     )
+    const [newUserInfo, setNewUserInfo] = useState(
+        {
+            name: "",
+            secondName: "",
+            email: "",
+            phone: "",
+            desciption: ""
+        }
+    )
+    const navigate = useNavigate()
+
+    function submitForm(struct) {
+        fetch('http://localhost:18018/participator/update/' + struct.humanReadableID, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(struct)
+        })
+            .then(response => response.json())
+            .then(data => {
+                navigate('/account/' + data.humanReadableID)
+                window.location.reload()
+            })
+    }
 
     return (
         <>
@@ -55,10 +82,13 @@ function AccountData({ currentUser }) {
                         {
                             (isCurrentUser && isEditState.name) &&
                             <div className='edit-holder'>
-                                <input type="text" placeholder={currentUser.name} />
+                                <input
+                                    type="text"
+                                    placeholder={currentUser.name}
+                                    onChange={(e) => setNewUserInfo({ ...newUserInfo, name: e.target.value })} />
                                 <div className='edit-holder-buttons'>
                                     <button onClick={() => {
-                                        // submitForm({ ...lessonDTO, heading: newLesson.title })
+                                        submitForm({ ...currentUser, name: newUserInfo.name })
                                         setEdit({ ...isEditState, name: false })
                                     }}>
                                         Submit
@@ -91,10 +121,13 @@ function AccountData({ currentUser }) {
                         {
                             (isCurrentUser && isEditState.secondName) &&
                             <div className='edit-holder'>
-                                <input type="text" placeholder={currentUser.secondName} />
+                                <input
+                                    type="text"
+                                    placeholder={currentUser.secondName}
+                                    onChange={(e) => setNewUserInfo({ ...newUserInfo, secondName: e.target.value })} />
                                 <div className='edit-holder-buttons'>
                                     <button onClick={() => {
-                                        // submitForm({ ...lessonDTO, heading: newLesson.title })
+                                        submitForm({ ...currentUser, secondName: newUserInfo.secondName })
                                         setEdit({ ...isEditState, secondName: false })
                                     }}>
                                         Submit
@@ -127,10 +160,13 @@ function AccountData({ currentUser }) {
                         {
                             (isCurrentUser && isEditState.email) &&
                             <div className='edit-holder'>
-                                <input type="text" placeholder={currentUser.email} />
+                                <input
+                                    type="text"
+                                    placeholder={currentUser.email}
+                                    onChange={(e) => setNewUserInfo({ ...newUserInfo, email: e.target.value })} />
                                 <div className='edit-holder-buttons'>
                                     <button onClick={() => {
-                                        // submitForm({ ...lessonDTO, heading: newLesson.title })
+                                        submitForm({ ...currentUser, email: newUserInfo.email })
                                         setEdit({ ...isEditState, email: false })
                                     }}>
                                         Submit
@@ -163,10 +199,13 @@ function AccountData({ currentUser }) {
                         {
                             (isCurrentUser && isEditState.phone) &&
                             <div className='edit-holder'>
-                                <input type="text" placeholder={currentUser.phone} />
+                                <input
+                                    type="text"
+                                    placeholder={currentUser.phone}
+                                    onChange={(e) => setNewUserInfo({ ...newUserInfo, phone: e.target.value })} />
                                 <div className='edit-holder-buttons'>
                                     <button onClick={() => {
-                                        // submitForm({ ...lessonDTO, heading: newLesson.title })
+                                        submitForm({ ...currentUser, phone: newUserInfo.phone })
                                         setEdit({ ...isEditState, phone: false })
                                     }}>
                                         Submit
@@ -179,7 +218,7 @@ function AccountData({ currentUser }) {
                         }
                     </div>
                     <div className='one-line-data-holder'>
-                    <h4 className="lesson-heading info-edit-label">
+                        <h4 className="lesson-heading info-edit-label">
                             <div>
                                 Description
                             </div>
@@ -200,14 +239,14 @@ function AccountData({ currentUser }) {
                             (isCurrentUser && isEditState.desciption) &&
                             <div className='edit-holder'>
                                 <textarea
-                                        name="description"
-                                        cols="30"
-                                        rows="10"
-                                        // onChange={(e) => setNewLesson({ ...newLesson, description: e.target.value })}
-                                        placeholder={currentUser.desciption} />
+                                    name="description"
+                                    cols="30"
+                                    rows="10"
+                                    onChange={(e) => setNewUserInfo({ ...newUserInfo, desciption: e.target.value })}
+                                    placeholder={currentUser.desciption} />
                                 <div className='edit-holder-buttons'>
                                     <button onClick={() => {
-                                        // submitForm({ ...lessonDTO, heading: newLesson.title })
+                                        submitForm({ ...currentUser, desciption: newUserInfo.desciption })
                                         setEdit({ ...isEditState, desciption: false })
                                     }}>
                                         Submit

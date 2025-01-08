@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import course_project.back.DTO.ParticipatorDTO;
 import course_project.back.service.ParticipatorService;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/participator")
 public class ParticipatorController {
-    
+
     @Autowired
     private ParticipatorService participatorService;
 
@@ -43,6 +45,14 @@ public class ParticipatorController {
     public ResponseEntity<ParticipatorDTO> getParticipatorById(@PathVariable String humanReadableId) {
         ParticipatorDTO participatorDTO = participatorService.getParticipatorByHumanReadableId(humanReadableId);
         return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/update/{humanReadableId}")
+    public ResponseEntity<ParticipatorDTO> putMethodName(@PathVariable String humanReadableId,
+            @RequestBody ParticipatorDTO participatorDTO) {
+        ParticipatorDTO result = participatorService.update(humanReadableId, participatorDTO);
+        return result != null ? new ResponseEntity<>(result, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
