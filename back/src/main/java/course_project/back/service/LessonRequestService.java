@@ -69,17 +69,19 @@ public class LessonRequestService {
     private LessonRequestEntity makeSchemeRequestFrom(LessonDTO lessonDTO) {
         UserEntity owner = userRepository.findByEmail(lessonDTO.getOwner().getEmail());
         LessonEntity lessonEntity = lessonRepository.findById(lessonDTO.getId()).get();
-
         return new LessonRequestEntity(owner, lessonEntity);
     }
 
     private void inviteEveryParticipator(LessonRequestEntity sheme, LessonDTO lessonDTO) {
         List<UserEntity> participators = lessonDTO.getUsers().stream()
-                .map(user -> userRepository.findByEmail(user.getEmail())).toList();
+                .map(user -> userRepository.findByEmail(user.getEmail()))
+                .filter(user -> !sheme.getLesson().getUsers().contains(user)).toList();
         participators.forEach(participator -> {
-            LessonRequestEntity lessonRequestEntity = sheme.clone();
-            lessonRequestEntity.setReciever(participator);
-            lessonRequestRepository.save(lessonRequestEntity);
+            if (!participator.getId().equals(sheme.getSender().getId())) {
+                LessonRequestEntity lessonRequestEntity = sheme.clone();
+                lessonRequestEntity.setReciever(participator);
+                lessonRequestRepository.save(lessonRequestEntity);
+            }
         });
     }
 
