@@ -6,7 +6,7 @@ function DeletionModal({ valueToDelete, closeModal, lessonDate }) {
     const topPositionLesson = (lessonDate.getHours() - 7) * 60 + lessonDate.getMinutes() + 10;
 
     function handleDeletion(lesson) {
-        fetch("http://localhost:18018/lessons/" + lesson.id, {
+        fetch("http://localhost:18018/lessons/delete/" + lesson.id, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

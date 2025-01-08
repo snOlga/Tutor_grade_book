@@ -14,6 +14,7 @@ import course_project.back.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LessonService {
@@ -37,6 +38,7 @@ public class LessonService {
         return lesson.map(LessonDTO::new).orElse(null);
     }
 
+    @Transactional
     public LessonDTO create(LessonDTO lessonDTO) {
         LessonEntity lessonEntity = prepareLessonEntityFromDTO(lessonDTO);
         LessonEntity result = setHumanReadableIdAndSave(lessonEntity);

@@ -30,14 +30,14 @@ public class LessonController {
         return new ResponseEntity<>(createdLessonDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<LessonDTO> updateLesson(@PathVariable Long id, @RequestBody LessonDTO lessonDTO) {
         LessonDTO updatedLessonDTO = lessonService.update(lessonDTO);
         return updatedLessonDTO != null ? new ResponseEntity<>(updatedLessonDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteLesson(@PathVariable Long id) {
         boolean deleted = lessonService.deleteById(id);
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
