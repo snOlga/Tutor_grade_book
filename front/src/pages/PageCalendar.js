@@ -7,6 +7,7 @@ import InfoLessonModal from '../components/modals/InfoLessonModal';
 import LessonsRequestsHolder from '../components/LessonsRequestsHolder';
 import SubjectFilters from '../components/SubjectFilters';
 import { getRoles, ROLES, getCurrentUserEmail } from '../App';
+import TutorSearch from '../components/TutorSearch';
 
 function TutorCalendar() {
     const [isChatOpen, openChat] = useState(false)
@@ -47,6 +48,9 @@ function TutorCalendar() {
                 <Header openLessonCreationModal={openLessonCreationModal} openLessonsRequests={openLessonsRequests} />
                 {
                     isStudent && <SubjectFilters setLessons={setLessons} />
+                }
+                {
+                    isStudent && <TutorSearch setLessons={setLessons} />
                 }
                 {
                     !isStudent && <div className='filters'></div>

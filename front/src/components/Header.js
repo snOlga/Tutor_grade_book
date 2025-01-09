@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../styles/header_style.css'
 import { getCurrentUserEmail, getRoles, ROLES } from '../App';
 import { Navigate, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 function Header({ openLessonCreationModal, openLessonsRequests }) {
     const [currentUser, setUser] = useState({})
@@ -45,6 +46,13 @@ function Header({ openLessonCreationModal, openLessonsRequests }) {
                 {
                     currentUser != {} &&
                     <button onClick={() => navigate('/account/' + currentUser.humanReadableID)}>My Account</button>
+                }
+                {
+                    currentUser != {} &&
+                    <button onClick={() => {
+                        Cookies.remove('token')
+                        window.location.reload()
+                    }}>Log Out</button>
                 }
                 {/* <button onClick={openChatFromHeader}>chat</button> */}
             </div>
