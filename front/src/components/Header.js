@@ -1,8 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/header_style.css'
-import { getRoles, ROLES } from '../App';
+import { getCurrentUserEmail, getRoles, ROLES } from '../App';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function Header({ openLessonCreationModal, openLessonsRequests }) {
+    const [currentUser, setUser] = useState({})
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        loadUser()
+    }, [])
+
+    function loadUser() {
+        fetch('http://localhost:18018/participator/with_email/' + getCurrentUserEmail(), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                setUser(data)
+            })
+    }
 
     return (
         <div className='header'>
@@ -14,12 +35,16 @@ function Header({ openLessonCreationModal, openLessonsRequests }) {
             </a>
             <div className='right-section'>
                 {
-                    (getRoles().includes(ROLES.TUTOR) && openLessonCreationModal != null) && 
+                    (getRoles().includes(ROLES.TUTOR) && openLessonCreationModal != null) &&
                     <button onClick={() => openLessonCreationModal(true)}>Create Lesson</button>
                 }
                 {
                     openLessonsRequests != null &&
                     <button onClick={() => openLessonsRequests(true)}>Lessons Requests</button>
+                }
+                {
+                    currentUser != {} &&
+                    <button onClick={() => navigate('/account/' + currentUser.humanReadableID)}>My Account</button>
                 }
                 {/* <button onClick={openChatFromHeader}>chat</button> */}
             </div>
