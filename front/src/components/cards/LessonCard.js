@@ -58,14 +58,16 @@ function LessonCard({ lesson, lessonDate, openDeletionModal, setLessonToDelete, 
                     <h4 className="lesson-heading">
                         {lesson.heading}
                     </h4>
-                    <div>
-                        Lesson by
+                    <div className='lesson-card-content'>
+                        <div>
+                            Lesson by
+                        </div>
+                        <a href={'/account/' + lesson.owner.humanReadableID} className='link'>{(lesson.owner.name + " " + lesson.owner.secondName)}</a>
+                        {
+                            (isStudent && !isParticipator) &&
+                            <button className="participate-button" onClick={participate}>Participate!</button>
+                        }
                     </div>
-                    <a href={'/account/' + lesson.owner.humanReadableID} className='link'>{(lesson.owner.name + " " + lesson.owner.secondName)}</a>
-                    {
-                        (isStudent && !isParticipator) &&
-                        <button onClick={participate}>Participate!</button>
-                    }
                 </div>
             </div>
         </>

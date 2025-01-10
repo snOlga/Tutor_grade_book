@@ -3,6 +3,7 @@ import '../styles/subject_filters_style.css'
 
 function SubjectFilters({ setLessons }) {
     const [allSubjects, setAllSubjects] = useState([])
+    const [whatChosen, setChosen] = useState(-1)
 
     useEffect(() => {
         fetchSubjects()
@@ -39,9 +40,12 @@ function SubjectFilters({ setLessons }) {
     return (
         <div className='filters'>
             {
-                allSubjects.map(subject => {
+                allSubjects.map((subject, index) => {
                     return (
-                        <div className='filter' onClick={() => fetchLessonsBySubjects(subject)}>
+                        <div className={'filter ' + (whatChosen == index ? 'chosen' : '')} onClick={() => {
+                            fetchLessonsBySubjects(subject)
+                            setChosen(index)
+                        }}>
                             {subject.name}
                         </div>
                     )

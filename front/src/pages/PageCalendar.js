@@ -5,9 +5,8 @@ import ChatHolder from '../components/ChatHolder';
 import CreateLessonModal from '../components/modals/CreateLessonModal';
 import InfoLessonModal from '../components/modals/InfoLessonModal';
 import LessonsRequestsHolder from '../components/LessonsRequestsHolder';
-import SubjectFilters from '../components/SubjectFilters';
 import { getRoles, ROLES, getCurrentUserEmail } from '../App';
-import TutorSearch from '../components/TutorSearch';
+import StudentSearchUI from '../components/StudentSearchUI';
 
 function TutorCalendar() {
     const [isChatOpen, openChat] = useState(false)
@@ -46,11 +45,9 @@ function TutorCalendar() {
         <>
             <div className="min-h-screen">
                 <Header openLessonCreationModal={openLessonCreationModal} openLessonsRequests={openLessonsRequests} />
+                <div style={{marginTop: "70px"}}></div>
                 {
-                    isStudent && <SubjectFilters setLessons={setLessons} />
-                }
-                {
-                    isStudent && <TutorSearch setLessons={setLessons} />
+                    isStudent && <StudentSearchUI setLessons={setLessons} />
                 }
                 {
                     !isStudent && <div className='filters'></div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles/search_style.css'
 
 function TutorSearch({ setLessons }) {
 
@@ -26,15 +27,16 @@ function TutorSearch({ setLessons }) {
         })
             .then(response => response.json())
             .then(data => {
-                setLessons(data)
+                setLessons(data.filter(lesson => lesson.isOpen))
             })
     }
 
     return (
-        <div>
+        <div className='search-holder'>
             <div>Find tutor's lessons?</div>
             <input
                 type="text"
+                className='search-input'
                 placeholder="Start typing tutor's id..."
                 onChange={e => getTutorParticipator(e.target.value)} />
         </div>

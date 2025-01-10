@@ -1,0 +1,15 @@
+.search-input {
+    border: 1px solid #333 !important;
+}
+
+.search-holder {
+    margin-top: 1.7em;
+    display: grid;
+    gap: 0.5em;
+    width: 15em;
+}
+
+.no-background {
+    background: none !important;
+    border: none !important;
+}

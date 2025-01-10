@@ -28,3 +28,13 @@
     top: 5px;
     right: 5px;
 }
+
+.lesson-card-content {
+    margin-top: 1em;
+    display: grid;
+    gap: 0.2em;
+}
+
+.participate-button {
+    margin-top: 0.5em;
+}
