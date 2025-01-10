@@ -124,8 +124,15 @@ function InfoLessonModal({ currentLesson, closeModal }) {
         setTimeState(prepareDuration() > 0)
     }
 
+    function close() {
+        if (isTutor)
+            window.location.reload()
+        else
+            closeModal(false)
+    }
+
     return (
-        <div className='all-window' onClick={() => window.location.reload()}>
+        <div className='all-window' onClick={() => close()}>
             <div className='modal-holder' onClick={e => e.stopPropagation()}>
                 <div className='heading'>
                     <div>
@@ -525,7 +532,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
                         </div>
                     </div>
                     <div className='buttons'>
-                        <button type='button' onClick={() => window.location.reload()}>Exit</button>
+                        <button type='button' onClick={() => close()}>Exit</button>
                     </div>
                 </div>
             </div>

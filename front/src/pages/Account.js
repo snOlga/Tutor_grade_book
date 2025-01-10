@@ -60,7 +60,7 @@ function Account() {
         <>
             <div className="min-h-screen">
                 <Header openLessonCreationModal={null} openLessonsRequests={null} />
-                <div className='filters'></div>
+                <div style={{ marginTop: "70px" }}></div>
                 <AccountData currentUser={currentUser} />
                 <Calendar lessons={lessons} setLessonInfoModalState={setLessonInfoModalState} />
                 {
