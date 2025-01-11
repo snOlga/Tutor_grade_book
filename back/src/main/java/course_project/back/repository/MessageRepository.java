@@ -10,5 +10,5 @@ import course_project.back.entity.MessageEntity;
 @Repository
 public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
     
-    List<MessageEntity> findAllByChatAndAuthor_Email(Long chatId, String email);
+    List<MessageEntity> findAllByChatId(Long chatId);
 }

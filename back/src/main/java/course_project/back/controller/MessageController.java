@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import course_project.back.DTO.ChatDTO;
 import course_project.back.DTO.MessageDTO;
 import course_project.back.service.MessageService;
 
@@ -29,10 +28,9 @@ public class MessageController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-    @GetMapping("/with_user/{email}")
-    public ResponseEntity<List<MessageDTO>> getallChatMessages(@PathVariable String email,
-            @RequestBody ChatDTO chatDTO) {
-        List<MessageDTO> result = messageService.findAllChatMessagesByUserEmail(email, chatDTO);
+    @GetMapping("/with_chat_id/{chatId}")
+    public ResponseEntity<List<MessageDTO>> getallChatMessages(@PathVariable Long chatId) {
+        List<MessageDTO> result = messageService.findAllChatMessages(chatId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

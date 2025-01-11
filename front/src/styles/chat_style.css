@@ -7,3 +7,42 @@
     width: 20%;
     z-index: 50;
 }
+
+.users-in-chat {
+    display: flex;
+    gap: 1.5em;
+}
+
+.chat {
+    position: relative;
+    width: 90%;
+    padding: 5px;
+    color: #555;
+    font-size: 0.9em;
+    z-index: 5;
+    transition: 0.2s;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    height: 6em;
+    cursor: pointer;
+}
+
+.chat:hover {
+    background-color: white;
+}
+
+.chat-w-pic {
+    display: flex;
+    gap: 1em;
+    margin-top: 1em;
+}
+
+.users-and-msg {
+    display: grid;
+    gap: 0.5em;
+}
+
+.first-msg {
+    color: #89a8b2;
+}
