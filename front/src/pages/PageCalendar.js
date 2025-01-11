@@ -44,8 +44,8 @@ function TutorCalendar() {
     return (
         <>
             <div className="min-h-screen">
-                <Header openLessonCreationModal={openLessonCreationModal} openLessonsRequests={openLessonsRequests} />
-                <div style={{marginTop: "70px"}}></div>
+                <Header openLessonCreationModal={openLessonCreationModal} openLessonsRequests={openLessonsRequests} openChat={openChat} />
+                <div style={{ marginTop: "70px" }}></div>
                 {
                     isStudent && <StudentSearchUI setLessons={setLessons} />
                 }
@@ -62,9 +62,9 @@ function TutorCalendar() {
                 {
                     isLessonsRequestsOpen && <LessonsRequestsHolder openLessonInfo={setLessonInfoModalState} />
                 }
-                {/* {
+                {
                     isChatOpen && <ChatHolder />
-                } */}
+                }
             </div >
         </>
     );

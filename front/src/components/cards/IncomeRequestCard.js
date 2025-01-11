@@ -50,10 +50,16 @@ function IncomeRequestCard({ request, openLessonInfo, income, setIncome }) {
                     </div>
                     {(request.isApproved == null) &&
                         <div className='requests-buttons'>
-                            <button onClick={() => approveRequest(request)}>
+                            <button onClick={e => {
+                                approveRequest(request)
+                                e.stopPropagation()
+                            }}>
                                 Approve
                             </button>
-                            <button onClick={() => rejectRequest(request)}>
+                            <button onClick={e => {
+                                rejectRequest(request)
+                                e.stopPropagation()
+                            }}>
                                 Reject
                             </button>
                         </div>}

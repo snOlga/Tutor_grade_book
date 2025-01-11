@@ -6,10 +6,10 @@
     left: 0;
     z-index: 10;
     position: fixed;
-    
+
     /* justify-content: space-between; */
     align-items: center;
-    
+
     padding: 0.5% 1%;
 
     display: flex;
@@ -30,4 +30,17 @@
     position: absolute;
     right: 5em;
     width: fit-content;
+}
+
+.requests-counter {
+    height: 1.1em;
+    width: 1em;
+    color: #B95567;
+    border-radius: 50%;
+    border: 1.5px solid #B95567;
+}
+
+.lessons-requests-button {
+    display: flex;
+    gap: 0.5em;
 }

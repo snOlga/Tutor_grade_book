@@ -42,6 +42,30 @@ function AccountData({ currentUser }) {
             })
     }
 
+    function createChat() {
+        fetch('http://localhost:18018/chats/create', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                users: [
+                    {
+                        email: getCurrentUserEmail()
+                    },
+                    {
+                        email: currentUser.email
+                    }
+                ]
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+    }
+
     return (
         <>
             <div className="calendar">
@@ -258,6 +282,12 @@ function AccountData({ currentUser }) {
                             </div>
                         }
                     </div>
+                    {
+                        !isCurrentUser &&
+                        <div className='one-line-data-holder'>
+                            <button onClick={() => createChat()}>Write me!</button>
+                        </div>
+                    }
                 </div>
             </div>
         </>

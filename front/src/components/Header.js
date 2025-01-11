@@ -4,12 +4,14 @@ import { getCurrentUserEmail, getRoles, ROLES } from '../App';
 import { Navigate, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-function Header({ openLessonCreationModal, openLessonsRequests }) {
+function Header({ openLessonCreationModal, openLessonsRequests, openChat }) {
     const [currentUser, setUser] = useState({})
+    const [incomeRequestsAmount, setIncomeAmount] = useState(0)
     const navigate = useNavigate()
 
     useEffect(() => {
         loadUser()
+        fetchIncomeRequests()
     }, [])
 
     function loadUser() {
@@ -23,6 +25,20 @@ function Header({ openLessonCreationModal, openLessonsRequests }) {
             .then(response => response.json())
             .then(data => {
                 setUser(data)
+            })
+    }
+
+    function fetchIncomeRequests() {
+        fetch("http://localhost:18018/lesson_requests/income/with_user/" + getCurrentUserEmail(), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                setIncomeAmount(data.length)
             })
     }
 
@@ -41,8 +57,19 @@ function Header({ openLessonCreationModal, openLessonsRequests }) {
                 }
                 {
                     openLessonsRequests != null &&
-                    <button onClick={() => openLessonsRequests(true)}>Lessons Requests</button>
+                    <button className='lessons-requests-button' onClick={() => openLessonsRequests(true)}>
+                        <div>
+                            Lessons Requests
+                        </div>
+                        {
+                            (incomeRequestsAmount > 0) &&
+                            <div className='requests-counter'>
+                                {incomeRequestsAmount > 9 ? "!" : incomeRequestsAmount}
+                            </div>
+                        }
+                    </button>
                 }
+                <button onClick={() => openChat(true)}>Chat</button>
                 {
                     currentUser != {} &&
                     <button
@@ -62,7 +89,6 @@ function Header({ openLessonCreationModal, openLessonsRequests }) {
                             LogOutIcon()
                         }</button>
                 }
-                {/* <button onClick={openChatFromHeader}>chat</button> */}
             </div>
         </div>
     );
