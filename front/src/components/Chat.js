@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/chat_style.css'
 import { getCurrentUserEmail } from '../App';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
 
 function Chat({ chat }) {
     const [allMessages, setMessages] = useState([])
@@ -8,6 +10,7 @@ function Chat({ chat }) {
 
     useEffect(() => {
         fetchAllMessages()
+        connectWebSocket()
     }, [])
 
     function fetchAllMessages() {
@@ -22,6 +25,17 @@ function Chat({ chat }) {
             .then(data => {
                 setMessages(data)
             })
+    }
+
+    function connectWebSocket() {
+        const socket = new SockJS('http://localhost:18018/ws-endpoint')
+        let stompClient = Stomp.over(socket)
+
+        stompClient.connect({}, function (frame) {
+            stompClient.subscribe('/topic/chat/' + chat.id, data => {
+                setMessages(JSON.parse(data.body).body)
+            })
+        })
     }
 
     function sendMessage() {
@@ -50,7 +64,15 @@ function Chat({ chat }) {
 
     return (
         <div>
-            {allMessages.map(msg => <div>{msg.text}</div>)}
+            <div className='messages'>
+                {
+                    allMessages.map(msg => {
+                        return (
+                            <div className={msg.author.email == getCurrentUserEmail() ? "outcome" : "income"}>{msg.text}</div>
+                        )
+                    })
+                }
+            </div>
             <div>
                 <textarea
                     cols="30"
