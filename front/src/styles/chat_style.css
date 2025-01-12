@@ -14,6 +14,7 @@
 }
 
 .chat {
+    margin-top: 1em;
     position: relative;
     width: 90%;
     padding: 5px;
@@ -29,7 +30,7 @@
 }
 
 .chat:hover {
-    transform: translateY(-4px); 
+    transform: translateY(-4px);
     z-index: 6;
     box-shadow: 0px 0px 10px #33333350;
 }
@@ -64,7 +65,6 @@
     transition: 0.2s;
     background-color: #B5E4E8;
     border-radius: 4px;
-    text-align: right;
 }
 
 .income {
@@ -77,5 +77,38 @@
     transition: 0.2s;
     background-color: #f9f9f9;
     border-radius: 4px;
-    text-align: left;
+}
+
+.chats {
+    display: block !important;
+}
+
+.msg-time {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 0.7em;
+    color: #89a8b2;
+}
+
+.msg-text {
+    margin-top: 1em;
+}
+
+.msg-author {
+    font-weight: 600;
+}
+
+.chat-input {
+    position: fixed;
+    display: flex;
+    gap: 0.5em;
+    right: 2em;
+    bottom: 2em;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    z-index: 30;
+    width: 35em;
+    height: fit-content;
+    padding: 1em;
 }

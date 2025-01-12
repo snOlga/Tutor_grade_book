@@ -3,10 +3,12 @@ import '../styles/chat_style.css'
 import { getCurrentUserEmail } from '../App';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
+import Message from './Message';
 
 function Chat({ chat }) {
     const [allMessages, setMessages] = useState([])
     const [messageValue, setMessageValue] = useState("")
+    // const [messageForEditing]
 
     useEffect(() => {
         fetchAllMessages()
@@ -50,7 +52,7 @@ function Chat({ chat }) {
                 author: {
                     email: getCurrentUserEmail()
                 },
-                sentTime: (new Date()).toISOString(),
+                sentTime: new Date().toISOString(),
                 isEdited: false,
                 text: messageValue,
                 isDeleted: false
@@ -68,15 +70,14 @@ function Chat({ chat }) {
                 {
                     allMessages.map(msg => {
                         return (
-                            <div className={msg.author.email == getCurrentUserEmail() ? "outcome" : "income"}>{msg.text}</div>
+                            <Message message={msg} />
                         )
                     })
                 }
             </div>
-            <div>
+            <div className='chat-input'>
                 <textarea
-                    cols="30"
-                    rows="10"
+                    rows="1"
                     value={messageValue}
                     onChange={e => setMessageValue(e.target.value)} />
                 <button onClick={() => sendMessage()}>Send</button>
