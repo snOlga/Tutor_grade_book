@@ -123,3 +123,10 @@
     margin-top: 1em;
     margin-bottom: 0.5em;
 }
+
+.editing-msg {
+    position: absolute;
+    top: 5px;
+    right: 1.5em;
+    cursor: pointer;
+}

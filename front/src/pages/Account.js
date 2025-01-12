@@ -5,8 +5,10 @@ import { useLocation } from 'react-router-dom';
 import Calendar from '../components/Calendar';
 import InfoLessonModal from '../components/modals/InfoLessonModal';
 import AccountData from '../components/AccountData';
+import ChatHolder from '../components/ChatHolder';
 
 function Account() {
+    const [isChatOpen, openChat] = useState(false)
     const location = useLocation()
     const userId = location.pathname.split("/")[2]
     const [currentUser, setUser] = useState({})
@@ -59,12 +61,15 @@ function Account() {
     return (
         <>
             <div className="min-h-screen">
-                <Header openLessonCreationModal={null} openLessonsRequests={null} />
+                <Header openLessonCreationModal={null} openLessonsRequests={null} openChat={openChat} />
                 <div style={{ marginTop: "70px" }}></div>
                 <AccountData currentUser={currentUser} />
                 <Calendar lessons={lessons} setLessonInfoModalState={setLessonInfoModalState} />
                 {
                     lessonInfoModalState.isOpen && <InfoLessonModal closeModal={openLessonInfoModal} currentLesson={lessonInfoModalState.lesson} />
+                }
+                {
+                    isChatOpen && <ChatHolder openChat={openChat} />
                 }
             </div >
         </>

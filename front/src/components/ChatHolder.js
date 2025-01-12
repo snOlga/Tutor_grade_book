@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import '../styles/chat_style.css'
 import { getCurrentUserEmail } from '../App';
 import Chat from './Chat';

@@ -46,4 +46,11 @@ public class MessageService {
         messageDTO.setIsEdited(true);
         return create(messageDTO);
     }
+
+    public MessageDTO deleteById(Long id) {
+        MessageEntity messageEntity = messageRepository.findById(id).get();
+        messageEntity.setIsDeleted(true);
+        messageRepository.save(messageEntity);
+        return new MessageDTO(messageEntity);
+    }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import '../styles/chat_style.css'
 import { getCurrentUserEmail } from '../App';
 import SockJS from 'sockjs-client';
@@ -17,7 +17,6 @@ function Chat({ chat }) {
     }, [])
 
     useEffect(() => {
-        console.log(messageForEditing)
         if (messageForEditing != {}) {
             setMessageValue(messageForEditing.text)
             setEditingFlag(true)
@@ -69,7 +68,6 @@ function Chat({ chat }) {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 setMessageValue("")
                 setEditingFlag(false)
             })
@@ -89,7 +87,6 @@ function Chat({ chat }) {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 setMessageValue("")
                 setEditingFlag(false)
             })
