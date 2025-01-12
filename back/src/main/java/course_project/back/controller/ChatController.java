@@ -33,4 +33,13 @@ public class ChatController {
         List<ChatDTO> result = chatService.findAllByUserEmail(email);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @GetMapping("/with_users/{emailFirst}/{emailSecond}")
+    public ResponseEntity<ChatDTO> getAllUserChats(
+            @PathVariable String emailFirst,
+            @PathVariable String emailSecond) {
+
+        ChatDTO result = chatService.findByUsersEmails(emailFirst, emailSecond);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

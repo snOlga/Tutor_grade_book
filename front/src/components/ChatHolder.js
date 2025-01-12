@@ -3,10 +3,10 @@ import '../styles/chat_style.css'
 import { getCurrentUserEmail } from '../App';
 import Chat from './Chat';
 
-function ChatHolder({ openChat }) {
+function ChatHolder({ openChat, chat, setChat }) {
     const [allChats, setAllChats] = useState([])
     const [isChatOpen, setOpenChat] = useState(false)
-    const [currentChat, setCurrentChat] = useState({})
+    const [currentChat, setCurrentChat] = useState(chat)
 
     useEffect(() => {
         fetchAllChats()
@@ -27,11 +27,14 @@ function ChatHolder({ openChat }) {
     }
 
     return (
-        <div className='all-window-2' onClick={() => openChat(false)}>
+        <div className='all-window-2' onClick={() => {
+            openChat(false)
+            setChat(null)
+        }}>
             <div className='lessons-requests-holder lessons-requests-content' onClick={e => e.stopPropagation()}>
                 <div className='chats'>
                     {
-                        !isChatOpen &&
+                        (!isChatOpen && chat == {}) &&
                         allChats.map(chat =>
                             <div className='chat' onClick={() => {
                                 setCurrentChat(chat)
@@ -66,7 +69,7 @@ function ChatHolder({ openChat }) {
                         )
                     }
                     {
-                        isChatOpen && <Chat chat={currentChat} />
+                        (isChatOpen || currentChat != null) && <Chat chat={currentChat} />
                     }
                 </div>
             </div>

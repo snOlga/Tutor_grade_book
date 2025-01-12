@@ -17,6 +17,7 @@ function Account() {
         lesson: {}
     })
     const [lessons, setLessons] = useState([])
+    const [chat, setChat] = useState(null)
 
     function openLessonInfoModal(state) {
         setLessonInfoModalState({ ...lessonInfoModalState, isOpen: state })
@@ -58,18 +59,20 @@ function Account() {
             })
     }
 
+    console.log(chat)
+
     return (
         <>
             <div className="min-h-screen">
                 <Header openLessonCreationModal={null} openLessonsRequests={null} openChat={openChat} />
                 <div style={{ marginTop: "70px" }}></div>
-                <AccountData currentUser={currentUser} />
+                <AccountData currentUser={currentUser} openChatWithId={setChat} />
                 <Calendar lessons={lessons} setLessonInfoModalState={setLessonInfoModalState} />
                 {
                     lessonInfoModalState.isOpen && <InfoLessonModal closeModal={openLessonInfoModal} currentLesson={lessonInfoModalState.lesson} />
                 }
                 {
-                    isChatOpen && <ChatHolder openChat={openChat} />
+                    (isChatOpen || chat != null) && <ChatHolder openChat={openChat} chat={chat} setChat={setChat} />
                 }
             </div >
         </>

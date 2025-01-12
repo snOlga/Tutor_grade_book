@@ -63,7 +63,7 @@ function TutorCalendar() {
                     isLessonsRequestsOpen && <LessonsRequestsHolder openLessonInfo={setLessonInfoModalState} />
                 }
                 {
-                    isChatOpen && <ChatHolder openChat={openChat} />
+                    isChatOpen && <ChatHolder openChat={openChat} chat={null} />
                 }
             </div >
         </>

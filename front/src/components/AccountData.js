@@ -4,7 +4,7 @@ import { getCurrentUserEmail } from '../App';
 import { EditIcon } from './modals/InfoLessonModal';
 import { Navigate, useNavigate } from 'react-router-dom';
 
-function AccountData({ currentUser }) {
+function AccountData({ currentUser, openChatWithId }) {
     const isCurrentUser = (getCurrentUserEmail() == currentUser.email)
     const [isEditState, setEdit] = useState(
         {
@@ -42,7 +42,24 @@ function AccountData({ currentUser }) {
             })
     }
 
-    function createChat() {
+    function openChat() {
+        fetch('http://localhost:18018/chats/with_users/' + getCurrentUserEmail() + "/" + currentUser.email, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(async data => {
+                if (data.id != null)
+                    openChatWithId(data)
+                else
+                    await openChatWithId(createChat())
+            })
+    }
+
+    async function createChat() {
         fetch('http://localhost:18018/chats/create', {
             method: 'POST',
             headers: {
@@ -62,7 +79,7 @@ function AccountData({ currentUser }) {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
+                return data
             })
     }
 
@@ -285,7 +302,7 @@ function AccountData({ currentUser }) {
                     {
                         !isCurrentUser &&
                         <div className='one-line-data-holder'>
-                            <button onClick={() => createChat()}>Write me!</button>
+                            <button onClick={() => openChat()}>Write me!</button>
                         </div>
                     }
                 </div>
