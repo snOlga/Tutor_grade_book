@@ -53,6 +53,7 @@
 .messages {
     display: grid;
     gap: 0.2em;
+    padding-bottom: 10em;
 }
 
 .outcome {
@@ -89,6 +90,8 @@
     right: 5px;
     font-size: 0.7em;
     color: #89a8b2;
+    display: flex;
+    gap: 0.5em;
 }
 
 .msg-text {
@@ -111,4 +114,12 @@
     width: 35em;
     height: fit-content;
     padding: 1em;
+}
+
+.day-delimiter {
+    color: #89a8b2;
+    border-bottom: 1px solid #89a8b2;
+    width: 90%;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
 }

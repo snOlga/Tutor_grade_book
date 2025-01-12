@@ -3,14 +3,14 @@ import '../styles/chat_style.css'
 import { getCurrentUserEmail } from '../App';
 import { EditIcon } from './modals/InfoLessonModal';
 
-function Message({ message }) {
+function Message({ message, messageEditing }) {
     const msgDate = new Date(message.sentTime)
 
     return (
         <div className={message.author.email == getCurrentUserEmail() ? "outcome" : "income"}>
             {
                 message.author.email == getCurrentUserEmail() &&
-                <div className='card-bin'>
+                <div className='card-bin' onClick={() => messageEditing(message)}>
                     <EditIcon />
                 </div>
             }
@@ -21,13 +21,13 @@ function Message({ message }) {
                 {message.text}
             </div>
             <div>
-                <div>
-                    {message.isEdited &&
-                        <div>
-                            edited
-                        </div>}
-                </div>
                 <div className='msg-time'>
+                    <div>
+                        {message.isEdited &&
+                            <div>
+                                edited
+                            </div>}
+                    </div>
                     {msgDate.getHours() + ":" + msgDate.getMinutes()}
                 </div>
             </div>

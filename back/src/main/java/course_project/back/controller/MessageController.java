@@ -9,6 +9,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,5 +38,15 @@ public class MessageController {
     public ResponseEntity<List<MessageDTO>> getallChatMessages(@PathVariable Long chatId) {
         List<MessageDTO> result = messageService.findAllChatMessages(chatId);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{messageId}")
+    public ResponseEntity<MessageDTO> putMethodName(@PathVariable Long messageId,
+            @RequestBody MessageDTO messageDTO) {
+        MessageDTO result = messageService.update(messageId, messageDTO);
+        messagingTemplate.convertAndSend("/topic/chat/" + result.getChat().getId(),
+                this.getallChatMessages(result.getChat().getId()));
+        return result != null ? new ResponseEntity<>(result, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

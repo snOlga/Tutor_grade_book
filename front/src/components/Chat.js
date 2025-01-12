@@ -8,12 +8,21 @@ import Message from './Message';
 function Chat({ chat }) {
     const [allMessages, setMessages] = useState([])
     const [messageValue, setMessageValue] = useState("")
-    // const [messageForEditing]
+    const [messageForEditing, setMessageEditing] = useState({})
+    const [editingFlag, setEditingFlag] = useState(false)
 
     useEffect(() => {
         fetchAllMessages()
         connectWebSocket()
     }, [])
+
+    useEffect(() => {
+        console.log(messageForEditing)
+        if (messageForEditing != {}) {
+            setMessageValue(messageForEditing.text)
+            setEditingFlag(true)
+        }
+    }, [messageForEditing])
 
     function fetchAllMessages() {
         fetch('http://localhost:18018/messages/with_chat_id/' + chat.id, {
@@ -40,7 +49,7 @@ function Chat({ chat }) {
         })
     }
 
-    function sendMessage() {
+    function sendNewMessage() {
         fetch('http://localhost:18018/messages/create', {
             method: 'POST',
             headers: {
@@ -61,6 +70,28 @@ function Chat({ chat }) {
             .then(response => response.json())
             .then(data => {
                 console.log(data)
+                setMessageValue("")
+                setEditingFlag(false)
+            })
+    }
+
+    function sendEditedMessage() {
+        fetch('http://localhost:18018/messages/update/' + messageForEditing.id, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ...messageForEditing,
+                text: messageValue
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setMessageValue("")
+                setEditingFlag(false)
             })
     }
 
@@ -68,9 +99,19 @@ function Chat({ chat }) {
         <div>
             <div className='messages'>
                 {
-                    allMessages.map(msg => {
+                    allMessages.map((msg, index) => {
+                        if (index != 0 && new Date(msg.sentTime).getDate() != new Date(allMessages[index - 1].sentTime).getDate()) {
+                            return (
+                                <div>
+                                    <div className='day-delimiter'>
+                                        {new Date(msg.sentTime).toDateString()}
+                                    </div>
+                                    <Message message={msg} messageEditing={setMessageEditing} />
+                                </div>
+                            )
+                        }
                         return (
-                            <Message message={msg} />
+                            <Message message={msg} messageEditing={setMessageEditing} />
                         )
                     })
                 }
@@ -80,9 +121,16 @@ function Chat({ chat }) {
                     rows="1"
                     value={messageValue}
                     onChange={e => setMessageValue(e.target.value)} />
-                <button onClick={() => sendMessage()}>Send</button>
+                {
+                    !editingFlag &&
+                    < button onClick={() => sendNewMessage()}>Send</button>
+                }
+                {
+                    editingFlag &&
+                    < button onClick={() => sendEditedMessage()}>Send</button>
+                }
             </div>
-        </div>
+        </div >
     );
 };
 

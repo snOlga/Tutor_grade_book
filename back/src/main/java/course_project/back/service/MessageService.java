@@ -41,4 +41,9 @@ public class MessageService {
 
         return messages.stream().map(MessageDTO::new).toList();
     }
+
+    public MessageDTO update(Long id, MessageDTO messageDTO) {
+        messageDTO.setIsEdited(true);
+        return create(messageDTO);
+    }
 }
