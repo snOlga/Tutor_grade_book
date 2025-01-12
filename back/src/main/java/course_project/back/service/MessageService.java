@@ -34,11 +34,9 @@ public class MessageService {
 
     public List<MessageDTO> findAllChatMessages(Long chatId) {
         List<MessageEntity> messages = messageRepository.findAllByChatId(chatId);
-
         messages.sort((msg1, msg2) -> {
             return (msg1.getSentTime().compareTo(msg2.getSentTime()));
         });
-
         return messages.stream().map(MessageDTO::new).toList();
     }
 
@@ -52,5 +50,10 @@ public class MessageService {
         messageEntity.setIsDeleted(true);
         messageRepository.save(messageEntity);
         return new MessageDTO(messageEntity);
+    }
+
+    public MessageDTO findLastMessage(Long id) {
+        List<MessageDTO> listOfMessages = findAllChatMessages(id);
+        return listOfMessages.size() > 0 ? listOfMessages.get((listOfMessages.size() - 1)) : new MessageDTO();
     }
 }

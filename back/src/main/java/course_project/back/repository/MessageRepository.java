@@ -11,4 +11,6 @@ import course_project.back.entity.MessageEntity;
 public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
     
     List<MessageEntity> findAllByChatId(Long chatId);
+
+    MessageEntity findByChatIdOrderBySentTime(Long chatId);
 }

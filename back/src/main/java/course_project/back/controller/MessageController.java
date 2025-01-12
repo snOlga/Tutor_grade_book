@@ -58,4 +58,10 @@ public class MessageController {
                 this.getallChatMessages(result.getChat().getId()));
         return result != null ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/last_message/{chatId}")
+    public ResponseEntity<MessageDTO> getLastMessage(@PathVariable Long chatId) {
+        MessageDTO result = messageService.findLastMessage(chatId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

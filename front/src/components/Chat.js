@@ -5,10 +5,10 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import Message from './Message';
 
-function Chat({ chat }) {
+function Chat({ chat, setOpenChat, setCurrentChat }) {
     const [allMessages, setMessages] = useState([])
     const [messageValue, setMessageValue] = useState("")
-    const [messageForEditing, setMessageEditing] = useState({})
+    const [messageForEditing, setMessageEditing] = useState(null)
     const [editingFlag, setEditingFlag] = useState(false)
 
     useEffect(() => {
@@ -17,7 +17,7 @@ function Chat({ chat }) {
     }, [])
 
     useEffect(() => {
-        if (messageForEditing != {}) {
+        if (messageForEditing != null) {
             setMessageValue(messageForEditing.text)
             setEditingFlag(true)
         }
@@ -114,17 +114,21 @@ function Chat({ chat }) {
                 }
             </div>
             <div className='chat-input'>
+                <button onClick={() => {
+                    setOpenChat(false)
+                    setCurrentChat(null)
+                }}>{"<"}</button>
                 <textarea
                     rows="1"
                     value={messageValue}
                     onChange={e => setMessageValue(e.target.value)} />
                 {
                     !editingFlag &&
-                    < button onClick={() => sendNewMessage()}>Send</button>
+                    <button onClick={() => sendNewMessage()}>Send</button>
                 }
                 {
                     editingFlag &&
-                    < button onClick={() => sendEditedMessage()}>Send</button>
+                    <button onClick={() => sendEditedMessage()}>Send</button>
                 }
             </div>
         </div >

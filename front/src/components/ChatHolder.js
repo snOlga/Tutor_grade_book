@@ -7,6 +7,7 @@ function ChatHolder({ openChat, chat, setChat }) {
     const [allChats, setAllChats] = useState([])
     const [isChatOpen, setOpenChat] = useState(false)
     const [currentChat, setCurrentChat] = useState(chat)
+    const [lastMessages, setLastMessages] = useState({})
 
     useEffect(() => {
         fetchAllChats()
@@ -23,7 +24,18 @@ function ChatHolder({ openChat, chat, setChat }) {
             .then(response => response.json())
             .then(data => {
                 setAllChats(data)
+                fetchLastMessages(data)
             })
+    }
+
+    async function fetchLastMessages(chats) {
+        const messages = {}
+        for (const chat of chats) {
+            const response = await fetch('http://localhost:18018/messages/last_message/' + chat.id)
+            const data = await response.json()
+            messages[chat.id] = data.text || "Chat is empty!"
+        }
+        setLastMessages(messages);
     }
 
     return (
@@ -34,7 +46,7 @@ function ChatHolder({ openChat, chat, setChat }) {
             <div className='lessons-requests-holder lessons-requests-content' onClick={e => e.stopPropagation()}>
                 <div className='chats'>
                     {
-                        (!isChatOpen && chat == {}) &&
+                        (!isChatOpen && currentChat == null) &&
                         allChats.map(chat =>
                             <div className='chat' onClick={() => {
                                 setCurrentChat(chat)
@@ -61,7 +73,7 @@ function ChatHolder({ openChat, chat, setChat }) {
                                             }
                                         </div>
                                         <div className='first-msg'>
-                                            fisrt message
+                                            {lastMessages[chat.id] || "Loading..."}
                                         </div>
                                     </div>
                                 </div>
@@ -69,7 +81,10 @@ function ChatHolder({ openChat, chat, setChat }) {
                         )
                     }
                     {
-                        (isChatOpen || currentChat != null) && <Chat chat={currentChat} />
+                        (isChatOpen || currentChat != null) &&
+                        <div>
+                            <Chat chat={currentChat} setOpenChat={setOpenChat} setCurrentChat={setCurrentChat} />
+                        </div>
                     }
                 </div>
             </div>
