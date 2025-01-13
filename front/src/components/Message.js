@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/chat_style.css'
-import { getCurrentUserEmail } from '../App';
+import { getCurrentUserEmail, getRoles, ROLES } from '../App';
 import { EditIcon } from './modals/InfoLessonModal';
 import { BinIcon } from './cards/LessonCard';
 
 function Message({ message, messageEditing }) {
     const msgDate = new Date(message.sentTime)
-    const isAuthor = message.author.email == getCurrentUserEmail()
+    const isAdmin = getRoles().includes(ROLES.ADMIN)
+    const isAuthor = message.author.email == getCurrentUserEmail() || isAdmin
     const [showActions, setActions] = useState(false)
 
     function handleDeletion() {

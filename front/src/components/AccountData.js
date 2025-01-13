@@ -6,7 +6,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 function AccountData({ currentUser, openChatWithId }) {
     const isAdmin = getRoles().includes(ROLES.ADMIN)
-    const isCurrentUser = (getCurrentUserEmail() == currentUser.email)
+    const isCurrentUser = (getCurrentUserEmail() == currentUser.email) || isAdmin
     const [isEditState, setEdit] = useState(
         {
             name: false,

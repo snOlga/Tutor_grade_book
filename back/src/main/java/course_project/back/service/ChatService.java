@@ -51,4 +51,16 @@ public class ChatService {
         }
         return result != null ? new ChatDTO(result) : new ChatDTO();
     }
+
+    public List<ChatDTO> findAll() {
+        List<ChatEntity> result = chatRepository.findAll();
+        return result.stream().map(ChatDTO::new).toList();
+    }
+
+    public boolean deleteById(Long id) {
+        ChatEntity chatEntity = chatRepository.findById(id).get();
+        chatEntity.setIsDeleted(true);
+        chatRepository.save(chatEntity);
+        return chatEntity != null;
+    }
 }

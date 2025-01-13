@@ -7,7 +7,8 @@ function LessonCard({ lesson, lessonDate, openDeletionModal, setLessonToDelete, 
     const topPositionLesson = (lessonDate.getHours() - 7) * 60 + lessonDate.getMinutes() + 10;
     const isTutor = getRoles().includes(ROLES.TUTOR)
     const isStudent = getRoles().includes(ROLES.STUDENT)
-    const isUserOwner = (getCurrentUserEmail() == lesson.owner.email)
+    const isAdmin = getRoles().includes(ROLES.ADMIN)
+    const isUserOwner = (getCurrentUserEmail() == lesson.owner.email) || isAdmin
     const isParticipator = (lesson.users.map(user => user.email).includes(getCurrentUserEmail()))
 
     function participate() {

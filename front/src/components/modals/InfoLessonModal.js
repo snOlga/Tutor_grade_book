@@ -37,7 +37,8 @@ function InfoLessonModal({ currentLesson, closeModal }) {
     const [tutorParticipator, setTutorParticipator] = useState([])
     const [isTimeOk, setTimeState] = useState(true)
     const isTutor = getRoles().includes(ROLES.TUTOR)
-    const isUserOwner = (getCurrentUserEmail() == currentLesson.owner.email)
+    const isAdmin = getRoles().includes(ROLES.ADMIN)
+    const isUserOwner = (getCurrentUserEmail() == currentLesson.owner.email) || isAdmin
 
     useEffect(() => {
         fetchSubjects()

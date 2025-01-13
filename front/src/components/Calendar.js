@@ -69,14 +69,6 @@ function Calendar({ lessons, setLessonInfoModalState }) {
                                     </div>
                                     <div className='day-content'>
                                         <LessonsCards lessons={lessons} currentDate={dayDate[0]} setLessonInfoModalState={setLessonInfoModalState} />
-                                        {/* {
-                                            time.map(oneTime => {
-                                                const topPosition = (oneTime - 7) * 60 + 10
-                                                return (
-                                                    <button className='create-lesson' style={{ top: topPosition + 'px' }}>click</button>
-                                                )
-                                            })
-                                        } */}
                                     </div>
                                 </div>
                             )
