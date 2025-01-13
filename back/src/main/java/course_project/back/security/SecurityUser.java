@@ -13,8 +13,6 @@ import java.util.Set;
 import java.util.ArrayList;
 
 public class SecurityUser implements UserDetails {
-    String ROLE_PREFIX = "ROLE_";
-
     private String email;
     private String password;
     private Set<String> roles;
@@ -33,7 +31,6 @@ public class SecurityUser implements UserDetails {
         List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
 
         for (String role : roles) {
-            //list.add(new SimpleGrantedAuthority(ROLE_PREFIX + role));
             list.add(new SimpleGrantedAuthority(role));
         }
 

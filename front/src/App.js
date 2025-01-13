@@ -7,7 +7,8 @@ import Account from './pages/Account'
 
 export const ROLES = {
     TUTOR: 'TUTOR',
-    STUDENT: 'STUDENT'
+    STUDENT: 'STUDENT',
+    ADMIN: 'ADMIN'
 }
 
 function App() {

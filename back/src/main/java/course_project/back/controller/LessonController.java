@@ -54,5 +54,4 @@ public class LessonController {
         List<LessonDTO> allLessons = lessonService.findAllBySubject(subjectId);
         return new ResponseEntity<>(allLessons, HttpStatus.OK);
     }
-
 }

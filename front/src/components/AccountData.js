@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/account_page.css'
-import { getCurrentUserEmail } from '../App';
+import { getCurrentUserEmail, getRoles, ROLES } from '../App';
 import { EditIcon } from './modals/InfoLessonModal';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 function AccountData({ currentUser, openChatWithId }) {
+    const isAdmin = getRoles().includes(ROLES.ADMIN)
     const isCurrentUser = (getCurrentUserEmail() == currentUser.email)
     const [isEditState, setEdit] = useState(
         {
@@ -81,6 +82,16 @@ function AccountData({ currentUser, openChatWithId }) {
             .then(data => {
                 return data
             })
+    }
+
+    function deleteUser() {
+        fetch('http://localhost:18018/participator/delete/' + currentUser.email, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
     }
 
     return (
@@ -303,6 +314,12 @@ function AccountData({ currentUser, openChatWithId }) {
                         !isCurrentUser &&
                         <div className='one-line-data-holder'>
                             <button onClick={() => openChat()}>Write me!</button>
+                        </div>
+                    }
+                    {
+                        isAdmin &&
+                        <div>
+                            <button onClick={() => deleteUser()}>Delete user</button>
                         </div>
                     }
                 </div>

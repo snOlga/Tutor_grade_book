@@ -59,8 +59,6 @@ function Account() {
             })
     }
 
-    console.log(chat)
-
     return (
         <>
             <div className="min-h-screen">

@@ -46,4 +46,11 @@ public class ParticipatorService {
         UserEntity result = repoUser.save(user);
         return new ParticipatorDTO(result);
     }
+
+    public ParticipatorDTO deleteById(String id) {
+        UserEntity user = repoUser.findByEmail(id);
+        user.setIsDeleted(true);
+        repoUser.save(user);
+        return new ParticipatorDTO(user);
+    }
 }

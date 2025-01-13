@@ -38,7 +38,6 @@ public class SecurityJwtTokenValidator extends OncePerRequestFilter {
 
         if (jwt != null) {
             System.out.println("got token: " + jwt);
-
             boolean isValid = jwtProvider.validateToken(jwt);
 
             if (isValid) {
@@ -59,7 +58,6 @@ public class SecurityJwtTokenValidator extends OncePerRequestFilter {
 
     private String getTokenCookie(Cookie[] cookies) {
         for (Cookie cookie : cookies) {
-
             if (cookie.getName().equals("token"))
                 return cookie.getValue();
         }

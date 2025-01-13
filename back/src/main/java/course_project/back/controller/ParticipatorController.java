@@ -3,6 +3,8 @@ package course_project.back.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,10 +51,18 @@ public class ParticipatorController {
     }
 
     @PutMapping("/update/{humanReadableId}")
-    public ResponseEntity<ParticipatorDTO> putMethodName(@PathVariable String humanReadableId,
+    public ResponseEntity<ParticipatorDTO> updateParticipator(@PathVariable String humanReadableId,
             @RequestBody ParticipatorDTO participatorDTO) {
         ParticipatorDTO result = participatorService.update(humanReadableId, participatorDTO);
         return result != null ? new ResponseEntity<>(result, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/delete/{humanReadableId}")
+    public ResponseEntity<ParticipatorDTO> deleteUser(@PathVariable String humanReadableId) {
+        ParticipatorDTO result = participatorService.deleteById(humanReadableId);
+        return result != null ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

@@ -31,7 +31,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/log_in").permitAll()
                         .requestMatchers("/auth/sign_up").permitAll()
 
-                        .requestMatchers("/lessons/create").hasAnyAuthority("ADMIN", "TUTOR")
+                        .requestMatchers("/lessons/create").hasAnyAuthority("ADMIN", "TUTOR") // TODO: @hasRole to controller
                         .requestMatchers("/lessons/update/**").hasAnyAuthority("ADMIN", "TUTOR")
                         .requestMatchers("/lessons/delete/**").hasAnyAuthority("ADMIN", "TUTOR")
 
