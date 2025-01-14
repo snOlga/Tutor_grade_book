@@ -3,8 +3,6 @@ package course_project.back.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,11 +29,9 @@ public class SecurityConfig {
                         .requestMatchers("/auth/log_in").permitAll()
                         .requestMatchers("/auth/sign_up").permitAll()
 
-                        .requestMatchers("/lessons/create").hasAnyAuthority("ADMIN", "TUTOR") // TODO: @hasRole to controller
+                        .requestMatchers("/lessons/create").hasAnyAuthority("ADMIN", "TUTOR")
                         .requestMatchers("/lessons/update/**").hasAnyAuthority("ADMIN", "TUTOR")
                         .requestMatchers("/lessons/delete/**").hasAnyAuthority("ADMIN", "TUTOR")
-
-                        .requestMatchers("/lesson_requests/create").hasAnyAuthority("ADMIN", "STUDENT")
 
                         .anyRequest().authenticated())
                 .addFilterBefore(new SecurityJwtTokenValidator(repoUser), UsernamePasswordAuthenticationFilter.class)
@@ -43,12 +39,6 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf.disable())
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
     }
 
     @Bean

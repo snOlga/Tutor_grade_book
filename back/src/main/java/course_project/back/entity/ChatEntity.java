@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.hibernate.annotations.Where;
 
-import course_project.back.DTO.ChatDTO;
 import lombok.*;
 
 @Setter
@@ -28,8 +27,4 @@ public class ChatEntity {
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
-
-    public ChatEntity(ChatDTO chatDTO) {
-        this.id = chatDTO.getId();
-    }
 }

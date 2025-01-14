@@ -1,8 +1,5 @@
 package course_project.back.service;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,9 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import course_project.back.DTO.UserDTO;
-import course_project.back.entity.RoleEntity;
+import course_project.back.converters.UserAuthConverter;
 import course_project.back.entity.UserEntity;
-import course_project.back.repository.RolesRepository;
 import course_project.back.repository.UserRepository;
 import course_project.back.security.SecurityJwtTokenProvider;
 import course_project.back.security.SecurityUser;
@@ -25,19 +21,19 @@ public class UserAuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private UserRepository repoUser;
+    private UserRepository userRepository;
     @Autowired
-    private RolesRepository rolesRepository;
+    private UserAuthConverter userAuthConverter;
 
     public String signUser(UserDTO user) {
         if (userExists(user.getEmail()))
             return "";
 
-        UserEntity userEntity = fromDTO(user);
+        UserEntity userEntity = userAuthConverter.fromDTO(user);
 
-        repoUser.save(userEntity);
+        userRepository.save(userEntity);
         userEntity.setDefaultHumanRedableID();
-        repoUser.save(userEntity);
+        userRepository.save(userEntity);
         String token = setUserToSecurity(userEntity);
         return token;
     }
@@ -45,15 +41,14 @@ public class UserAuthService {
     public String logUser(UserDTO userDTO) {
         String token = "";
         if (validateUser(userDTO.getEmail(), userDTO.getPassword())) {
-            UserEntity user = repoUser.findByEmail(userDTO.getEmail());
+            UserEntity user = userRepository.findByEmail(userDTO.getEmail());
             token = setUserToSecurity(user);
         }
         return token;
     }
 
     public void setUserToSecurityByEmail(String email) {
-        UserEntity user = repoUser.findByEmail(email);
-        setUserToSecurity(user);
+        setUserToSecurity(userRepository.findByEmail(email));
     }
 
     public String setUserToSecurity(UserEntity user) {
@@ -62,33 +57,14 @@ public class UserAuthService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(securityUser, null,
                 securityUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtProvider.generateToken(authentication);
-        return token;
+        return jwtProvider.generateToken(authentication);
     }
 
     private boolean validateUser(String login, String password) {
-        UserEntity user = repoUser.findByEmail(login);
-        if (!passwordEncoder.matches(password, user.getPassword()))
-            return false;
-        return true;
+        return passwordEncoder.matches(password, userRepository.findByEmail(login).getPassword());
     }
 
     private boolean userExists(String login) {
-        UserEntity user = repoUser.findByEmail(login);
-        return user != null;
-    }
-
-    private UserEntity fromDTO(UserDTO userDTO) {
-        Set<RoleEntity> roles = new HashSet<>();
-        for (String role : userDTO.getRoles()) {
-            RoleEntity currentRole = rolesRepository.findByName(role);
-            roles.add(currentRole);
-        }
-
-        UserEntity userEntity = new UserEntity(userDTO.getName(), userDTO.getSecondName(), userDTO.getEmail(),
-                userDTO.getPhone(), userDTO.getDescription(),
-                userDTO.getHumanReadableID() == null ? "" : userDTO.getHumanReadableID(), userDTO.getPassword(),
-                roles);
-        return userEntity;
+        return userRepository.findByEmail(login) != null;
     }
 }

@@ -57,16 +57,4 @@ public class UserEntity {
     public void setDefaultHumanRedableID() {
         setHumanReadableID(getName() + "_" + getSecondName() + "_" + getId());
     }
-
-    public UserEntity(String name, String secondName, String email, String phone, String description,
-            String humanReadableID, String password, Set<RoleEntity> roles) {
-        this.name = name;
-        this.secondName = secondName;
-        this.email = email;
-        this.phone = phone;
-        this.description = description;
-        this.humanReadableID = humanReadableID;
-        this.password = password;
-        this.roles = roles;
-    }
 }

@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import course_project.back.DTO.MessageDTO;
+import course_project.back.converters.MessageConverter;
 import course_project.back.entity.MessageEntity;
-import course_project.back.repository.ChatRepository;
 import course_project.back.repository.MessageRepository;
-import course_project.back.repository.UserRepository;
 
 @Service
 public class MessageService {
@@ -17,19 +16,12 @@ public class MessageService {
     @Autowired
     private MessageRepository messageRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ChatRepository chatRepository;
+    private MessageConverter messageConverter;
 
     public MessageDTO create(MessageDTO messageDTO) {
-        MessageEntity messageEntity = new MessageEntity(messageDTO);
-
-        messageEntity.setAuthor(userRepository.findByEmail(messageDTO.getAuthor().getEmail()));
-        messageEntity.setChat(chatRepository.findById(messageDTO.getChat().getId()).get());
-
+        MessageEntity messageEntity = messageConverter.fromDTO(messageDTO);
         messageRepository.save(messageEntity);
-
-        return new MessageDTO(messageEntity);
+        return messageConverter.fromEntity(messageEntity);
     }
 
     public List<MessageDTO> findAllChatMessages(Long chatId) {
@@ -37,7 +29,7 @@ public class MessageService {
         messages.sort((msg1, msg2) -> {
             return (msg1.getSentTime().compareTo(msg2.getSentTime()));
         });
-        return messages.stream().map(MessageDTO::new).toList();
+        return messages.stream().map(messageConverter::fromEntity).toList();
     }
 
     public MessageDTO update(Long id, MessageDTO messageDTO) {
@@ -49,7 +41,7 @@ public class MessageService {
         MessageEntity messageEntity = messageRepository.findById(id).get();
         messageEntity.setIsDeleted(true);
         messageRepository.save(messageEntity);
-        return new MessageDTO(messageEntity);
+        return messageConverter.fromEntity(messageEntity);
     }
 
     public MessageDTO findLastMessage(Long id) {

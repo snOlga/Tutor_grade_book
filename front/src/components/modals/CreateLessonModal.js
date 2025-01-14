@@ -103,8 +103,43 @@ function CreateLessonModal({ closeModal }) {
                 users: newLesson.studentParticipators.concat(newLesson.tutorParticipators)
             })
         })
-            .then(response => {
-                // window.location.reload()
+            .then(response => response.json())
+            .then(data => {
+                inviteParticipators(data)
+                closeModal(false)
+            })
+    }
+
+    function inviteParticipators(lesson) {
+        for (let user of newLesson.studentParticipators.concat(newLesson.tutorParticipators)) {
+            if (!lesson.users.map(u => u.email).includes(user.email))
+                participate(lesson, user)
+        }
+    }
+
+    function participate(lesson, reciever) {
+        fetch('http://localhost:18018/lesson_requests/create', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                isDeleted: false,
+                sender: {
+                    email: getCurrentUserEmail()
+                },
+                reciever: {
+                    email: reciever.email
+                },
+                lesson: {
+                    id: lesson.id
+                }
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
             })
     }
 
@@ -142,7 +177,7 @@ function CreateLessonModal({ closeModal }) {
                 <div className='heading'>
                     Creation Lesson Form
                 </div>
-                <form>
+                {/* <form> */}
                     <div className='content'>
                         <div className='left-part'>
                             <div className='field-holder'>
@@ -187,6 +222,7 @@ function CreateLessonModal({ closeModal }) {
                                     type="date"
                                     value={newLesson.startDate}
                                     className={newLesson.startDate != "" ? "" : "error"}
+                                    onChange={(e) => setNewLesson({ ...newLesson, startDate: e.target.value })}
                                     required />
                             </div>
                             <div className='field-holder'>
@@ -278,7 +314,7 @@ function CreateLessonModal({ closeModal }) {
                                 onClick={() => closeModal(false)}>Exit</button>
                         </div>
                     </div>
-                </form>
+                {/* </form> */}
             </div>
         </div >
     );

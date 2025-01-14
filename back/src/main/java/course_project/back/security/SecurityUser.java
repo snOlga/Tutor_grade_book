@@ -29,11 +29,9 @@ public class SecurityUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
-
         for (String role : roles) {
             list.add(new SimpleGrantedAuthority(role));
         }
-
         return list;
     }
 

@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 
 import org.hibernate.annotations.Where;
 
-import course_project.back.DTO.MessageDTO;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.*;
@@ -47,12 +46,4 @@ public class MessageEntity {
     @Nonnull
     @Column(name = "is_deleted")
     private Boolean isDeleted;
-
-    public MessageEntity(MessageDTO messageDTO) {
-        this.id = messageDTO.getId();
-        this.sentTime = messageDTO.getSentTime();
-        this.isEdited = messageDTO.getIsEdited();
-        this.text = messageDTO.getText();
-        this.isDeleted = messageDTO.getIsDeleted();
-    }
 }

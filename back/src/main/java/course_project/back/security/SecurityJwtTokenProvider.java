@@ -28,7 +28,7 @@ public class SecurityJwtTokenProvider {
         return token;
     }
 
-    public String getUsernameFromJWT(String token) {
+    public String getUserEmailFromJWT(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()

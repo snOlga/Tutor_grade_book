@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.hibernate.annotations.Where;
 
-import course_project.back.DTO.LessonDTO;
 import lombok.*;
 
 @Setter
@@ -67,16 +66,7 @@ public class LessonEntity {
             @JoinColumn(name = "user_id") })
     private Set<UserEntity> users;
 
-    public LessonEntity(LessonDTO lessonDTO) {
-        this.id = lessonDTO.getId();
-        this.startTime = lessonDTO.getStartTime();
-        this.durationInMinutes = lessonDTO.getDurationInMinutes();
-        this.subject = new SubjectEntity(lessonDTO.getSubject());
-        this.homework = lessonDTO.getHomework();
-        this.isOpen = lessonDTO.getIsOpen();
-        this.isDeleted = lessonDTO.getIsDeleted();
-        this.description = lessonDTO.getDescription();
-        this.heading = lessonDTO.getHeading();
-        this.humanReadableId = lessonDTO.getHumanReadableId();
+    public void setDefaultHumanRedableID() {
+        setHumanReadableId(getHeading() + "_" + getOwner().getName() + "_" + getId());
     }
 }

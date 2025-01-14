@@ -2,7 +2,6 @@ package course_project.back.entity;
 
 import org.hibernate.annotations.Where;
 
-import course_project.back.DTO.LessonRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,21 +35,4 @@ public class LessonRequestEntity {
     @ManyToOne
     @JoinColumn(name = "lesson_id")
     private LessonEntity lesson;
-
-    public LessonRequestEntity(LessonRequestDTO lessonRequestDTO) {
-        this.id = lessonRequestDTO.getId();
-        this.isApproved = lessonRequestDTO.getIsApproved();
-        this.isDeleted = lessonRequestDTO.getIsDeleted();
-    }
-
-    public LessonRequestEntity(UserEntity sender, LessonEntity lesson) {
-        this.sender = sender;
-        this.lesson = lesson;
-        this.isDeleted = false;
-    }
-
-    @Override
-    public LessonRequestEntity clone() {
-        return new LessonRequestEntity(this.id, this.isApproved, this.isDeleted, this.sender, this.reciever, this.lesson);
-    }
 }

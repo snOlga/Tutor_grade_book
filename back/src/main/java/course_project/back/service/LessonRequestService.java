@@ -5,14 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import course_project.back.DTO.LessonDTO;
 import course_project.back.DTO.LessonRequestDTO;
+import course_project.back.converters.LessonRequestConverter;
 import course_project.back.entity.LessonEntity;
 import course_project.back.entity.LessonRequestEntity;
-import course_project.back.entity.UserEntity;
 import course_project.back.repository.LessonRepository;
 import course_project.back.repository.LessonRequestRepository;
-import course_project.back.repository.UserRepository;
 
 @Service
 public class LessonRequestService {
@@ -20,27 +18,23 @@ public class LessonRequestService {
     @Autowired
     private LessonRequestRepository lessonRequestRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private LessonRepository lessonRepository;
+    @Autowired
+    private LessonRequestConverter lessonRequestConverter;
 
     public LessonRequestDTO create(LessonRequestDTO lessonRequestDTO) {
-        LessonRequestEntity lessonRequestEntity = new LessonRequestEntity(lessonRequestDTO);
-        lessonRequestEntity.setSender(userRepository.findByEmail(lessonRequestDTO.getSender().getEmail()));
-        lessonRequestEntity.setReciever(userRepository.findByEmail(lessonRequestDTO.getReciever().getEmail()));
-        lessonRequestEntity.setLesson(lessonRepository.findById(lessonRequestDTO.getLesson().getId()).get());
-        LessonRequestEntity result = lessonRequestRepository.save(lessonRequestEntity);
-        return new LessonRequestDTO(result);
+        LessonRequestEntity result = lessonRequestRepository.save(lessonRequestConverter.fromDTO(lessonRequestDTO));
+        return lessonRequestConverter.fromEntity(result);
     }
 
     public List<LessonRequestDTO> findAllIncomeByUserEmail(String email) {
         List<LessonRequestEntity> lessonRequestEntities = lessonRequestRepository.findAllByReciever_Email(email);
-        return lessonRequestEntities.stream().map(LessonRequestDTO::new).toList();
+        return lessonRequestEntities.stream().map(lessonRequestConverter::fromEntity).toList();
     }
 
     public List<LessonRequestDTO> findAllOutcomeByUserEmail(String email) {
         List<LessonRequestEntity> lessonRequestEntities = lessonRequestRepository.findAllBySender_Email(email);
-        return lessonRequestEntities.stream().map(LessonRequestDTO::new).toList();
+        return lessonRequestEntities.stream().map(lessonRequestConverter::fromEntity).toList();
     }
 
     public LessonRequestDTO updateApprovement(Long id, LessonRequestDTO lessonRequestDTO) {
@@ -49,7 +43,7 @@ public class LessonRequestService {
         lessonRequestRepository.save(lessonRequestEntity);
         if (lessonRequestDTO.getIsApproved())
             addUserToLesson(lessonRequestEntity);
-        return new LessonRequestDTO(lessonRequestEntity);
+        return lessonRequestConverter.fromEntity(lessonRequestEntity);
     }
 
     public Boolean deleteById(Long id) {
@@ -57,32 +51,6 @@ public class LessonRequestService {
         lessonRequestEntity.setIsDeleted(true);
         lessonRequestRepository.save(lessonRequestEntity);
         return lessonRequestEntity != null;
-    }
-
-    public void inviteParticipators(LessonDTO lessonDTO) {
-        if (lessonDTO.getUsers().size() == 0)
-            return;
-        LessonRequestEntity lessonRequestEntityScheme = makeSchemeRequestFrom(lessonDTO);
-        inviteEveryParticipator(lessonRequestEntityScheme, lessonDTO);
-    }
-
-    private LessonRequestEntity makeSchemeRequestFrom(LessonDTO lessonDTO) {
-        UserEntity owner = userRepository.findByEmail(lessonDTO.getOwner().getEmail());
-        LessonEntity lessonEntity = lessonRepository.findById(lessonDTO.getId()).get();
-        return new LessonRequestEntity(owner, lessonEntity);
-    }
-
-    private void inviteEveryParticipator(LessonRequestEntity sheme, LessonDTO lessonDTO) {
-        List<UserEntity> participators = lessonDTO.getUsers().stream()
-                .map(user -> userRepository.findByEmail(user.getEmail()))
-                .filter(user -> !sheme.getLesson().getUsers().contains(user)).toList();
-        participators.forEach(participator -> {
-            if (!participator.getId().equals(sheme.getSender().getId())) {
-                LessonRequestEntity lessonRequestEntity = sheme.clone();
-                lessonRequestEntity.setReciever(participator);
-                lessonRequestRepository.save(lessonRequestEntity);
-            }
-        });
     }
 
     private void addUserToLesson(LessonRequestEntity lessonRequestEntity) {

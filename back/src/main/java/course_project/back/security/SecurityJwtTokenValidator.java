@@ -41,7 +41,7 @@ public class SecurityJwtTokenValidator extends OncePerRequestFilter {
             boolean isValid = jwtProvider.validateToken(jwt);
 
             if (isValid) {
-                String userEmail = jwtProvider.getUsernameFromJWT(jwt);
+                String userEmail = jwtProvider.getUserEmailFromJWT(jwt);
                 UserEntity user = repoUser.findByEmail(userEmail);
                 SecurityUser securityUser = new SecurityUser(user.getEmail(), user.getPassword(),
                         user.getRoles());

@@ -118,6 +118,41 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             .then(response => response.json())
             .then(data => {
                 setLessonDTO(data)
+                inviteParticipators(data)
+            })
+    }
+
+    function inviteParticipators(lesson) {
+        for (let user of newLesson.studentParticipators.concat(newLesson.tutorParticipators)) {
+            console.log(user)
+            if (!lesson.users.map(u => u.email).includes(user.email))
+                participate(lesson, user)
+        }
+    }
+
+    function participate(lesson, reciever) {
+        fetch('http://localhost:18018/lesson_requests/create', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                isDeleted: false,
+                sender: {
+                    email: getCurrentUserEmail()
+                },
+                reciever: {
+                    email: reciever.email
+                },
+                lesson: {
+                    id: lesson.id
+                }
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
             })
     }
 

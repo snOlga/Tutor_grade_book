@@ -1,6 +1,5 @@
 package course_project.back.entity;
 
-import course_project.back.DTO.SubjectDTO;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,10 +22,4 @@ public class SubjectEntity {
 
     @Column(name = "analogy_names")
     private String analogyNames;
-
-    public SubjectEntity(SubjectDTO subjectDTO) {
-        this.id = subjectDTO.getId();
-        this.name = subjectDTO.getName();
-        this.analogyNames = subjectDTO.getAnalogyNames();
-    }
 }
