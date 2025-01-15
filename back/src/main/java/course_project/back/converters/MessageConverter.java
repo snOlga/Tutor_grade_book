@@ -26,13 +26,16 @@ public class MessageConverter implements ConverterInterface<MessageDTO, MessageE
         messageEntity.setIsDeleted(messageDTO.getIsDeleted());
         messageEntity.setSentTime(messageDTO.getSentTime());
         messageEntity.setText(messageDTO.getText());
-        messageEntity.setAuthor(participatorConverter.fromDTO(messageDTO.getAuthor()));
+        messageEntity.setAuthor(participatorConverter.getFromDB(messageDTO.getAuthor()));
         messageEntity.setChat(chatConverter.getFromDB(messageDTO.getChat()));
         return messageEntity;
     }
 
     @Override
     public MessageDTO fromEntity(MessageEntity messageEntity) {
+        if (messageEntity == null)
+            return null;
+
         MessageDTO messageDTO = new MessageDTO();
         messageDTO.setId(messageEntity.getId());
         messageDTO.setIsEdited(messageEntity.getIsEdited());

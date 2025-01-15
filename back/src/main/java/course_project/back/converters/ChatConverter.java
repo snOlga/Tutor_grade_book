@@ -29,10 +29,14 @@ public class ChatConverter implements ConverterInterface<ChatDTO, ChatEntity> {
 
     @Override
     public ChatDTO fromEntity(ChatEntity chatEntity) {
+        if (chatEntity == null)
+            return null;
+
         ChatDTO chatDTO = new ChatDTO();
         chatDTO.setId(chatEntity.getId());
         chatDTO.setIsDeleted(chatEntity.getIsDeleted());
         chatDTO.setUsers(new HashSet<>(chatEntity.getUsers().stream().map(participatorConverter::fromEntity).toList()));
+
         return chatDTO;
     }
 

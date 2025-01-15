@@ -9,5 +9,5 @@ import course_project.back.entity.ChatEntity;
 
 @Repository
 public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
-    List<ChatEntity> findByUsers_Email(String email);
+    List<ChatEntity> findByUsers_EmailAndUsers_IsDeletedFalse(String email);
 }

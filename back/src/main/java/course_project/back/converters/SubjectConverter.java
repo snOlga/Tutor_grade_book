@@ -25,6 +25,9 @@ public class SubjectConverter implements ConverterInterface<SubjectDTO, SubjectE
 
     @Override
     public SubjectDTO fromEntity(SubjectEntity subjectEntity) {
+        if (subjectEntity == null)
+            return null;
+
         SubjectDTO subjectDTO = new SubjectDTO();
         subjectDTO.setId(subjectEntity.getId());
         subjectDTO.setName(subjectEntity.getName());

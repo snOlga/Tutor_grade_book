@@ -9,8 +9,6 @@ import course_project.back.entity.MessageEntity;
 
 @Repository
 public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
-    
-    List<MessageEntity> findAllByChatId(Long chatId);
 
-    MessageEntity findByChatIdOrderBySentTime(Long chatId);
+    List<MessageEntity> findAllByChatIdAndAuthor_IsDeletedFalse(Long chatId);
 }

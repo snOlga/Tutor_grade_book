@@ -46,7 +46,7 @@ public class LessonService {
     }
 
     public List<LessonDTO> findAllBySubject(Long id) {
-        List<LessonEntity> result = lessonRepository.findAllBySubjectIdAndIsOpenTrue(id);
+        List<LessonEntity> result = lessonRepository.findAllBySubjectIdAndIsOpenTrueAndOwner_IsDeletedFalse(id);
         result.sort((lesson1, lesson2) -> {
             return (lesson1.getStartTime().compareTo(lesson2.getStartTime()));
         });

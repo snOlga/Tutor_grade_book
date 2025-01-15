@@ -38,6 +38,9 @@ public class UserAuthConverter implements ConverterInterface<UserDTO, UserEntity
 
     @Override
     public UserDTO fromEntity(UserEntity userEntity) {
+        if (userEntity == null)
+            return null;
+
         UserDTO userDTO = new UserDTO();
         userDTO.setId(userEntity.getId());
         userDTO.setName(userEntity.getName());
@@ -49,6 +52,10 @@ public class UserAuthConverter implements ConverterInterface<UserDTO, UserEntity
         userDTO.setIsDeleted(userEntity.getIsDeleted());
         // userDTO.setPassword(userEntity.getPassword());
         userDTO.setRoles(new HashSet<>(userEntity.getRoles().stream().map(RoleEntity::getName).toList()));
+
+        if (userDTO.getRoles().isEmpty())
+            return null;
+
         return userDTO;
     }
 

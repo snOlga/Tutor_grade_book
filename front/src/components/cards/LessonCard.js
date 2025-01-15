@@ -31,10 +31,6 @@ function LessonCard({ lesson, lessonDate, openDeletionModal, setLessonToDelete, 
                 }
             })
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-            })
     }
 
     return (

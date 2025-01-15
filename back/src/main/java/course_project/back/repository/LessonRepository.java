@@ -10,11 +10,8 @@ import java.util.List;
 
 @Repository
 public interface LessonRepository extends JpaRepository<LessonEntity, Long> {
-    LessonEntity findByHumanReadableId(String humanReadableId);
 
     List<LessonEntity> findByUsers_Email(String email);
 
-    List<LessonEntity> findByIdIn(List<Long> ids);
-
-    List<LessonEntity> findAllBySubjectIdAndIsOpenTrue(Long subjectId);
+    List<LessonEntity> findAllBySubjectIdAndIsOpenTrueAndOwner_IsDeletedFalse(Long subjectId);
 }

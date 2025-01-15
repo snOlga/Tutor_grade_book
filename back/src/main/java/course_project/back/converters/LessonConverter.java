@@ -46,6 +46,9 @@ public class LessonConverter implements ConverterInterface<LessonDTO, LessonEnti
 
     @Override
     public LessonDTO fromEntity(LessonEntity lessonEntity) {
+        if (lessonEntity == null)
+            return null;
+
         LessonDTO lessonDTO = new LessonDTO();
         lessonDTO.setId(lessonEntity.getId());
         lessonDTO.setHeading(lessonEntity.getHeading());
@@ -55,10 +58,11 @@ public class LessonConverter implements ConverterInterface<LessonDTO, LessonEnti
         lessonDTO.setStartTime(lessonEntity.getStartTime());
         lessonDTO.setIsOpen(lessonEntity.getIsOpen());
         lessonDTO.setIsDeleted(lessonEntity.getIsDeleted());
+        lessonDTO.setHumanReadableId(lessonEntity.getHumanReadableId());
         lessonDTO.setOwner(participatorConverter.fromEntity(lessonEntity.getOwner()));
         lessonDTO.setUsers(lessonEntity.getUsers().stream().map(participatorConverter::fromEntity).toList());
         lessonDTO.setSubject(subjectConverter.fromEntity(lessonEntity.getSubject()));
-        lessonDTO.setHumanReadableId(lessonEntity.getHumanReadableId());
+
         return lessonDTO;
     }
 

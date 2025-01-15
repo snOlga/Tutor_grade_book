@@ -22,9 +22,10 @@ public class ParticipatorConverter implements ConverterInterface<ParticipatorDTO
 
     @Override
     public ParticipatorDTO fromEntity(UserEntity userEntity) {
-        ParticipatorDTO participatorDTO = new ParticipatorDTO();
         if (userEntity == null)
-            return participatorDTO;
+            return null;
+
+        ParticipatorDTO participatorDTO = new ParticipatorDTO();
         participatorDTO.setName(userEntity.getName());
         participatorDTO.setSecondName(userEntity.getSecondName());
         participatorDTO.setDescription(userEntity.getDescription());

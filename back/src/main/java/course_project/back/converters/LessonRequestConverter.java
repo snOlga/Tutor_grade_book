@@ -32,6 +32,9 @@ public class LessonRequestConverter implements ConverterInterface<LessonRequestD
 
     @Override
     public LessonRequestDTO fromEntity(LessonRequestEntity lessonRequestEntity) {
+        if (lessonRequestEntity == null)
+            return null;
+
         LessonRequestDTO lessonRequestDTO = new LessonRequestDTO();
         lessonRequestDTO.setId(lessonRequestEntity.getId());
         lessonRequestDTO.setSender(participatorConverter.fromEntity(lessonRequestEntity.getSender()));

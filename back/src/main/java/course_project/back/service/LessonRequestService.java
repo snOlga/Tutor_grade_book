@@ -28,12 +28,15 @@ public class LessonRequestService {
     }
 
     public List<LessonRequestDTO> findAllIncomeByUserEmail(String email) {
-        List<LessonRequestEntity> lessonRequestEntities = lessonRequestRepository.findAllByReciever_Email(email);
+        List<LessonRequestEntity> lessonRequestEntities = lessonRequestRepository
+                .findAllByReciever_EmailAndSender_IsDeletedFalseAndReciever_IsDeletedFalseAndLesson_IsDeletedFalse(
+                        email);
         return lessonRequestEntities.stream().map(lessonRequestConverter::fromEntity).toList();
     }
 
     public List<LessonRequestDTO> findAllOutcomeByUserEmail(String email) {
-        List<LessonRequestEntity> lessonRequestEntities = lessonRequestRepository.findAllBySender_Email(email);
+        List<LessonRequestEntity> lessonRequestEntities = lessonRequestRepository
+                .findAllBySender_EmailAndSender_IsDeletedFalseAndReciever_IsDeletedFalseAndLesson_IsDeletedFalse(email);
         return lessonRequestEntities.stream().map(lessonRequestConverter::fromEntity).toList();
     }
 

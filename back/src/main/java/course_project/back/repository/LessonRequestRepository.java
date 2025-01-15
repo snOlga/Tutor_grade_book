@@ -10,7 +10,10 @@ import course_project.back.entity.LessonRequestEntity;
 
 @Repository
 public interface LessonRequestRepository extends JpaRepository<LessonRequestEntity, Long> {
-    List<LessonRequestEntity> findAllByReciever_Email(String email);
 
-    List<LessonRequestEntity> findAllBySender_Email(String email);
+    List<LessonRequestEntity> findAllByReciever_EmailAndSender_IsDeletedFalseAndReciever_IsDeletedFalseAndLesson_IsDeletedFalse(
+            String email);
+
+    List<LessonRequestEntity> findAllBySender_EmailAndSender_IsDeletedFalseAndReciever_IsDeletedFalseAndLesson_IsDeletedFalse(
+            String email);
 }
