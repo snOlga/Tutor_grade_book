@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function LoginForm () {
+function LoginForm() {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -26,13 +26,11 @@ function LoginForm () {
                 password: formData.password
             })
         })
-            .then(response => response.json())
+            .then(response => response.text())
             .then(data => {
-                if (data.isSuccessful === "true") {
-                    let expires = (new Date(Date.now() + 86400 * 1000)).toUTCString();
-                    document.cookie = "token=" + data.token + "; expires=" + expires
-                    window.location.reload();
-                }
+                let expires = (new Date(Date.now() + 86400 * 1000)).toUTCString();
+                document.cookie = "token=" + data + "; expires=" + expires
+                window.location.reload();
             })
     }
 

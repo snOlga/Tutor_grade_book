@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import RegistrationForm from '../components/RegistrationForm';
-import LoginForm from '../components/LoginForm';
+import RegistrationForm from '../components/auth/RegistrationForm';
+import LoginForm from '../components/auth/LoginForm';
 import '../styles/styles.css';
 
 function Enter() {

@@ -17,5 +17,6 @@ public class UserDTO {
     private String description;
     private String humanReadableID;
     private String password;
+    private Boolean isDeleted;
     private Set<String> roles;
 }

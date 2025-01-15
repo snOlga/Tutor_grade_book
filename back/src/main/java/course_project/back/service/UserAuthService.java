@@ -25,11 +25,12 @@ public class UserAuthService {
     @Autowired
     private UserAuthConverter userAuthConverter;
 
-    public String signUser(UserDTO user) {
-        if (userExists(user.getEmail()))
+    public String signUser(UserDTO userDTO) {
+        if (userExists(userDTO.getEmail()))
             return "";
 
-        UserEntity userEntity = userAuthConverter.fromDTO(user);
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        UserEntity userEntity = userAuthConverter.fromDTO(userDTO);
 
         userRepository.save(userEntity);
         userEntity.setDefaultHumanRedableID();
@@ -40,15 +41,11 @@ public class UserAuthService {
 
     public String logUser(UserDTO userDTO) {
         String token = "";
-        if (validateUser(userDTO.getEmail(), userDTO.getPassword())) {
-            UserEntity user = userRepository.findByEmail(userDTO.getEmail());
-            token = setUserToSecurity(user);
+        UserEntity userEntity = userRepository.findByEmail(userDTO.getEmail());
+        if (validateUser(userDTO.getPassword(), userEntity.getPassword())) {
+            token = setUserToSecurity(userEntity);
         }
         return token;
-    }
-
-    public void setUserToSecurityByEmail(String email) {
-        setUserToSecurity(userRepository.findByEmail(email));
     }
 
     public String setUserToSecurity(UserEntity user) {
@@ -60,8 +57,8 @@ public class UserAuthService {
         return jwtProvider.generateToken(authentication);
     }
 
-    private boolean validateUser(String login, String password) {
-        return passwordEncoder.matches(password, userRepository.findByEmail(login).getPassword());
+    private boolean validateUser(String dtoPassword, String entityPassword) {
+        return passwordEncoder.matches(dtoPassword, entityPassword);
     }
 
     private boolean userExists(String login) {

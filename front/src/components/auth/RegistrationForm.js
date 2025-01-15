@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { ROLES } from '../App';
+import { ROLES } from '../../App';
 
 function RegistrationForm() {
     const [formData, setFormData] = useState({
@@ -47,13 +47,14 @@ function RegistrationForm() {
                     email: formData.email,
                     phone: formData.phone,
                     password: formData.password,
-                    roles: formData.roles
+                    roles: formData.roles,
+                    isDeleted: false
                 })
             })
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(data => {
                     let expires = (new Date(Date.now() + 86400 * 1000)).toUTCString();
-                    document.cookie = "token=" + data.token + "; expires=" + expires
+                    document.cookie = "token=" + data + "; expires=" + expires
                     window.location.reload();
                 })
         }

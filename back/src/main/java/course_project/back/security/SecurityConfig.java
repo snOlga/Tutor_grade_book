@@ -24,7 +24,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/", "/static/**", "/index.html", "/favicon.ico", "/manifest.json").permitAll()
+                        .requestMatchers("/auth/**", "/", "/static/**", "/index.html", "/favicon.ico", "/manifest.json").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new SecurityJwtTokenValidator(repoUser), UsernamePasswordAuthenticationFilter.class)
                 .cors((cors) -> cors.disable())
