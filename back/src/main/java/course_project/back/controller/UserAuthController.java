@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import course_project.back.DTO.UserDTO;
 import course_project.back.service.UserAuthService;
+import jakarta.annotation.security.PermitAll;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,7 +23,8 @@ public class UserAuthController {
     @Autowired
     private UserAuthService userService;
 
-    @PostMapping("/sign_up")
+    @PermitAll
+    @PostMapping("/sign")
     public Map<String, String> signUp(@RequestBody UserDTO userDTO) {
         Map<String, String> response = defaultResponse();
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -33,7 +35,8 @@ public class UserAuthController {
         return response;
     }
 
-    @PostMapping("/log_in")
+    @PermitAll
+    @PostMapping("/log")
     public Map<String, String> logIn(@RequestBody UserDTO userDTO) {
         Map<String, String> response = defaultResponse();
         String token = userService.logUser(userDTO);

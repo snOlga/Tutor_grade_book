@@ -24,7 +24,7 @@ function SubjectFilters({ setLessons }) {
     }
 
     function fetchLessonsBySubjects(subject) {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/with_subject/' + subject.id, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/subject/' + subject.id, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

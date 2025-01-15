@@ -18,25 +18,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
-@RequestMapping("/lesson_requests")
+@RequestMapping("/lesson-requests")
 public class LessonRequestController {
 
     @Autowired
     private LessonRequestService lessonRequestService;
 
-    @GetMapping("/income/with_user/{email}")
+    @GetMapping("/income/{email}")
     public ResponseEntity<List<LessonRequestDTO>> getAllUserIncomeLessonsRequests(@PathVariable String email) {
         List<LessonRequestDTO> allRequests = lessonRequestService.findAllIncomeByUserEmail(email);
         return new ResponseEntity<>(allRequests, HttpStatus.OK);
     }
 
-    @GetMapping("/outcome/with_user/{email}")
+    @GetMapping("/outcome/{email}")
     public ResponseEntity<List<LessonRequestDTO>> getAllUserOutcomeLessonsRequests(@PathVariable String email) {
         List<LessonRequestDTO> allRequests = lessonRequestService.findAllOutcomeByUserEmail(email);
         return new ResponseEntity<>(allRequests, HttpStatus.OK);
     }
 
-    @PutMapping("/update_approvement/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<LessonRequestDTO> approveRequest(@PathVariable Long id,
             @RequestBody LessonRequestDTO lessonRequestDTO) {
         LessonRequestDTO updatedLessonRequestDTO = lessonRequestService.updateApprovement(id, lessonRequestDTO);
@@ -50,7 +50,7 @@ public class LessonRequestController {
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<LessonRequestDTO> createLessonRequest(@RequestBody LessonRequestDTO lessonRequestDTO) {
         LessonRequestDTO createdLessonDTO = lessonRequestService.create(lessonRequestDTO);
         return new ResponseEntity<>(createdLessonDTO, HttpStatus.CREATED);

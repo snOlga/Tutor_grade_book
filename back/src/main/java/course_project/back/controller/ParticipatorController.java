@@ -16,41 +16,41 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/participator")
+@RequestMapping("/participators")
 public class ParticipatorController {
 
     @Autowired
     private ParticipatorService participatorService;
 
-    @GetMapping("/students/{id}")
+    @GetMapping("/student/{id}")
     public ResponseEntity<ParticipatorDTO> getStudentByHumanReadableID(@PathVariable String id) {
         ParticipatorDTO participatorDTO = participatorService.getStudentByHumanReadableID(id);
         return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/tutors/{id}")
+    @GetMapping("/tutor/{id}")
     public ResponseEntity<ParticipatorDTO> getTutorByHumanReadableID(@PathVariable String id) {
         ParticipatorDTO participatorDTO = participatorService.getTutorByHumanReadableID(id);
         return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/with_email/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<ParticipatorDTO> getParticipatorByEmail(@PathVariable String email) {
         ParticipatorDTO participatorDTO = participatorService.getParticipatorByEmail(email);
         return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/{humanReadableId}")
+    @GetMapping("/human-readable-id/{humanReadableId}")
     public ResponseEntity<ParticipatorDTO> getParticipatorById(@PathVariable String humanReadableId) {
         ParticipatorDTO participatorDTO = participatorService.getParticipatorByHumanReadableId(humanReadableId);
         return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/update/{humanReadableId}")
+    @PutMapping("/{humanReadableId}")
     public ResponseEntity<ParticipatorDTO> updateParticipator(@PathVariable String humanReadableId,
             @RequestBody ParticipatorDTO participatorDTO) {
         ParticipatorDTO result = participatorService.update(humanReadableId, participatorDTO);
@@ -59,7 +59,7 @@ public class ParticipatorController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/delete/{humanReadableId}")
+    @DeleteMapping("/{humanReadableId}")
     public ResponseEntity<ParticipatorDTO> deleteUser(@PathVariable String humanReadableId) {
         ParticipatorDTO result = participatorService.deleteById(humanReadableId);
         return result != null ? new ResponseEntity<>(HttpStatus.NO_CONTENT)

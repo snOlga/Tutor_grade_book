@@ -32,7 +32,7 @@ function Account() {
     }, [currentUser])
 
     function fetchAccountData() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'participator/' + userId, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'participators/human-readable-id/' + userId, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -46,7 +46,7 @@ function Account() {
     }
 
     function loadLessons() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/with_user/' + currentUser.email, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/user/' + currentUser.email, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

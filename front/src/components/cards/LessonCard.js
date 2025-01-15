@@ -12,7 +12,7 @@ function LessonCard({ lesson, lessonDate, openDeletionModal, setLessonToDelete, 
     const isParticipator = (lesson.users.map(user => user.email).includes(getCurrentUserEmail()))
 
     function participate() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson_requests/create', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson-requests', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

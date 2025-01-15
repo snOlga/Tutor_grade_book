@@ -27,7 +27,7 @@ public class MessageController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDTO) {
         MessageDTO result = messageService.create(messageDTO);
         messagingTemplate.convertAndSend("/topic/chat/" + result.getChat().getId(),
@@ -35,13 +35,13 @@ public class MessageController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-    @GetMapping("/with_chat_id/{chatId}")
+    @GetMapping("/chat/{chatId}")
     public ResponseEntity<List<MessageDTO>> getallChatMessages(@PathVariable Long chatId) {
         List<MessageDTO> result = messageService.findAllChatMessages(chatId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PutMapping("/update/{messageId}")
+    @PutMapping("/{messageId}")
     public ResponseEntity<MessageDTO> putMethodName(@PathVariable Long messageId,
             @RequestBody MessageDTO messageDTO) {
         MessageDTO result = messageService.update(messageId, messageDTO);
@@ -51,7 +51,7 @@ public class MessageController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<MessageDTO> deleteLesson(@PathVariable Long id) {
         MessageDTO result = messageService.deleteById(id);
         messagingTemplate.convertAndSend("/topic/chat/" + result.getChat().getId(),
@@ -59,7 +59,7 @@ public class MessageController {
         return result != null ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/last_message/{chatId}")
+    @GetMapping("/last/{chatId}")
     public ResponseEntity<MessageDTO> getLastMessage(@PathVariable Long chatId) {
         MessageDTO result = messageService.findLastMessage(chatId);
         return new ResponseEntity<>(result, HttpStatus.OK);

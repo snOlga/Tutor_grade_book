@@ -35,7 +35,7 @@ function RegistrationForm() {
             setError('Passwords do not match!');
         } else {
             setError('');
-            fetch(process.env.REACT_APP_ROOT_PATH + 'auth/sign_up', {
+            fetch(process.env.REACT_APP_ROOT_PATH + 'auth/sign', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

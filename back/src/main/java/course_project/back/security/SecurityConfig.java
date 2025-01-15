@@ -25,14 +25,6 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/", "/static/**", "/index.html", "/favicon.ico", "/manifest.json").permitAll()
-
-                        .requestMatchers("/auth/log_in").permitAll()
-                        .requestMatchers("/auth/sign_up").permitAll()
-
-                        .requestMatchers("/lessons/create").hasAnyAuthority("ADMIN", "TUTOR")
-                        .requestMatchers("/lessons/update/**").hasAnyAuthority("ADMIN", "TUTOR")
-                        .requestMatchers("/lessons/delete/**").hasAnyAuthority("ADMIN", "TUTOR")
-
                         .anyRequest().authenticated())
                 .addFilterBefore(new SecurityJwtTokenValidator(repoUser), UsernamePasswordAuthenticationFilter.class)
                 .cors((cors) -> cors.disable())

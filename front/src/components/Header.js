@@ -15,7 +15,7 @@ function Header({ openLessonCreationModal, openLessonsRequests, openChat }) {
     }, [])
 
     function loadUser() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'participator/with_email/' + getCurrentUserEmail(), {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'participators/email/' + getCurrentUserEmail(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -29,7 +29,7 @@ function Header({ openLessonCreationModal, openLessonsRequests, openChat }) {
     }
 
     function fetchIncomeRequests() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson_requests/income/with_user/' + getCurrentUserEmail(), {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson-requests/income/' + getCurrentUserEmail(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

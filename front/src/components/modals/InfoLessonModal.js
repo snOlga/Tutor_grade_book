@@ -107,7 +107,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
     }
 
     function submitForm(structure) {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/create', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -131,7 +131,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
     }
 
     function participate(lesson, reciever) {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson_requests/create', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson-requests', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

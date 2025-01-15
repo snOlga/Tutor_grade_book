@@ -83,7 +83,7 @@ function CreateLessonModal({ closeModal }) {
         let time = prepareStartTime()
         let duration = prepareDuration()
         let subject = getSubject()
-        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/create', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -118,7 +118,7 @@ function CreateLessonModal({ closeModal }) {
     }
 
     function participate(lesson, reciever) {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson_requests/create', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson-requests', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -144,7 +144,7 @@ function CreateLessonModal({ closeModal }) {
     }
 
     function getStudentParticipator() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'participator/students/' + studentParticipator, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'participators/student/' + studentParticipator, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -158,7 +158,7 @@ function CreateLessonModal({ closeModal }) {
     }
 
     function getTutorParticipator() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'participator/tutors/' + tutorParticipator, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'participators/tutor/' + tutorParticipator, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

@@ -16,7 +16,7 @@ function ChatHolder({ openChat, chat, setChat }) {
     }, [])
 
     function fetchAllChats() {
-        const urlToFetch = process.env.REACT_APP_ROOT_PATH + (isAdmin ? 'chats' : 'chats/with_user/' + getCurrentUserEmail())
+        const urlToFetch = process.env.REACT_APP_ROOT_PATH + (isAdmin ? 'chats' : 'chats/' + getCurrentUserEmail())
 
         fetch(urlToFetch, {
             method: 'GET',
@@ -35,7 +35,7 @@ function ChatHolder({ openChat, chat, setChat }) {
     async function fetchLastMessages(chats) {
         const messages = {}
         for (const chat of chats) {
-            const response = await fetch(process.env.REACT_APP_ROOT_PATH + 'messages/last_message/' + chat.id)
+            const response = await fetch(process.env.REACT_APP_ROOT_PATH + 'messages/last/' + chat.id)
             const data = await response.json()
             messages[chat.id] = data.text || "Chat is empty!"
         }
@@ -43,7 +43,7 @@ function ChatHolder({ openChat, chat, setChat }) {
     }
 
     function deleteChat(chat) {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'chats/delete/' + chat.id, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'chats/' + chat.id, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -70,9 +70,12 @@ function ChatHolder({ openChat, chat, setChat }) {
                                     <div>
                                         {chat.id} Chat ID
                                     </div>
-                                    <div onClick={() => deleteChat(chat)}>
-                                        <BinIcon />
-                                    </div>
+                                    {
+                                        isAdmin &&
+                                        <div onClick={() => deleteChat(chat)}>
+                                            <BinIcon />
+                                        </div>
+                                    }
                                 </div>
                                 <div className='chat-w-pic' onClick={() => {
                                     setCurrentChat(chat)

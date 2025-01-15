@@ -24,19 +24,19 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<ChatDTO> createChat(@RequestBody ChatDTO chatDTO) {
         ChatDTO result = chatService.create(chatDTO);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-    @GetMapping("/with_user/{email}")
+    @GetMapping("/{email}")
     public ResponseEntity<List<ChatDTO>> getAllUserChats(@PathVariable String email) {
         List<ChatDTO> result = chatService.findAllByUserEmail(email);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/with_users/{emailFirst}/{emailSecond}")
+    @GetMapping("/{emailFirst}/{emailSecond}")
     public ResponseEntity<ChatDTO> getAllUserChats(
             @PathVariable String emailFirst,
             @PathVariable String emailSecond) {
@@ -53,7 +53,7 @@ public class ChatController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteChat(@PathVariable Long id) {
         boolean deleted = chatService.deleteById(id);
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);

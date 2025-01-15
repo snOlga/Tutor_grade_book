@@ -15,7 +15,7 @@ function LoginForm () {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch(process.env.REACT_APP_ROOT_PATH + 'auth/log_in', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'auth/log', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

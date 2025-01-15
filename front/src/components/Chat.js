@@ -24,7 +24,7 @@ function Chat({ chat, setOpenChat, setCurrentChat }) {
     }, [messageForEditing])
 
     function fetchAllMessages() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'messages/with_chat_id/' + chat.id, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'messages/chat/' + chat.id, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -49,7 +49,7 @@ function Chat({ chat, setOpenChat, setCurrentChat }) {
     }
 
     function sendNewMessage() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'messages/create', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'messages', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -74,7 +74,7 @@ function Chat({ chat, setOpenChat, setCurrentChat }) {
     }
 
     function sendEditedMessage() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'messages/update/' + messageForEditing.id, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'messages/' + messageForEditing.id, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

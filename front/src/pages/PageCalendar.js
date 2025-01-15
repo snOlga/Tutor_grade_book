@@ -28,7 +28,7 @@ function TutorCalendar() {
     }, [])
 
     function loadLessons() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/with_user/' + getCurrentUserEmail(), {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/user/' + getCurrentUserEmail(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
