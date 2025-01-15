@@ -16,7 +16,7 @@ function ChatHolder({ openChat, chat, setChat }) {
     }, [])
 
     function fetchAllChats() {
-        const urlToFetch = isAdmin ? 'http://localhost:18018/chats' : 'http://localhost:18018/chats/with_user/' + getCurrentUserEmail()
+        const urlToFetch = process.env.REACT_APP_ROOT_PATH + (isAdmin ? 'chats' : 'chats/with_user/' + getCurrentUserEmail())
 
         fetch(urlToFetch, {
             method: 'GET',
@@ -35,7 +35,7 @@ function ChatHolder({ openChat, chat, setChat }) {
     async function fetchLastMessages(chats) {
         const messages = {}
         for (const chat of chats) {
-            const response = await fetch('http://localhost:18018/messages/last_message/' + chat.id)
+            const response = await fetch(process.env.REACT_APP_ROOT_PATH + 'messages/last_message/' + chat.id)
             const data = await response.json()
             messages[chat.id] = data.text || "Chat is empty!"
         }
@@ -43,7 +43,7 @@ function ChatHolder({ openChat, chat, setChat }) {
     }
 
     function deleteChat(chat) {
-        fetch('http://localhost:18018/chats/delete/' + chat.id, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'chats/delete/' + chat.id, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

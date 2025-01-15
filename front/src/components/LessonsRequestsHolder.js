@@ -17,7 +17,7 @@ function LessonsRequestsHolder({ openLessonInfo }) {
     }, [])
 
     function fetchOutcomeRequests() {
-        fetch("http://localhost:18018/lesson_requests/outcome/with_user/" + getCurrentUserEmail(), {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson_requests/outcome/with_user/' + getCurrentUserEmail(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -31,7 +31,7 @@ function LessonsRequestsHolder({ openLessonInfo }) {
     }
 
     function fetchIncomeRequests() {
-        fetch("http://localhost:18018/lesson_requests/income/with_user/" + getCurrentUserEmail(), {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson_requests/income/with_user/' + getCurrentUserEmail(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

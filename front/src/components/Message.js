@@ -11,7 +11,7 @@ function Message({ message, messageEditing }) {
     const [showActions, setActions] = useState(false)
 
     function handleDeletion() {
-        fetch("http://localhost:18018/messages/delete/" + message.id, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'messages/delete/' + message.id, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

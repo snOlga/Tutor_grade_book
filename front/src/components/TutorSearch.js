@@ -4,7 +4,7 @@ import '../styles/search_style.css'
 function TutorSearch({ setLessons }) {
 
     function getTutorParticipator(tutorId) {
-        fetch('http://localhost:18018/participator/tutors/' + tutorId, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'participator/tutors/' + tutorId, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -18,7 +18,7 @@ function TutorSearch({ setLessons }) {
     }
 
     function loadLessons(tutor) {
-        fetch('http://localhost:18018/lessons/with_user/' + tutor.email, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/with_user/' + tutor.email, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

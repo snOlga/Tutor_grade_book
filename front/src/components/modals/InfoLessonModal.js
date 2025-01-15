@@ -49,7 +49,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
     }, [newLesson.startTime, newLesson.endTime])
 
     function fetchSubjects() {
-        fetch('http://localhost:18018/subjects', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'subjects', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -63,7 +63,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
     }
 
     function getTutorParticipator() {
-        fetch('http://localhost:18018/participator/tutors/' + tutorParticipator, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'participator/tutors/' + tutorParticipator, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -77,7 +77,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
     }
 
     function getStudentParticipator() {
-        fetch('http://localhost:18018/participator/students/' + studentParticipator, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'participator/students/' + studentParticipator, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -107,7 +107,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
     }
 
     function submitForm(structure) {
-        fetch('http://localhost:18018/lessons/create', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/create', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -131,7 +131,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
     }
 
     function participate(lesson, reciever) {
-        fetch('http://localhost:18018/lesson_requests/create', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson_requests/create', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

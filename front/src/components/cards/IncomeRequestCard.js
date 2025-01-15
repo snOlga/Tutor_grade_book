@@ -5,7 +5,7 @@ import { YesIcon, NoIcon } from '../modals/InfoLessonModal';
 function IncomeRequestCard({ request, openLessonInfo, income, setIncome }) {
 
     function approveRequest(request) {
-        fetch("http://localhost:18018/lesson_requests/update_approvement/" + request.id, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson_requests/update_approvement/' + request.id, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -22,7 +22,7 @@ function IncomeRequestCard({ request, openLessonInfo, income, setIncome }) {
     }
 
     function rejectRequest(request) {
-        fetch("http://localhost:18018/lesson_requests/update_approvement/" + request.id, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson_requests/update_approvement/' + request.id, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

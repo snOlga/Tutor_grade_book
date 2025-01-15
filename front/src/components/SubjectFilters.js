@@ -10,7 +10,7 @@ function SubjectFilters({ setLessons }) {
     }, [])
 
     function fetchSubjects() {
-        fetch('http://localhost:18018/subjects', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'subjects', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -24,7 +24,7 @@ function SubjectFilters({ setLessons }) {
     }
 
     function fetchLessonsBySubjects(subject) {
-        fetch('http://localhost:18018/lessons/with_subject/' + subject.id, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/with_subject/' + subject.id, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

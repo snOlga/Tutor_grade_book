@@ -28,7 +28,7 @@ function AccountData({ currentUser, openChatWithId }) {
     const navigate = useNavigate()
 
     function submitForm(struct) {
-        fetch('http://localhost:18018/participator/update/' + struct.humanReadableID, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'participator/update/' + struct.humanReadableID, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -44,7 +44,7 @@ function AccountData({ currentUser, openChatWithId }) {
     }
 
     function openChat() {
-        fetch('http://localhost:18018/chats/with_users/' + getCurrentUserEmail() + "/" + currentUser.email, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'chats/with_users/' + getCurrentUserEmail() + "/" + currentUser.email, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -61,7 +61,7 @@ function AccountData({ currentUser, openChatWithId }) {
     }
 
     async function createChat() {
-        fetch('http://localhost:18018/chats/create', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'chats/create', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -85,7 +85,7 @@ function AccountData({ currentUser, openChatWithId }) {
     }
 
     function deleteUser() {
-        fetch('http://localhost:18018/participator/delete/' + currentUser.email, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'participator/delete/' + currentUser.email, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

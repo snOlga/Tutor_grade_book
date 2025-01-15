@@ -5,7 +5,7 @@ import { YesIcon, NoIcon } from '../modals/InfoLessonModal';
 function OutcomeRequestCard({ request, openLessonInfo, outcome, setOutcome }) {
 
     function deleteRequest(request) {
-        fetch("http://localhost:18018/lesson_requests/" + request.id, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'lesson_requests/' + request.id, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

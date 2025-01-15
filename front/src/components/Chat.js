@@ -24,7 +24,7 @@ function Chat({ chat, setOpenChat, setCurrentChat }) {
     }, [messageForEditing])
 
     function fetchAllMessages() {
-        fetch('http://localhost:18018/messages/with_chat_id/' + chat.id, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'messages/with_chat_id/' + chat.id, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -38,7 +38,7 @@ function Chat({ chat, setOpenChat, setCurrentChat }) {
     }
 
     function connectWebSocket() {
-        const socket = new SockJS('http://localhost:18018/ws-endpoint')
+        const socket = new SockJS(process.env.REACT_APP_ROOT_PATH + 'ws-endpoint')
         let stompClient = Stomp.over(socket)
 
         stompClient.connect({}, function (frame) {
@@ -49,7 +49,7 @@ function Chat({ chat, setOpenChat, setCurrentChat }) {
     }
 
     function sendNewMessage() {
-        fetch('http://localhost:18018/messages/create', {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'messages/create', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -74,7 +74,7 @@ function Chat({ chat, setOpenChat, setCurrentChat }) {
     }
 
     function sendEditedMessage() {
-        fetch('http://localhost:18018/messages/update/' + messageForEditing.id, {
+        fetch(process.env.REACT_APP_ROOT_PATH + 'messages/update/' + messageForEditing.id, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
