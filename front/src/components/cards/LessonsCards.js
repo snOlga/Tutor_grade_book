@@ -4,7 +4,7 @@ import '../../styles/card_style.css'
 import DeletionModal from './DeletionModal';
 import LessonCard from './LessonCard';
 
-function LessonsCards({ lessons, currentDate, setLessonInfoModalState }) {
+function LessonsCards({ lessons, currentDate, setLessonInfoModalState, timeOffset }) {
     const [isDeletionModalOpen, openDeletionModal] = useState(false)
     const [lessonToDelete, setLessonToDelete] = useState(-1)
 
@@ -28,7 +28,8 @@ function LessonsCards({ lessons, currentDate, setLessonInfoModalState }) {
                                     lessonDate={lessonDate}
                                     openDeletionModal={openDeletionModal}
                                     setLessonToDelete={setLessonToDelete}
-                                    setLessonInfoModalState={setLessonInfoModalState} />
+                                    setLessonInfoModalState={setLessonInfoModalState}
+                                    timeOffset={timeOffset} />
                             )
                         }
                     }

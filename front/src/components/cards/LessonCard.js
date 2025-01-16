@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import '../../styles/chat_style.css'
 import { getRoles, ROLES, getCurrentUserEmail } from '../../App';
 
-function LessonCard({ lesson, lessonDate, openDeletionModal, setLessonToDelete, setLessonInfoModalState }) {
+function LessonCard({ lesson, lessonDate, openDeletionModal, setLessonToDelete, setLessonInfoModalState, timeOffset }) {
 
-    const topPositionLesson = (lessonDate.getHours() - 7) * 60 + lessonDate.getMinutes() + 10;
+    const topPositionLesson = (lessonDate.getHours() + timeOffset) * 60 + lessonDate.getMinutes() + 10;
     const isTutor = getRoles().includes(ROLES.TUTOR)
     const isStudent = getRoles().includes(ROLES.STUDENT)
     const isAdmin = getRoles().includes(ROLES.ADMIN)

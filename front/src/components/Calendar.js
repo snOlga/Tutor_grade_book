@@ -8,11 +8,22 @@ function Calendar({ lessons, setLessonInfoModalState }) {
     const [currentWeek, setCurrentWeek] = useState(0)
     const [days, setDays] = useState([[new Date(), ""]])
     const [weekdays] = useState(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
-    const [time] = useState(['08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'])
+    const [time, setTime] = useState([...Array(25).keys()])
+    const [isMorningFolded, foldMorning] = useState(false)
+    const [timeOffset, setTimeOffset] = useState(1)
+    const [visibleLessons, setVisibleLessons] = useState([...lessons])
 
     useEffect(() => {
         setDaysOnLoading()
     }, [currentWeek])
+
+    useEffect(() => {
+        foldingMorning()
+    }, [isMorningFolded])
+
+    useEffect(() => {
+        setVisibleLessons(lessons)
+    }, [lessons])
 
     function setDaysOnLoading() {
         const curr = new Date();
@@ -34,6 +45,19 @@ function Calendar({ lessons, setLessonInfoModalState }) {
         setCurrentWeek(currentWeek - 1)
     }
 
+    function foldingMorning() {
+        if (isMorningFolded) {
+            setTime([...Array(18).keys()].map(t => t + 7))
+            setTimeOffset(-6)
+            setVisibleLessons(lessons.filter(lesson => new Date(lesson.startTime).getHours() >= 7))
+        }
+        else {
+            setTime([...Array(25).keys()])
+            setTimeOffset(1)
+            setVisibleLessons(lessons)
+        }
+    }
+
     return (
         <div>
             <div className="calendar">
@@ -53,6 +77,25 @@ function Calendar({ lessons, setLessonInfoModalState }) {
                                     <div className='half-of-hour'>
                                         {time}:00
                                     </div>
+                                    {
+                                        (time == 7) &&
+                                        <div className='week-buttons'>
+                                            <button onClick={() => foldMorning(!isMorningFolded)}>
+                                                {
+                                                    !isMorningFolded &&
+                                                    <div>
+                                                        ↑
+                                                    </div>
+                                                }
+                                                {
+                                                    isMorningFolded &&
+                                                    <div>
+                                                        ↓
+                                                    </div>
+                                                }
+                                            </button>
+                                        </div>
+                                    }
                                 </div>
                             )
                         })
@@ -68,7 +111,10 @@ function Calendar({ lessons, setLessonInfoModalState }) {
                                         <p className="date-day">{dayDate[1]}</p>
                                     </div>
                                     <div className='day-content'>
-                                        <LessonsCards lessons={lessons} currentDate={dayDate[0]} setLessonInfoModalState={setLessonInfoModalState} />
+                                        {
+                                            visibleLessons != [] &&
+                                            <LessonsCards lessons={visibleLessons} currentDate={dayDate[0]} setLessonInfoModalState={setLessonInfoModalState} timeOffset={timeOffset} />
+                                        }
                                     </div>
                                 </div>
                             )
