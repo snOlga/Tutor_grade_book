@@ -38,7 +38,7 @@ function Header({ openLessonCreationModal, openLessonsRequests, openChat }) {
         })
             .then(response => response.json())
             .then(data => {
-                setIncomeAmount(data.length)
+                setIncomeAmount(data.filter(req => req.isApproved == null).length)
             })
     }
 

@@ -25,7 +25,7 @@ public class MessageService {
     }
 
     public List<MessageDTO> findAllChatMessages(Long chatId) {
-        List<MessageEntity> messages = messageRepository.findAllByChatIdAndAuthor_IsDeletedFalse(chatId);
+        List<MessageEntity> messages = messageRepository.findAllByChatId(chatId);
         messages.sort((msg1, msg2) -> {
             return (msg1.getSentTime().compareTo(msg2.getSentTime()));
         });

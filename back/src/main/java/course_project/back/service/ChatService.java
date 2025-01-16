@@ -30,12 +30,12 @@ public class ChatService {
     }
 
     public List<ChatDTO> findAllByUserEmail(String email) {
-        List<ChatEntity> result = chatRepository.findByUsers_EmailAndUsers_IsDeletedFalse(email);
+        List<ChatEntity> result = chatRepository.findAllByUserEmail(email);
         return result.stream().map(chatConverter::fromEntity).toList();
     }
 
     public ChatDTO findByUsersEmails(String emailFirst, String emailSecond) {
-        List<ChatEntity> listOfChatsByFirstUser = chatRepository.findByUsers_EmailAndUsers_IsDeletedFalse(emailFirst);
+        List<ChatEntity> listOfChatsByFirstUser = chatRepository.findAllByUserEmail(emailFirst);
         UserEntity user2 = userRepository.findByEmail(emailSecond);
         ChatEntity result = null;
         for (ChatEntity firstUserChat : listOfChatsByFirstUser) {

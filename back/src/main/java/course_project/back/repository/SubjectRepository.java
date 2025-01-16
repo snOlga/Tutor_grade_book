@@ -7,5 +7,5 @@ import course_project.back.entity.SubjectEntity;
 
 @Repository
 public interface SubjectRepository extends JpaRepository<SubjectEntity, Long> {
-    public SubjectEntity findByName(String name);
+    SubjectEntity findByName(String name);
 }

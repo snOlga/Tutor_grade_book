@@ -8,5 +8,5 @@ import course_project.back.entity.RoleEntity;
 
 @Repository
 public interface RolesRepository extends JpaRepository<RoleEntity, Long> {
-    public RoleEntity findByName(String name);
+    RoleEntity findByName(String name);
 }

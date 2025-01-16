@@ -38,7 +38,7 @@ public class LessonService {
     }
 
     public List<LessonDTO> findAllByUserEmail(String email) {
-        List<LessonEntity> result = lessonRepository.findByUsers_Email(email);
+        List<LessonEntity> result = lessonRepository.findAllByUserEmail(email);
         result.sort((lesson1, lesson2) -> {
             return (lesson1.getStartTime().compareTo(lesson2.getStartTime()));
         });
@@ -46,7 +46,7 @@ public class LessonService {
     }
 
     public List<LessonDTO> findAllBySubject(Long id) {
-        List<LessonEntity> result = lessonRepository.findAllBySubjectIdAndIsOpenTrueAndOwner_IsDeletedFalse(id);
+        List<LessonEntity> result = lessonRepository.findAllBySubjectId(id);
         result.sort((lesson1, lesson2) -> {
             return (lesson1.getStartTime().compareTo(lesson2.getStartTime()));
         });
