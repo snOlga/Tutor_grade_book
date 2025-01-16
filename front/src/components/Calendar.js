@@ -4,7 +4,7 @@ import LessonsCards from './cards/LessonsCards.js';
 import '../styles/calendar_style.css'
 import { getCurrentUserEmail } from '../App.js'
 
-function Calendar({ lessons, setLessonInfoModalState }) {
+function Calendar({ lessons, setLessonInfoModalState, setWeek }) {
     const [currentWeek, setCurrentWeek] = useState(0)
     const [days, setDays] = useState([[new Date(), ""]])
     const [weekdays] = useState(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
@@ -36,6 +36,8 @@ function Calendar({ lessons, setLessonInfoModalState }) {
             countedDays.push(dateWeekday);
         }
         setDays(countedDays)
+        setWeek.setStartWeekDate(countedDays[0][0])
+        setWeek.setEndWeekDate(countedDays[countedDays.length - 1][0])
     }
 
     function nextWeek() {

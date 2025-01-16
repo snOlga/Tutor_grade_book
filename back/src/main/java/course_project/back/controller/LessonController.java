@@ -3,6 +3,7 @@ package course_project.back.controller;
 import java.util.List;
 
 import course_project.back.DTO.LessonDTO;
+import course_project.back.DTO.WeekDTO;
 import course_project.back.service.LessonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -47,15 +47,15 @@ public class LessonController {
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/user/{email}")
-    public ResponseEntity<List<LessonDTO>> getAllUserLessons(@PathVariable String email) {
-        List<LessonDTO> allLessons = lessonService.findAllByUserEmail(email);
+    @PutMapping("/user/{email}")
+    public ResponseEntity<List<LessonDTO>> getAllUserLessons(@PathVariable String email, @RequestBody WeekDTO weekDTO) {
+        List<LessonDTO> allLessons = lessonService.findAllByUserEmail(email, weekDTO);
         return new ResponseEntity<>(allLessons, HttpStatus.OK);
     }
 
-    @GetMapping("/subject/{subjectId}")
-    public ResponseEntity<List<LessonDTO>> getAllSubjectLessons(@PathVariable Long subjectId) {
-        List<LessonDTO> allLessons = lessonService.findAllBySubject(subjectId);
+    @PutMapping("/subject/{subjectId}")
+    public ResponseEntity<List<LessonDTO>> getAllSubjectLessons(@PathVariable Long subjectId, @RequestBody WeekDTO weekDTO) {
+        List<LessonDTO> allLessons = lessonService.findAllBySubject(subjectId, weekDTO);
         return new ResponseEntity<>(allLessons, HttpStatus.OK);
     }
 }

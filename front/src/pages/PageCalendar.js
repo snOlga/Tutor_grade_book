@@ -18,6 +18,9 @@ function TutorCalendar() {
     const [isLessonsRequestsOpen, openLessonsRequests] = useState(false)
     const [lessons, setLessons] = useState([])
     const isStudent = getRoles().includes(ROLES.STUDENT)
+    const [startWeekDate, setStartWeekDate] = useState(new Date())
+    const [endWeekDate, setEndWeekDate] = useState(new Date())
+    const setWeek = { setStartWeekDate, setEndWeekDate }
 
     function openLessonInfoModal(state) {
         setLessonInfoModalState({ ...lessonInfoModalState, isOpen: state })
@@ -25,15 +28,19 @@ function TutorCalendar() {
 
     useEffect(() => {
         loadLessons()
-    }, [])
+    }, [startWeekDate, endWeekDate])
 
     function loadLessons() {
         fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/user/' + getCurrentUserEmail(), {
-            method: 'GET',
+            method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-            }
+            },
+            body: JSON.stringify({
+                startDate: startWeekDate.toISOString(),
+                endDate: endWeekDate.toISOString()
+            })
         })
             .then(response => response.json())
             .then(data => {
@@ -52,7 +59,7 @@ function TutorCalendar() {
                 {
                     !isStudent && <div className='filters'></div>
                 }
-                <Calendar lessons={lessons} setLessonInfoModalState={setLessonInfoModalState} />
+                <Calendar lessons={lessons} setLessonInfoModalState={setLessonInfoModalState} setWeek={setWeek} />
                 {
                     isLessonCreationOpen && <CreateLessonModal closeModal={openLessonCreationModal} />
                 }

@@ -3,6 +3,7 @@ package course_project.back.service;
 import java.util.List;
 
 import course_project.back.DTO.LessonDTO;
+import course_project.back.DTO.WeekDTO;
 import course_project.back.converters.LessonConverter;
 import course_project.back.entity.LessonEntity;
 import course_project.back.repository.LessonRepository;
@@ -37,16 +38,18 @@ public class LessonService {
         return lessonRepository != null;
     }
 
-    public List<LessonDTO> findAllByUserEmail(String email) {
-        List<LessonEntity> result = lessonRepository.findAllByUserEmail(email);
+    public List<LessonDTO> findAllByUserEmail(String email, WeekDTO weekDTO) {
+        List<LessonEntity> result = lessonRepository.findAllByUserEmail(email, weekDTO.getStartDate().toString(),
+                weekDTO.getEndDate().toString());
         result.sort((lesson1, lesson2) -> {
             return (lesson1.getStartTime().compareTo(lesson2.getStartTime()));
         });
         return result.stream().map(lessonConverter::fromEntity).toList();
     }
 
-    public List<LessonDTO> findAllBySubject(Long id) {
-        List<LessonEntity> result = lessonRepository.findAllBySubjectId(id);
+    public List<LessonDTO> findAllBySubject(Long id, WeekDTO weekDTO) {
+        List<LessonEntity> result = lessonRepository.findAllBySubjectId(id, weekDTO.getStartDate().toString(),
+                weekDTO.getEndDate().toString());
         result.sort((lesson1, lesson2) -> {
             return (lesson1.getStartTime().compareTo(lesson2.getStartTime()));
         });
