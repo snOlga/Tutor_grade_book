@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
 
-import org.hibernate.annotations.Where;
+// import org.hibernate.annotations.Where;
 
 import lombok.*;
 
@@ -14,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Where(clause = "is_deleted = false")
+// @Where(clause = "is_deleted = false")
 @Table(name = "lessons")
 public class LessonEntity {
     @Id
@@ -44,7 +44,7 @@ public class LessonEntity {
 
     @Nonnull
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 
     @Column(name = "description")
     private String description;

@@ -2,7 +2,7 @@ package course_project.back.entity;
 
 import java.sql.Timestamp;
 
-import org.hibernate.annotations.Where;
+// import org.hibernate.annotations.Where;  
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
@@ -13,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Where(clause = "is_deleted = false")
+// @Where(clause = "is_deleted = false")
 @Table(name = "messages")
 public class MessageEntity {
     @Id
@@ -45,5 +45,5 @@ public class MessageEntity {
 
     @Nonnull
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 }

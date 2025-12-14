@@ -34,6 +34,7 @@ public class SecurityJwtTokenValidator extends OncePerRequestFilter {
             jwt = getTokenCookie(request.getCookies());
         } catch (Exception e) {
             filterChain.doFilter(request, response);
+            return;
         }
 
         if (jwt != null) {
@@ -57,6 +58,9 @@ public class SecurityJwtTokenValidator extends OncePerRequestFilter {
     }
 
     private String getTokenCookie(Cookie[] cookies) {
+        if (cookies == null) {
+            return null;
+        }
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("token"))
                 return cookie.getValue();

@@ -1,6 +1,6 @@
 package course_project.back.entity;
 
-import org.hibernate.annotations.Where;
+// import org.hibernate.annotations.Where;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Where(clause = "is_deleted = false")
+// @Where(clause = "is_deleted = false")
 @Table(name = "lessons_requests")
 public class LessonRequestEntity {
     @Id
@@ -22,7 +22,7 @@ public class LessonRequestEntity {
     private Boolean isApproved;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 
     @ManyToOne
     @JoinColumn(name = "sender_id")

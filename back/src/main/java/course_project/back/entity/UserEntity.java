@@ -2,7 +2,7 @@ package course_project.back.entity;
 
 import java.util.Set;
 
-import org.hibernate.annotations.Where;
+// import org.hibernate.annotations.Where;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
@@ -14,7 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "users_tutor_grade_book")
-@Where(clause = "is_deleted = false")
+// @Where(clause = "is_deleted = false")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,13 +46,13 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany
     @JoinTable(name = "users_roles", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
             @JoinColumn(name = "role_id") })
     private Set<RoleEntity> roles;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 
     public void setDefaultHumanRedableID() {
         setHumanReadableID(getName() + "_" + getSecondName() + "_" + getId());

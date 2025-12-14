@@ -3,7 +3,7 @@ package course_project.back.entity;
 import jakarta.persistence.*;
 import java.util.Set;
 
-import org.hibernate.annotations.Where;
+// import org.hibernate.annotations.Where;
 
 import lombok.*;
 
@@ -13,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "chats")
-@Where(clause = "is_deleted = false")
+// @Where(clause = "is_deleted = false")
 public class ChatEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +26,5 @@ public class ChatEntity {
     private Set<UserEntity> users;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 }

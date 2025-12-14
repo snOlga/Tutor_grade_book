@@ -1,5 +1,6 @@
 package course_project.back.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import course_project.back.DTO.LessonDTO;
@@ -39,8 +40,8 @@ public class LessonService {
     }
 
     public List<LessonDTO> findAllByUserEmail(String email, WeekDTO weekDTO) {
-        List<LessonEntity> result = lessonRepository.findAllByUserEmail(email, weekDTO.getStartDate().toString(),
-                weekDTO.getEndDate().toString());
+        List<LessonEntity> result = lessonRepository.findAllByUserEmail(email, weekDTO.getStartDate(),
+                weekDTO.getEndDate());
         result.sort((lesson1, lesson2) -> {
             return (lesson1.getStartTime().compareTo(lesson2.getStartTime()));
         });
@@ -48,8 +49,8 @@ public class LessonService {
     }
 
     public List<LessonDTO> findAllBySubject(Long id, WeekDTO weekDTO) {
-        List<LessonEntity> result = lessonRepository.findAllBySubjectId(id, weekDTO.getStartDate().toString(),
-                weekDTO.getEndDate().toString());
+        List<LessonEntity> result = new ArrayList<LessonEntity>(lessonRepository.findAllBySubjectId(id, weekDTO.getStartDate(),
+                weekDTO.getEndDate()));
         result.sort((lesson1, lesson2) -> {
             return (lesson1.getStartTime().compareTo(lesson2.getStartTime()));
         });
