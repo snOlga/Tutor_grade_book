@@ -29,14 +29,18 @@ public class LessonService {
     }
 
     public LessonDTO update(LessonDTO lessonDTO) {
+        if(!lessonRepository.findById(lessonDTO.getId()).isPresent())
+            return null;
         return create(lessonDTO);
     }
 
     public boolean deleteById(Long id) {
+        if(!lessonRepository.findById(id).isPresent())
+            return false;
         LessonEntity lessonEntity = lessonRepository.findById(id).get();
         lessonEntity.setIsDeleted(true);
         lessonRepository.save(lessonEntity);
-        return lessonRepository != null;
+        return true;
     }
 
     public List<LessonDTO> findAllByUserEmail(String email, WeekDTO weekDTO) {

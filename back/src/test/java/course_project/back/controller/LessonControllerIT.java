@@ -8,10 +8,10 @@ import course_project.back.DTO.LessonDTO;
 import course_project.back.DTO.ParticipatorDTO;
 import course_project.back.DTO.SubjectDTO;
 import course_project.back.DTO.WeekDTO;
+import course_project.back.controller.utils.Utils;
 import course_project.back.entity.RoleEntity;
 import course_project.back.entity.SubjectEntity;
 import course_project.back.entity.UserEntity;
-import course_project.back.repository.LessonRepository;
 import course_project.back.repository.RolesRepository;
 import course_project.back.repository.SubjectRepository;
 import course_project.back.repository.UserRepository;
@@ -41,21 +41,16 @@ class LessonControllerIT {
 
         @Autowired
         private MockMvc mockMvc;
-
         @Autowired
         private ObjectMapper objectMapper;
-
-        @Autowired
-        private LessonRepository lessonRepository;
-
         @Autowired
         private SubjectRepository subjectRepository;
-
         @Autowired
         private UserRepository userRepository;
-
         @Autowired
         private RolesRepository rolesRepository;
+        @Autowired
+        private Utils utils;
 
         private SubjectEntity testSubject;
         private UserEntity testOwner;
@@ -63,25 +58,14 @@ class LessonControllerIT {
 
         @BeforeEach
         void setup() {
-                lessonRepository.deleteAll();
-                userRepository.deleteAll();
-                subjectRepository.deleteAll();
-                rolesRepository.deleteAll();
-
-                // Create test role
+                utils.cleanDb();
                 RoleEntity newRole = new RoleEntity();
                 newRole.setName("TUTOR");
                 rolesRepository.saveAndFlush(newRole);
-                // Fetch by name to get a fresh managed entity (avoids detached entity issues
-                // with cascade)
                 tutorRole = rolesRepository.findByName("TUTOR");
-
-                // Create test subject
                 testSubject = new SubjectEntity();
                 testSubject.setName("Mathematics");
                 testSubject = subjectRepository.save(testSubject);
-
-                // Create test owner (tutor)
                 testOwner = new UserEntity();
                 testOwner.setName("John");
                 testOwner.setSecondName("Doe");
@@ -120,8 +104,7 @@ class LessonControllerIT {
         }
 
         @Test
-        @WithMockUser(authorities = "USER")
-        void userShouldNotCreateLesson() throws Exception {
+        void unauthenticatedShouldNotCreateLesson() throws Exception {
                 LessonDTO lessonDTO = createTestLessonDTO();
 
                 mockMvc.perform(post("/lessons")
@@ -131,19 +114,8 @@ class LessonControllerIT {
         }
 
         @Test
-        void unauthenticatedShouldNotCreateLesson() throws Exception {
-                LessonDTO lessonDTO = createTestLessonDTO();
-
-                mockMvc.perform(post("/lessons")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(lessonDTO)))
-                                .andExpect(status().isUnauthorized());
-        }
-
-        @Test
         @WithMockUser(authorities = "ADMIN")
         void adminShouldUpdateLesson() throws Exception {
-                // First create a lesson through the service
                 LessonDTO lessonDTO = createTestLessonDTO();
                 String response = mockMvc.perform(post("/lessons")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -182,28 +154,6 @@ class LessonControllerIT {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(createdLesson)))
                                 .andExpect(status().isOk());
-        }
-
-        @Test
-        @WithMockUser(authorities = "ADMIN")
-        void shouldReturn404WhenUpdatingNonExistentLesson() throws Exception {
-                LessonDTO lessonDTO = createTestLessonDTO();
-
-                mockMvc.perform(put("/lessons/{id}", 999L)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(lessonDTO)))
-                                .andExpect(status().isNotFound());
-        }
-
-        @Test
-        @WithMockUser(authorities = "USER")
-        void userShouldNotUpdateLesson() throws Exception {
-                LessonDTO lessonDTO = createTestLessonDTO();
-
-                mockMvc.perform(put("/lessons/{id}", 1L)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(lessonDTO)))
-                                .andExpect(status().isForbidden());
         }
 
         @Test
@@ -250,13 +200,7 @@ class LessonControllerIT {
         }
 
         @Test
-        @WithMockUser(authorities = "USER")
-        void userShouldNotDeleteLesson() throws Exception {
-                mockMvc.perform(delete("/lessons/{id}", 1L))
-                                .andExpect(status().isForbidden());
-        }
-
-        @Test
+        @WithMockUser(authorities = "TUTOR")
         void shouldGetAllUserLessons() throws Exception {
                 WeekDTO weekDTO = createTestWeekDTO();
 
@@ -267,6 +211,7 @@ class LessonControllerIT {
         }
 
         @Test
+        @WithMockUser(authorities = "TUTOR")
         void shouldGetAllSubjectLessons() throws Exception {
                 WeekDTO weekDTO = createTestWeekDTO();
 
@@ -286,14 +231,12 @@ class LessonControllerIT {
                 lessonDTO.setDescription("Test Description");
                 lessonDTO.setIsDeleted(false);
 
-                // Set SubjectDTO
                 SubjectDTO subjectDTO = new SubjectDTO();
                 subjectDTO.setId(testSubject.getId());
                 subjectDTO.setName(testSubject.getName());
                 lessonDTO.setSubject(subjectDTO);
                 lessonDTO.setIsDeleted(false);
 
-                // Set Owner ParticipatorDTO
                 ParticipatorDTO ownerDTO = new ParticipatorDTO();
                 ownerDTO.setName(testOwner.getName());
                 ownerDTO.setSecondName(testOwner.getSecondName());

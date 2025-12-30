@@ -47,12 +47,14 @@ public class LessonController {
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TUTOR', 'STUDENT')")
     @PutMapping("/user/{email}")
     public ResponseEntity<List<LessonDTO>> getAllUserLessons(@PathVariable String email, @RequestBody WeekDTO weekDTO) {
         List<LessonDTO> allLessons = lessonService.findAllByUserEmail(email, weekDTO);
         return new ResponseEntity<>(allLessons, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TUTOR', 'STUDENT')")
     @PutMapping("/subject/{subjectId}")
     public ResponseEntity<List<LessonDTO>> getAllSubjectLessons(@PathVariable Long subjectId, @RequestBody WeekDTO weekDTO) {
         List<LessonDTO> allLessons = lessonService.findAllBySubject(subjectId, weekDTO);

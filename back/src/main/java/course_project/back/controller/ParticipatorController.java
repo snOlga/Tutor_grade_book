@@ -16,21 +16,21 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/participators")
+@RequestMapping("/participators") // TODO: remove it
 public class ParticipatorController {
 
     @Autowired
     private ParticipatorService participatorService;
 
     @GetMapping("/student/{id}")
-    public ResponseEntity<ParticipatorDTO> getStudentByHumanReadableID(@PathVariable String id) {
+    public ResponseEntity<ParticipatorDTO> getStudentByID(@PathVariable String id) {
         ParticipatorDTO participatorDTO = participatorService.getStudentByHumanReadableID(id);
         return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/tutor/{id}")
-    public ResponseEntity<ParticipatorDTO> getTutorByHumanReadableID(@PathVariable String id) {
+    public ResponseEntity<ParticipatorDTO> getTutorByID(@PathVariable String id) {
         ParticipatorDTO participatorDTO = participatorService.getTutorByHumanReadableID(id);
         return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -44,7 +44,7 @@ public class ParticipatorController {
     }
 
     @GetMapping("/human-readable-id/{humanReadableId}")
-    public ResponseEntity<ParticipatorDTO> getParticipatorById(@PathVariable String humanReadableId) {
+    public ResponseEntity<ParticipatorDTO> getParticipatorByHumanReadableId(@PathVariable String humanReadableId) {
         ParticipatorDTO participatorDTO = participatorService.getParticipatorByHumanReadableId(humanReadableId);
         return participatorDTO != null ? new ResponseEntity<>(participatorDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);

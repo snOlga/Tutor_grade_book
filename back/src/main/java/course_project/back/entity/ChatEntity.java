@@ -20,7 +20,7 @@ public class ChatEntity {
     @Column(name = "id")
     private Long id;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany
     @JoinTable(name = "users_chats", joinColumns = { @JoinColumn(name = "chat_id") }, inverseJoinColumns = {
             @JoinColumn(name = "user_id") })
     private Set<UserEntity> users;
