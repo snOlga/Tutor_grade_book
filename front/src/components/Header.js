@@ -3,6 +3,7 @@ import '../styles/header_style.css'
 import { getCurrentUserEmail, getRoles, ROLES } from '../App';
 import { Navigate, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { refreshAccessToken } from '../services/auth'
 
 function Header({ openLessonCreationModal, openLessonsRequests, openChat }) {
     const [currentUser, setUser] = useState({})
@@ -25,7 +26,7 @@ function Header({ openLessonCreationModal, openLessonsRequests, openChat }) {
             .then(response => response.json())
             .then(data => {
                 setUser(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function fetchIncomeRequests() {
@@ -39,7 +40,7 @@ function Header({ openLessonCreationModal, openLessonsRequests, openChat }) {
             .then(response => response.json())
             .then(data => {
                 setIncomeAmount(data.filter(req => req.isApproved == null).length)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     return (

@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { ROLES } from '../../App';
+import auth from '../../services/auth'
 
 function RegistrationForm() {
     const [formData, setFormData] = useState({
@@ -55,6 +56,7 @@ function RegistrationForm() {
                 .then(data => {
                     let expires = (new Date(Date.now() + 86400 * 1000)).toUTCString();
                     document.cookie = "token=" + data + "; expires=" + expires
+                    auth.setRefreshToken(data.refreshToken)
                     window.location.reload();
                 })
         }
@@ -139,7 +141,7 @@ function RegistrationForm() {
                     <input
                         id="isTutor"
                         name="isTutor"
-                        value={formData.isTutor}
+                        checked={formData.isTutor}
                         onChange={setRole}
                         type="checkbox"
                     />
@@ -149,7 +151,7 @@ function RegistrationForm() {
                     <input
                         id="isStudent"
                         name="isStudent"
-                        value={formData.isStudent}
+                        checked={formData.isStudent}
                         onChange={setRole}
                         type="checkbox"
                     />

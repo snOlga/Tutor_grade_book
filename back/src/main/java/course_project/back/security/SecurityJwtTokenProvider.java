@@ -9,28 +9,53 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 
 public class SecurityJwtTokenProvider {
-    private SecretKey key = Keys.hmacShaKeyFor("super_puper_secret_key!!!!!!!!!!!!!!!!!!!!!".getBytes());
+    private SecretKey accessKey = Keys.hmacShaKeyFor("super_puper_secret_key!!!!!!!!!!!!!!!!!!!!!".getBytes());
+    private SecretKey refreshKey = Keys.hmacShaKeyFor("super_puper_secret_refresh_key!!!!!!!!!!!!!!!!!!!!!".getBytes());
 
-    public String generateToken(Authentication authentication) {
+    public String generateAccessToken(Authentication authentication) {
         String username = authentication.getName();
         Date currentDate = new Date(System.currentTimeMillis());
-        Date expireDate = new Date(System.currentTimeMillis() + 86400000);
+        Date expireDate = new Date(System.currentTimeMillis() + 15 * 60 * 1000);
 
         String token = Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
                 .claim("authorities", authentication.getAuthorities())
-                .signWith(key)
+                .signWith(accessKey)
                 .compact();
 
-        System.out.println("generated token: " + token);
+        System.out.println("generated access token: " + token);
         return token;
+    }
+
+    public String generateRefreshToken(String userEmail) {
+        Date currentDate = new Date(System.currentTimeMillis());
+        Date expireDate = new Date(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000);
+
+        String token = Jwts.builder()
+                .setSubject(userEmail)
+                .setIssuedAt(currentDate)
+                .setExpiration(expireDate)
+                .signWith(refreshKey)
+                .compact();
+
+        System.out.println("generated refresh token: " + token);
+        return token;
+    }
+
+    public String getUserEmailFromRefresh(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(refreshKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
     }
 
     public String getUserEmailFromJWT(String token) {
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(accessKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -40,7 +65,19 @@ public class SecurityJwtTokenProvider {
     public Boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(key)
+                    .setSigningKey(accessKey)
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public Boolean validateRefreshToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(refreshKey)
                     .build()
                     .parseClaimsJws(token);
             return true;
@@ -51,7 +88,7 @@ public class SecurityJwtTokenProvider {
 
     public Claims getClaims(String token) {
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(accessKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

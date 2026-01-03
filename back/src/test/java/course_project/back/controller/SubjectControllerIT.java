@@ -40,7 +40,6 @@ class SubjectControllerIT {
     @Test
     @WithMockUser
     void shouldReturnAllSubjects() throws Exception {
-        // Arrange
         SubjectEntity subject1 = new SubjectEntity();
         subject1.setName("Physics");
         subjectRepository.save(subject1);
@@ -49,7 +48,6 @@ class SubjectControllerIT {
         subject2.setName("Chemistry");
         subjectRepository.save(subject2);
 
-        // Act & Assert
         mockMvc.perform(get("/subjects")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

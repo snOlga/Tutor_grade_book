@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../styles/lessons_requests_style.css'
 import { YesIcon, NoIcon } from '../modals/InfoLessonModal';
+import { refreshAccessToken } from '../../services/auth'
 
 function OutcomeRequestCard({ request, openLessonInfo, outcome, setOutcome }) {
 
@@ -14,7 +15,7 @@ function OutcomeRequestCard({ request, openLessonInfo, outcome, setOutcome }) {
         })
             .then(response => {
                 setOutcome(outcome.filter(req => req.id != request.id))
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     return (

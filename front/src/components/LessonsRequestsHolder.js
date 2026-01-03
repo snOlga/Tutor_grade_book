@@ -4,6 +4,7 @@ import { getCurrentUserEmail } from '../App';
 import { YesIcon, NoIcon } from './modals/InfoLessonModal';
 import IncomeRequestCard from './cards/IncomeRequestCard';
 import OutcomeRequestCard from './cards/OutcomeRequestCard';
+import { refreshAccessToken } from '../services/auth'
 
 function LessonsRequestsHolder({ openLessonInfo }) {
     const [showIncome, setShowIncome] = useState(true)
@@ -27,7 +28,7 @@ function LessonsRequestsHolder({ openLessonInfo }) {
             .then(response => response.json())
             .then(data => {
                 setOutcome(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function fetchIncomeRequests() {
@@ -41,7 +42,7 @@ function LessonsRequestsHolder({ openLessonInfo }) {
             .then(response => response.json())
             .then(data => {
                 setIncome(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     return (

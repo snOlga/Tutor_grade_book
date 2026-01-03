@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../styles/chat_style.css'
 import { getRoles, ROLES, getCurrentUserEmail } from '../../App';
+import { refreshAccessToken } from '../../services/auth'
 
 function LessonCard({ lesson, lessonDate, openDeletionModal, setLessonToDelete, setLessonInfoModalState, timeOffset }) {
 
@@ -30,7 +31,7 @@ function LessonCard({ lesson, lessonDate, openDeletionModal, setLessonToDelete, 
                     id: lesson.id
                 }
             })
-        })
+        }).catch(() => refreshAccessToken())
     }
 
     return (

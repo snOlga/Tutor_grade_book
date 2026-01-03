@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import course_project.back.DTO.TokenDTO;
 import course_project.back.DTO.UserDTO;
 import course_project.back.service.UserAuthService;
 
@@ -20,16 +21,23 @@ public class UserAuthController {
     private UserAuthService userService;
 
     @PostMapping("/sign")
-    public ResponseEntity<String> signUp(@RequestBody UserDTO userDTO) {
-        String token = userService.signUser(userDTO);
-        return (token != null || token != "") ? new ResponseEntity<>(token, HttpStatus.OK)
+    public ResponseEntity<TokenDTO> signUp(@RequestBody UserDTO userDTO) {
+        TokenDTO tokens = userService.signUser(userDTO);
+        return (tokens.getAccessToken() != "") ? new ResponseEntity<>(tokens, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/log")
-    public ResponseEntity<String> logIn(@RequestBody UserDTO userDTO) {
-        String token = userService.logUser(userDTO);
-        return (token != null || token != "") ? new ResponseEntity<>(token, HttpStatus.OK)
+    public ResponseEntity<TokenDTO> logIn(@RequestBody UserDTO userDTO) {
+        TokenDTO tokens = userService.logUser(userDTO);
+        return (tokens.getAccessToken() != "") ? new ResponseEntity<>(tokens, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenDTO> refreshToken(@RequestBody TokenDTO refreshToken) {
+        TokenDTO tokens = userService.refreshToken(refreshToken.getRefreshToken());
+        return (tokens.getAccessToken() != "") ? new ResponseEntity<>(tokens, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

@@ -29,6 +29,13 @@ public class SecurityJwtTokenValidator extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
+        String path = request.getRequestURI();
+        if(path.startsWith("/auth/"))
+            System.out.println("auth path: " + path);
+        if (path.endsWith("/") || path.startsWith("/static/") || path.startsWith("/auth/")) { // "permitAll" paths
+            filterChain.doFilter(request, response);
+            return;
+        }
         String jwt = null;
         try {
             jwt = getTokenCookie(request.getCookies());

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../styles/lessons_requests_style.css'
 import { YesIcon, NoIcon } from '../modals/InfoLessonModal';
+import { refreshAccessToken } from '../../services/auth'
 
 function IncomeRequestCard({ request, openLessonInfo, income, setIncome }) {
 
@@ -18,7 +19,7 @@ function IncomeRequestCard({ request, openLessonInfo, income, setIncome }) {
             .then(response => response.json())
             .then(data => {
                 setIncome(income.map(request => request.id == data.id ? data : request))
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function rejectRequest(request) {
@@ -35,7 +36,7 @@ function IncomeRequestCard({ request, openLessonInfo, income, setIncome }) {
             .then(response => response.json())
             .then(data => {
                 setIncome(income.map(request => request.id == data.id ? data : request))
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     return (

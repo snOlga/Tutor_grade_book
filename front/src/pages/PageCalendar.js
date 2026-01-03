@@ -7,6 +7,7 @@ import InfoLessonModal from '../components/modals/InfoLessonModal';
 import LessonsRequestsHolder from '../components/LessonsRequestsHolder';
 import { getRoles, ROLES, getCurrentUserEmail } from '../App';
 import StudentSearchUI from '../components/StudentSearchUI';
+import { refreshAccessToken } from '../services/auth'
 
 function TutorCalendar() {
     const [isChatOpen, openChat] = useState(false)
@@ -45,7 +46,7 @@ function TutorCalendar() {
             .then(response => response.json())
             .then(data => {
                 setLessons(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     return (

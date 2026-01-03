@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../../styles/lesson_creation_modal_style.css'
 import '../../styles/lesson_info_modal_style.css'
 import { getRoles, ROLES, getCurrentUserEmail } from '../../App';
+import { refreshAccessToken } from '../../services/auth'
 
 function InfoLessonModal({ currentLesson, closeModal }) {
     const lessonDate = new Date(currentLesson.startTime)
@@ -59,7 +60,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             .then(response => response.json())
             .then(data => {
                 setAllSubjects(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function getTutorParticipator() {
@@ -73,7 +74,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             .then(response => response.json())
             .then(data => {
                 setNewLesson({ ...newLesson, tutorParticipators: [...newLesson.tutorParticipators, data] })
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function getStudentParticipator() {
@@ -87,7 +88,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             .then(response => response.json())
             .then(data => {
                 setNewLesson({ ...newLesson, studentParticipators: [...newLesson.studentParticipators, data] })
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function prepareStartTime() {
@@ -119,7 +120,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             .then(data => {
                 setLessonDTO(data)
                 inviteParticipators(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function inviteParticipators(lesson) {
@@ -153,7 +154,7 @@ function InfoLessonModal({ currentLesson, closeModal }) {
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function checkTime() {

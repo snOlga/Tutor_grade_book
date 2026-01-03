@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { refreshAccessToken } from '../services/auth'
 import '../styles/subject_filters_style.css'
 
 function SubjectFilters({ setLessons }) {
@@ -20,7 +21,7 @@ function SubjectFilters({ setLessons }) {
             .then(response => response.json())
             .then(data => {
                 setAllSubjects(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function fetchLessonsBySubjects(subject) {
@@ -34,7 +35,7 @@ function SubjectFilters({ setLessons }) {
             .then(response => response.json())
             .then(data => {
                 setLessons(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     return (

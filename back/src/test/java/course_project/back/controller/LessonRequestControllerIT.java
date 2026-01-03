@@ -147,17 +147,14 @@ class LessonRequestControllerIT {
                 lessonDTO.setDescription("Test Description");
                 lessonDTO.setIsDeleted(false);
 
-                // Set SubjectDTO
                 SubjectDTO subjectDTO = new SubjectDTO();
                 subjectDTO.setId(subject.getId());
                 subjectDTO.setName(subject.getName());
                 lessonDTO.setSubject(subjectDTO);
                 lessonDTO.setIsDeleted(false);
 
-                // Set Owner ParticipatorDTO
                 ParticipatorDTO ownerDTO = participatorConverter.fromEntity(tutor);
 
-                // Set users list
                 List<ParticipatorDTO> users = new ArrayList<>();
                 users.add(ownerDTO);
                 lessonDTO.setUsers(users);

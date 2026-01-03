@@ -3,6 +3,7 @@ import '../styles/chat_style.css'
 import { getCurrentUserEmail, getRoles, ROLES } from '../App';
 import Chat from './Chat';
 import { BinIcon } from './cards/LessonCard';
+import { refreshAccessToken } from '../services/auth'
 
 function ChatHolder({ openChat, chat, setChat }) {
     const [allChats, setAllChats] = useState([])
@@ -29,13 +30,13 @@ function ChatHolder({ openChat, chat, setChat }) {
             .then(data => {
                 setAllChats(data)
                 fetchLastMessages(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     async function fetchLastMessages(chats) {
         const messages = {}
         for (const chat of chats) {
-            const response = await fetch(process.env.REACT_APP_ROOT_PATH + 'messages/last/' + chat.id)
+            const response = await fetch(process.env.REACT_APP_ROOT_PATH + 'messages/last/' + chat.id).catch(() => refreshAccessToken())
             const data = await response.json()
             messages[chat.id] = data.text || "Chat is empty!"
         }
@@ -52,7 +53,7 @@ function ChatHolder({ openChat, chat, setChat }) {
         })
             .then(response => {
                 fetchAllChats()
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     return (

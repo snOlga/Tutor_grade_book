@@ -4,6 +4,7 @@ import { getCurrentUserEmail } from '../App';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import Message from './Message';
+import { refreshAccessToken } from '../services/auth'
 
 function Chat({ chat, setOpenChat, setCurrentChat }) {
     const [allMessages, setMessages] = useState([])
@@ -34,7 +35,7 @@ function Chat({ chat, setOpenChat, setCurrentChat }) {
             .then(response => response.json())
             .then(data => {
                 setMessages(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function connectWebSocket() {
@@ -70,7 +71,7 @@ function Chat({ chat, setOpenChat, setCurrentChat }) {
             .then(data => {
                 setMessageValue("")
                 setEditingFlag(false)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function sendEditedMessage() {
@@ -89,7 +90,7 @@ function Chat({ chat, setOpenChat, setCurrentChat }) {
             .then(data => {
                 setMessageValue("")
                 setEditingFlag(false)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     return (

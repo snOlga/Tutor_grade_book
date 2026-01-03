@@ -6,6 +6,7 @@ import Calendar from '../components/Calendar';
 import InfoLessonModal from '../components/modals/InfoLessonModal';
 import AccountData from '../components/AccountData';
 import ChatHolder from '../components/ChatHolder';
+import { refreshAccessToken } from '../services/auth'
 
 function Account() {
     const [isChatOpen, openChat] = useState(false)
@@ -45,7 +46,7 @@ function Account() {
             .then(response => response.json())
             .then(data => {
                 setUser(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function loadLessons() {
@@ -63,7 +64,7 @@ function Account() {
             .then(response => response.json())
             .then(data => {
                 setLessons(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     return (

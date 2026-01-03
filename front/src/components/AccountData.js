@@ -3,6 +3,7 @@ import '../styles/account_page.css'
 import { getCurrentUserEmail, getRoles, ROLES } from '../App';
 import { EditIcon } from './modals/InfoLessonModal';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { refreshAccessToken } from '../services/auth'
 
 function AccountData({ currentUser, openChatWithId }) {
     const isAdmin = getRoles().includes(ROLES.ADMIN)
@@ -40,7 +41,7 @@ function AccountData({ currentUser, openChatWithId }) {
             .then(data => {
                 navigate('/account/' + data.humanReadableID)
                 window.location.reload()
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function openChat() {
@@ -57,11 +58,11 @@ function AccountData({ currentUser, openChatWithId }) {
                     openChatWithId(data)
                 else
                     await openChatWithId(createChat())
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     async function createChat() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'chats', {
+        return await fetch(process.env.REACT_APP_ROOT_PATH + 'chats', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -77,11 +78,7 @@ function AccountData({ currentUser, openChatWithId }) {
                     }
                 ]
             })
-        })
-            .then(response => response.json())
-            .then(data => {
-                return data
-            })
+        }).then(response => response.json()).catch(() => refreshAccessToken())
     }
 
     function deleteUser() {
@@ -91,7 +88,7 @@ function AccountData({ currentUser, openChatWithId }) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             }
-        })
+        }).catch(() => refreshAccessToken())
     }
 
     return (

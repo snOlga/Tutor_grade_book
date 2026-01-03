@@ -247,7 +247,6 @@ class LessonControllerIT {
                                 .toList());
                 lessonDTO.setOwner(ownerDTO);
 
-                // Set users list
                 List<ParticipatorDTO> users = new ArrayList<>();
                 users.add(ownerDTO);
                 lessonDTO.setUsers(users);

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/participators") // TODO: remove it
+@RequestMapping("/participators")
 public class ParticipatorController {
 
     @Autowired

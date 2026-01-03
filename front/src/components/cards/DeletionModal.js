@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/calendar_style.css'
+import { refreshAccessToken } from '../../services/auth'
 
 function DeletionModal({ valueToDelete, closeModal, lessonDate }) {
 
@@ -15,7 +16,7 @@ function DeletionModal({ valueToDelete, closeModal, lessonDate }) {
         })
             .then(response => {
                 window.location.reload()
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     return (

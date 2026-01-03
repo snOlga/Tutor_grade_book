@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import auth from '../../services/auth'
 
 function LoginForm() {
     const [formData, setFormData] = useState({
@@ -26,10 +27,11 @@ function LoginForm() {
                 password: formData.password
             })
         })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
                 let expires = (new Date(Date.now() + 86400 * 1000)).toUTCString();
-                document.cookie = "token=" + data + "; expires=" + expires
+                document.cookie = "token=" + data.accessToken + "; expires=" + expires
+                auth.setRefreshToken(data.refreshToken)
                 window.location.reload();
             })
     }

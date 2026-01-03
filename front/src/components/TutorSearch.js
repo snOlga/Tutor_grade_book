@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/search_style.css'
+import { refreshAccessToken } from '../services/auth'
 
 function TutorSearch({ setLessons }) {
 
@@ -14,7 +15,7 @@ function TutorSearch({ setLessons }) {
             .then(response => response.json())
             .then(data => {
                 loadLessons(data)
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     function loadLessons(tutor) {
@@ -28,7 +29,7 @@ function TutorSearch({ setLessons }) {
             .then(response => response.json())
             .then(data => {
                 setLessons(data.filter(lesson => lesson.isOpen))
-            })
+            }).catch(() => refreshAccessToken())
     }
 
     return (
