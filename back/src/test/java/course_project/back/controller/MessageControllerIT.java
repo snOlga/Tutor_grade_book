@@ -57,15 +57,12 @@ class MessageControllerIT {
     private Utils utils;
 
     private Long testChatId;
+    private MessageDTO messageDTO;
 
     @BeforeEach
     void setup() {
         utils.cleanDb();
-    }
 
-    @Test
-    @WithMockUser
-    void shouldCreateMessage() throws Exception {
         UserEntity student = new UserEntity();
         student.setName("John");
         student.setSecondName("Doe");
@@ -84,6 +81,7 @@ class MessageControllerIT {
         ChatEntity chat = new ChatEntity();
         chat.setUsers(Collections.singleton(student));
         chat = chatRepository.save(chat);
+        testChatId = chat.getId();
 
         MessageDTO messageDTO = new MessageDTO();
         messageDTO.setText("Hello World");
@@ -92,7 +90,12 @@ class MessageControllerIT {
         messageDTO.setSentTime(new Timestamp(System.currentTimeMillis()));
         messageDTO.setIsEdited(false);
         messageDTO.setIsDeleted(false);
+        this.messageDTO = messageDTO;
+    }
 
+    @Test
+    @WithMockUser
+    void shouldCreateMessage() throws Exception {
         mockMvc.perform(post("/messages")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(messageDTO)))

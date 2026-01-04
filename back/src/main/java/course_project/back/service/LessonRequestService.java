@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 
 import course_project.back.DTO.LessonRequestDTO;
 import course_project.back.converters.LessonRequestConverter;
-import course_project.back.entity.LessonEntity;
 import course_project.back.entity.LessonRequestEntity;
-import course_project.back.repository.LessonRepository;
 import course_project.back.repository.LessonRequestRepository;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import course_project.back.DTO.LessonUserUpdateDTO;
 
 @Service
 public class LessonRequestService {
@@ -18,9 +19,13 @@ public class LessonRequestService {
     @Autowired
     private LessonRequestRepository lessonRequestRepository;
     @Autowired
-    private LessonRepository lessonRepository;
-    @Autowired
     private LessonRequestConverter lessonRequestConverter;
+
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
+
+    @Value("${lesson.user.update.topic}")
+    private String lessonUserUpdateTopic;
 
     public LessonRequestDTO create(LessonRequestDTO lessonRequestDTO) {
         LessonRequestEntity result = lessonRequestRepository.save(lessonRequestConverter.fromDTO(lessonRequestDTO));
@@ -54,9 +59,12 @@ public class LessonRequestService {
     }
 
     private void addUserToLesson(LessonRequestEntity lessonRequestEntity) {
-        LessonEntity lessonEntity = lessonRequestEntity.getLesson();
-        lessonEntity.getUsers().add(lessonRequestEntity.getReciever());
-        lessonEntity.getUsers().add(lessonRequestEntity.getSender());
-        lessonRepository.save(lessonEntity);
+        LessonUserUpdateDTO message = new LessonUserUpdateDTO();
+        message.setLessonId(lessonRequestEntity.getLesson().getId());
+        if (lessonRequestEntity.getSender() != null)
+            message.setSenderId(lessonRequestEntity.getSender().getId());
+        if (lessonRequestEntity.getReciever() != null)
+            message.setRecieverId(lessonRequestEntity.getReciever().getId());
+        kafkaTemplate.send(lessonUserUpdateTopic, message);
     }
 }

@@ -127,6 +127,12 @@
 			<version>3.4.1</version>
 		</dependency>
 
+		<!-- Spring Kafka for producing messages to LessonService -->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

@@ -12,6 +12,13 @@ import course_project.back.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.kafka.annotation.KafkaListener;
+
+import java.util.HashSet;
+import java.util.Optional;
+
+import course_project.back.DTO.LessonUserUpdateDTO;
+import course_project.back.repository.UserRepository;
 
 @Service
 public class LessonService {
@@ -20,6 +27,8 @@ public class LessonService {
     private LessonRepository lessonRepository;
     @Autowired
     private LessonConverter lessonConverter;
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional
     public LessonDTO create(LessonDTO lessonDTO) {
@@ -65,5 +74,24 @@ public class LessonService {
         LessonEntity result = lessonRepository.save(lessonEntity);
         result.setDefaultHumanRedableID();
         return lessonRepository.save(result);
+    }
+
+    @KafkaListener(topics = "${lesson.user.update.topic}", groupId = "lesson-service-group", containerFactory = "lessonUserUpdateKafkaListenerContainerFactory")
+    @Transactional
+    public void handleLessonUserUpdate(LessonUserUpdateDTO dto) {
+        if (dto == null || dto.getLessonId() == null) return;
+        Optional<LessonEntity> maybeLesson = lessonRepository.findById(dto.getLessonId());
+        if (!maybeLesson.isPresent()) return;
+        LessonEntity lesson = maybeLesson.get();
+        if (lesson.getUsers() == null) {
+            lesson.setUsers(new HashSet<>());
+        }
+        if (dto.getSenderId() != null) {
+            userRepository.findById(dto.getSenderId()).ifPresent(u -> lesson.getUsers().add(u));
+        }
+        if (dto.getRecieverId() != null) {
+            userRepository.findById(dto.getRecieverId()).ifPresent(u -> lesson.getUsers().add(u));
+        }
+        lessonRepository.save(lesson);
     }
 }
