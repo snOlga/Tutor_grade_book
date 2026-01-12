@@ -52,7 +52,7 @@ function RegistrationForm() {
                     isDeleted: false
                 })
             })
-                .then(response => response.text())
+                .then(response => response.json())
                 .then(data => {
                     let expires = (new Date(Date.now() + 86400 * 1000)).toUTCString();
                     document.cookie = "token=" + data.accessToken + "; expires=" + expires
