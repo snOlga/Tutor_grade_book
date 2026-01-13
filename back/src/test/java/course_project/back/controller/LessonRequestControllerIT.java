@@ -14,6 +14,7 @@ import course_project.back.converters.ParticipatorConverter;
 import course_project.back.entity.RoleEntity;
 import course_project.back.entity.SubjectEntity;
 import course_project.back.entity.UserEntity;
+import course_project.back.repository.LessonRepository;
 import course_project.back.repository.RolesRepository;
 import course_project.back.repository.SubjectRepository;
 import course_project.back.repository.UserRepository;
@@ -50,7 +51,7 @@ class LessonRequestControllerIT {
     @Autowired
     private RolesRepository rolesRepository;
     @Autowired
-    private course_project.back.repository.LessonRepository lessonRepository;
+    private LessonRepository lessonRepository;
     @Autowired
     private ParticipatorConverter participatorConverter;
     @Autowired

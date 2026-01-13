@@ -33,8 +33,13 @@ public class MessageService {
     }
 
     public MessageDTO update(Long id, MessageDTO messageDTO) {
-        messageDTO.setIsEdited(true);
-        return create(messageDTO);
+        MessageEntity messageEntity = messageRepository.findById(id).orElse(null);
+        if (messageEntity == null)
+            return null;
+        messageEntity.setIsEdited(true);
+        messageEntity.setText(messageDTO.getText());
+        messageRepository.save(messageEntity);
+        return messageConverter.fromEntity(messageEntity);
     }
 
     public MessageDTO deleteById(Long id) {

@@ -26,5 +26,5 @@ public class ChatEntity {
     private Set<UserEntity> users;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted = Boolean.FALSE;
+    private Boolean isDeleted = false;
 }

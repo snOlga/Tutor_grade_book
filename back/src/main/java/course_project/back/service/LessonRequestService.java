@@ -9,6 +9,7 @@ import course_project.back.DTO.LessonRequestDTO;
 import course_project.back.converters.LessonRequestConverter;
 import course_project.back.entity.LessonRequestEntity;
 import course_project.back.repository.LessonRequestRepository;
+import course_project.back.repository.LessonRepository;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import course_project.back.DTO.LessonUserUpdateDTO;
@@ -20,6 +21,8 @@ public class LessonRequestService {
     private LessonRequestRepository lessonRequestRepository;
     @Autowired
     private LessonRequestConverter lessonRequestConverter;
+    @Autowired
+    private LessonRepository lessonRepository;
 
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
@@ -28,6 +31,12 @@ public class LessonRequestService {
     private String lessonUserUpdateTopic;
 
     public LessonRequestDTO create(LessonRequestDTO lessonRequestDTO) {
+        if (lessonRequestDTO.getLesson() != null && lessonRequestDTO.getLesson().getId() != null) {
+            var maybeLesson = lessonRepository.findById(lessonRequestDTO.getLesson().getId());
+            if (maybeLesson.isPresent() && Boolean.TRUE.equals(maybeLesson.get().getIsDeleted())) {
+                return null;
+            }
+        }
         LessonRequestEntity result = lessonRequestRepository.save(lessonRequestConverter.fromDTO(lessonRequestDTO));
         return lessonRequestConverter.fromEntity(result);
     }
@@ -46,8 +55,11 @@ public class LessonRequestService {
         LessonRequestEntity lessonRequestEntity = lessonRequestRepository.findById(id).get();
         lessonRequestEntity.setIsApproved(lessonRequestDTO.getIsApproved());
         lessonRequestRepository.save(lessonRequestEntity);
-        if (lessonRequestDTO.getIsApproved())
+        if (lessonRequestDTO.getIsApproved()) {
             addUserToLesson(lessonRequestEntity);
+            lessonRequestEntity.setIsDeleted(true);
+            lessonRequestRepository.save(lessonRequestEntity);
+        }
         return lessonRequestConverter.fromEntity(lessonRequestEntity);
     }
 
