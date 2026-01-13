@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageDTO {
-    private Long id;
+    private String id;
     @NonNull
     private ChatDTO chat;
     @NonNull

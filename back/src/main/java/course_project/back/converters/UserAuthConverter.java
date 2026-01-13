@@ -23,7 +23,7 @@ public class UserAuthConverter implements ConverterInterface<UserDTO, UserEntity
     @Override
     public UserEntity fromDTO(UserDTO userDTO) {
         UserEntity userEntity = new UserEntity();
-        userEntity.setId(userDTO.getId());
+        userEntity.setId(Utils.fromDTO(userDTO.getId()));
         userEntity.setName(userDTO.getName());
         userEntity.setSecondName(userDTO.getSecondName());
         userEntity.setEmail(userDTO.getEmail());
@@ -42,7 +42,7 @@ public class UserAuthConverter implements ConverterInterface<UserDTO, UserEntity
             return null;
 
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(userEntity.getId());
+        userDTO.setId(userEntity.getId().toString());
         userDTO.setName(userEntity.getName());
         userDTO.setSecondName(userEntity.getSecondName());
         userDTO.setEmail(userEntity.getEmail());

@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LessonRequestDTO {
-    private Long id;
+    private String id;
     private Boolean isApproved;
     private Boolean isDeleted;
     @NonNull

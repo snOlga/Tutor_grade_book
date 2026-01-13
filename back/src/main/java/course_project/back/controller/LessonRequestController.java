@@ -1,6 +1,7 @@
 package course_project.back.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,16 +38,16 @@ public class LessonRequestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LessonRequestDTO> approveRequest(@PathVariable Long id,
+    public ResponseEntity<LessonRequestDTO> approveRequest(@PathVariable String id,
             @RequestBody LessonRequestDTO lessonRequestDTO) {
-        LessonRequestDTO updatedLessonRequestDTO = lessonRequestService.updateApprovement(id, lessonRequestDTO);
+        LessonRequestDTO updatedLessonRequestDTO = lessonRequestService.updateApprovement(UUID.fromString(id), lessonRequestDTO);
         return updatedLessonRequestDTO != null ? new ResponseEntity<>(updatedLessonRequestDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<LessonRequestDTO> deleteRequest(@PathVariable Long id) {
-        boolean deleted = lessonRequestService.deleteById(id);
+    public ResponseEntity<LessonRequestDTO> deleteRequest(@PathVariable String id) {
+        boolean deleted = lessonRequestService.deleteById(UUID.fromString(id));
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

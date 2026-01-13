@@ -24,7 +24,7 @@ public class LessonConverter implements ConverterInterface<LessonDTO, LessonEnti
     @Override
     public LessonEntity fromDTO(LessonDTO lessonDTO) {
         LessonEntity lessonEntity = new LessonEntity();
-        lessonEntity.setId(lessonDTO.getId());
+        lessonEntity.setId(Utils.fromDTO(lessonDTO.getId()));
         lessonEntity.setHeading(lessonDTO.getHeading());
         lessonEntity.setDurationInMinutes(lessonDTO.getDurationInMinutes());
         lessonEntity.setHomework(lessonDTO.getHomework());
@@ -50,7 +50,7 @@ public class LessonConverter implements ConverterInterface<LessonDTO, LessonEnti
             return null;
 
         LessonDTO lessonDTO = new LessonDTO();
-        lessonDTO.setId(lessonEntity.getId());
+        lessonDTO.setId(lessonEntity.getId().toString());
         lessonDTO.setHeading(lessonEntity.getHeading());
         lessonDTO.setDescription(lessonEntity.getDescription());
         lessonDTO.setHomework(lessonEntity.getHomework());
@@ -68,6 +68,6 @@ public class LessonConverter implements ConverterInterface<LessonDTO, LessonEnti
 
     @Override
     public LessonEntity getFromDB(LessonDTO lessonDTO) {
-        return lessonRepository.findById(lessonDTO.getId()).get();
+        return lessonRepository.findById(Utils.fromDTO(lessonDTO.getId())).get();
     }
 }

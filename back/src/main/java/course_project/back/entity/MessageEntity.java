@@ -1,6 +1,7 @@
 package course_project.back.entity;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 // import org.hibernate.annotations.Where;  
 
@@ -17,9 +18,9 @@ import lombok.*;
 @Table(name = "messages")
 public class MessageEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    private UUID id;
 
     @Nonnull
     @ManyToOne

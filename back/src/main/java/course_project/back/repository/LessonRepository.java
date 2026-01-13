@@ -9,9 +9,10 @@ import course_project.back.entity.LessonEntity;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface LessonRepository extends JpaRepository<LessonEntity, Long> {
+public interface LessonRepository extends JpaRepository<LessonEntity, UUID> {
 
         @Query("""
                         SELECT l FROM LessonEntity l

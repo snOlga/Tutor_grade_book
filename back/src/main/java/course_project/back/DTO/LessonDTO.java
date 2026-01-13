@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LessonDTO {
-    private Long id;
+    private String id;
     @NonNull
     private Timestamp startTime;
     @NonNull

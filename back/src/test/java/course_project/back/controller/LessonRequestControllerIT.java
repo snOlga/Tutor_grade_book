@@ -117,7 +117,7 @@ class LessonRequestControllerIT {
         lessonEntity.setOwner(userRepository.findById(tutor.getId()).get());
         lessonEntity.setUsers(new java.util.HashSet<>());
         lessonEntity = lessonRepository.save(lessonEntity);
-        lessonDTO.setId(lessonEntity.getId());
+        lessonDTO.setId(lessonEntity.getId().toString());
         lessonDTO.setOwner(participatorConverter.fromEntity(tutor));
         LessonRequestDTO requestDTO = new LessonRequestDTO();
         requestDTO.setSender(participatorConverter.fromEntity(tutor));

@@ -1,6 +1,7 @@
 package course_project.back.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import course_project.back.DTO.LessonDTO;
 import course_project.back.DTO.WeekDTO;
@@ -34,7 +35,7 @@ public class LessonController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'TUTOR')")
     @PutMapping("/{id}")
-    public ResponseEntity<LessonDTO> updateLesson(@PathVariable Long id, @RequestBody LessonDTO lessonDTO) {
+    public ResponseEntity<LessonDTO> updateLesson(@PathVariable String id, @RequestBody LessonDTO lessonDTO) {
         LessonDTO updatedLessonDTO = lessonService.update(lessonDTO);
         return updatedLessonDTO != null ? new ResponseEntity<>(updatedLessonDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -42,8 +43,8 @@ public class LessonController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'TUTOR')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLesson(@PathVariable Long id) {
-        boolean deleted = lessonService.deleteById(id);
+    public ResponseEntity<Void> deleteLesson(@PathVariable String id) {
+        boolean deleted = lessonService.deleteById(UUID.fromString(id));
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

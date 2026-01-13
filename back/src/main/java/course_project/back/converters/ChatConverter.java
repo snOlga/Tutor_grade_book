@@ -21,7 +21,7 @@ public class ChatConverter implements ConverterInterface<ChatDTO, ChatEntity> {
     @Override
     public ChatEntity fromDTO(ChatDTO chatDTO) {
         ChatEntity chatEntity = new ChatEntity();
-        chatEntity.setId(chatDTO.getId());
+        chatEntity.setId(Utils.fromDTO(chatDTO.getId()));
         chatEntity.setIsDeleted(chatDTO.getIsDeleted());
         chatEntity.setUsers(new HashSet<>(chatDTO.getUsers().stream().map(participatorConverter::fromDTO).toList()));
         return chatEntity;
@@ -33,7 +33,7 @@ public class ChatConverter implements ConverterInterface<ChatDTO, ChatEntity> {
             return null;
 
         ChatDTO chatDTO = new ChatDTO();
-        chatDTO.setId(chatEntity.getId());
+        chatDTO.setId(chatEntity.getId().toString());
         chatDTO.setIsDeleted(chatEntity.getIsDeleted());
         chatDTO.setUsers(new HashSet<>(chatEntity.getUsers().stream().map(participatorConverter::fromEntity).toList()));
 
@@ -42,6 +42,6 @@ public class ChatConverter implements ConverterInterface<ChatDTO, ChatEntity> {
 
     @Override
     public ChatEntity getFromDB(ChatDTO chatDTO) {
-        return chatRepository.findById(chatDTO.getId()).get();
+        return chatRepository.findById(Utils.fromDTO(chatDTO.getId())).get();
     }
 }

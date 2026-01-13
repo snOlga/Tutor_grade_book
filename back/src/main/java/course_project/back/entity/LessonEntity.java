@@ -4,6 +4,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
+import java.util.UUID;
 
 // import org.hibernate.annotations.Where;
 
@@ -18,9 +19,9 @@ import lombok.*;
 @Table(name = "lessons")
 public class LessonEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    private UUID id;
 
     @Nonnull
     @Column(name = "start_time")

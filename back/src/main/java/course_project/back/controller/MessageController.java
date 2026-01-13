@@ -1,6 +1,7 @@
 package course_project.back.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,15 +37,15 @@ public class MessageController {
     }
 
     @GetMapping("/chat/{chatId}")
-    public ResponseEntity<List<MessageDTO>> getallChatMessages(@PathVariable Long chatId) {
-        List<MessageDTO> result = messageService.findAllChatMessages(chatId);
+    public ResponseEntity<List<MessageDTO>> getallChatMessages(@PathVariable String chatId) {
+        List<MessageDTO> result = messageService.findAllChatMessages(UUID.fromString(chatId));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PutMapping("/{messageId}")
-    public ResponseEntity<MessageDTO> putMethodName(@PathVariable Long messageId,
+    public ResponseEntity<MessageDTO> putMethodName(@PathVariable String messageId,
             @RequestBody MessageDTO messageDTO) {
-        MessageDTO result = messageService.update(messageId, messageDTO);
+        MessageDTO result = messageService.update(UUID.fromString(messageId), messageDTO);
         messagingTemplate.convertAndSend("/topic/chat/" + result.getChat().getId(),
                 this.getallChatMessages(result.getChat().getId()));
         return result != null ? new ResponseEntity<>(result, HttpStatus.OK)
@@ -52,16 +53,16 @@ public class MessageController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MessageDTO> deleteLesson(@PathVariable Long id) {
-        MessageDTO result = messageService.deleteById(id);
+    public ResponseEntity<MessageDTO> deleteLesson(@PathVariable String messageId) {
+        MessageDTO result = messageService.deleteById(UUID.fromString(messageId));
         messagingTemplate.convertAndSend("/topic/chat/" + result.getChat().getId(),
                 this.getallChatMessages(result.getChat().getId()));
         return result != null ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/last/{chatId}")
-    public ResponseEntity<MessageDTO> getLastMessage(@PathVariable Long chatId) {
-        MessageDTO result = messageService.findLastMessage(chatId);
+    public ResponseEntity<MessageDTO> getLastMessage(@PathVariable String chatId) {
+        MessageDTO result = messageService.findLastMessage(UUID.fromString(chatId));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

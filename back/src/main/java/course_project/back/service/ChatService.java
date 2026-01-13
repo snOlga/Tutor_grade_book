@@ -2,6 +2,7 @@ package course_project.back.service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class ChatService {
         return result.stream().map(chatConverter::fromEntity).toList();
     }
 
-    public boolean deleteById(Long id) {
+    public boolean deleteById(UUID id) {
         ChatEntity chatEntity = chatRepository.findById(id).get();
         chatEntity.setIsDeleted(true);
         chatRepository.save(chatEntity);

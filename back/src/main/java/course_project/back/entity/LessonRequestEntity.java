@@ -1,5 +1,7 @@
 package course_project.back.entity;
 
+import java.util.UUID;
+
 // import org.hibernate.annotations.Where;
 
 import jakarta.persistence.*;
@@ -14,9 +16,9 @@ import lombok.*;
 @Table(name = "lessons_requests")
 public class LessonRequestEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    private UUID id;
 
     @Column(name = "is_approved")
     private Boolean isApproved;

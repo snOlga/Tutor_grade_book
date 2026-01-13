@@ -1,6 +1,7 @@
 package course_project.back.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class MessageService {
         return messageConverter.fromEntity(messageEntity);
     }
 
-    public List<MessageDTO> findAllChatMessages(Long chatId) {
+    public List<MessageDTO> findAllChatMessages(UUID chatId) {
         List<MessageEntity> messages = messageRepository.findAllByChatId(chatId);
         messages.sort((msg1, msg2) -> {
             return (msg1.getSentTime().compareTo(msg2.getSentTime()));
@@ -32,7 +33,7 @@ public class MessageService {
         return messages.stream().map(messageConverter::fromEntity).toList();
     }
 
-    public MessageDTO update(Long id, MessageDTO messageDTO) {
+    public MessageDTO update(UUID id, MessageDTO messageDTO) {
         MessageEntity messageEntity = messageRepository.findById(id).orElse(null);
         if (messageEntity == null)
             return null;
@@ -42,14 +43,14 @@ public class MessageService {
         return messageConverter.fromEntity(messageEntity);
     }
 
-    public MessageDTO deleteById(Long id) {
+    public MessageDTO deleteById(UUID id) {
         MessageEntity messageEntity = messageRepository.findById(id).get();
         messageEntity.setIsDeleted(true);
         messageRepository.save(messageEntity);
         return messageConverter.fromEntity(messageEntity);
     }
 
-    public MessageDTO findLastMessage(Long id) {
+    public MessageDTO findLastMessage(UUID id) {
         List<MessageDTO> listOfMessages = findAllChatMessages(id);
         return listOfMessages.size() > 0 ? listOfMessages.get((listOfMessages.size() - 1)) : new MessageDTO();
     }

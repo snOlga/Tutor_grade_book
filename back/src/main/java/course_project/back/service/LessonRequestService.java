@@ -1,12 +1,14 @@
 package course_project.back.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import course_project.back.DTO.LessonRequestDTO;
 import course_project.back.converters.LessonRequestConverter;
+import course_project.back.converters.Utils;
 import course_project.back.entity.LessonRequestEntity;
 import course_project.back.repository.LessonRequestRepository;
 import course_project.back.repository.LessonRepository;
@@ -32,7 +34,7 @@ public class LessonRequestService {
 
     public LessonRequestDTO create(LessonRequestDTO lessonRequestDTO) {
         if (lessonRequestDTO.getLesson() != null && lessonRequestDTO.getLesson().getId() != null) {
-            var maybeLesson = lessonRepository.findById(lessonRequestDTO.getLesson().getId());
+            var maybeLesson = lessonRepository.findById(Utils.fromDTO(lessonRequestDTO.getLesson().getId()));
             if (maybeLesson.isPresent() && Boolean.TRUE.equals(maybeLesson.get().getIsDeleted())) {
                 return null;
             }
@@ -51,7 +53,7 @@ public class LessonRequestService {
         return lessonRequestEntities.stream().map(lessonRequestConverter::fromEntity).toList();
     }
 
-    public LessonRequestDTO updateApprovement(Long id, LessonRequestDTO lessonRequestDTO) {
+    public LessonRequestDTO updateApprovement(UUID id, LessonRequestDTO lessonRequestDTO) {
         LessonRequestEntity lessonRequestEntity = lessonRequestRepository.findById(id).get();
         lessonRequestEntity.setIsApproved(lessonRequestDTO.getIsApproved());
         lessonRequestRepository.save(lessonRequestEntity);
@@ -63,7 +65,7 @@ public class LessonRequestService {
         return lessonRequestConverter.fromEntity(lessonRequestEntity);
     }
 
-    public Boolean deleteById(Long id) {
+    public Boolean deleteById(UUID id) {
         LessonRequestEntity lessonRequestEntity = lessonRequestRepository.findById(id).get();
         lessonRequestEntity.setIsDeleted(true);
         lessonRequestRepository.save(lessonRequestEntity);

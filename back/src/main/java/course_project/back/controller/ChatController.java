@@ -1,6 +1,7 @@
 package course_project.back.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,8 +55,8 @@ public class ChatController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteChat(@PathVariable Long id) {
-        boolean deleted = chatService.deleteById(id);
+    public ResponseEntity<Void> deleteChat(@PathVariable String id) {
+        boolean deleted = chatService.deleteById(UUID.fromString(id));
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

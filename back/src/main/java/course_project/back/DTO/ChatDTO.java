@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatDTO {
-    private Long id;
+    private String id;
     @NonNull
     private Set<ParticipatorDTO> users;
     private Boolean isDeleted = false;

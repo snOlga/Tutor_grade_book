@@ -6,6 +6,7 @@ import java.util.List;
 import course_project.back.DTO.LessonDTO;
 import course_project.back.DTO.WeekDTO;
 import course_project.back.converters.LessonConverter;
+import course_project.back.converters.Utils;
 import course_project.back.entity.LessonEntity;
 import course_project.back.repository.LessonRepository;
 
@@ -16,6 +17,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.UUID;
 
 import course_project.back.DTO.LessonUserUpdateDTO;
 import course_project.back.repository.UserRepository;
@@ -38,12 +40,12 @@ public class LessonService {
     }
 
     public LessonDTO update(LessonDTO lessonDTO) {
-        if(!lessonRepository.findById(lessonDTO.getId()).isPresent())
+        if(!lessonRepository.findById(Utils.fromDTO(lessonDTO.getId())).isPresent())
             return null;
         return create(lessonDTO);
     }
 
-    public boolean deleteById(Long id) {
+    public boolean deleteById(UUID id) {
         if(!lessonRepository.findById(id).isPresent())
             return false;
         LessonEntity lessonEntity = lessonRepository.findById(id).get();

@@ -1,6 +1,7 @@
 package course_project.back.entity;
 
 import java.util.Set;
+import java.util.UUID;
 
 // import org.hibernate.annotations.Where;
 
@@ -17,9 +18,9 @@ import lombok.*;
 // @Where(clause = "is_deleted = false")
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    private UUID id;
 
     @Nonnull
     @Column(name = "name")

@@ -195,7 +195,7 @@ class LessonControllerIT {
         @Test
         @WithMockUser(authorities = "ADMIN")
         void shouldReturn404WhenDeletingNonExistentLesson() throws Exception {
-                mockMvc.perform(delete("/lessons/{id}", 999L))
+                mockMvc.perform(delete("/lessons/{id}", "68753A44-4D6F-1226-9C60-0050E4C00067"))
                                 .andExpect(status().isNotFound());
         }
 

@@ -1,5 +1,7 @@
 package course_project.back.converters;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,7 @@ public class MessageConverter implements ConverterInterface<MessageDTO, MessageE
     @Override
     public MessageEntity fromDTO(MessageDTO messageDTO) {
         MessageEntity messageEntity = new MessageEntity();
-        messageEntity.setId(messageDTO.getId());
+        messageEntity.setId(Utils.fromDTO(messageDTO.getId()));
         messageEntity.setIsEdited(messageDTO.getIsEdited());
         messageEntity.setIsDeleted(messageDTO.getIsDeleted());
         messageEntity.setSentTime(messageDTO.getSentTime());
@@ -37,7 +39,7 @@ public class MessageConverter implements ConverterInterface<MessageDTO, MessageE
             return null;
 
         MessageDTO messageDTO = new MessageDTO();
-        messageDTO.setId(messageEntity.getId());
+        messageDTO.setId(messageEntity.getId().toString());
         messageDTO.setIsEdited(messageEntity.getIsEdited());
         messageDTO.setIsDeleted(messageEntity.getIsDeleted());
         messageDTO.setSentTime(messageEntity.getSentTime());
@@ -49,6 +51,6 @@ public class MessageConverter implements ConverterInterface<MessageDTO, MessageE
 
     @Override
     public MessageEntity getFromDB(MessageDTO messageDTO) {
-        return messageRepository.findById(messageDTO.getId()).get();
+        return messageRepository.findById(UUID.fromString(messageDTO.getId())).get();
     }
 }

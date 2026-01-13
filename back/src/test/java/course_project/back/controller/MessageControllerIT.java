@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import course_project.back.controller.utils.Utils;
 import course_project.back.converters.ChatConverter;
@@ -56,7 +57,7 @@ class MessageControllerIT {
     @Autowired
     private Utils utils;
 
-    private Long testChatId;
+    private UUID testChatId;
     private MessageDTO messageDTO;
 
     @BeforeEach

@@ -21,7 +21,7 @@ public class LessonRequestConverter implements ConverterInterface<LessonRequestD
     @Override
     public LessonRequestEntity fromDTO(LessonRequestDTO lessonRequestDTO) {
         LessonRequestEntity lessonRequestEntity = new LessonRequestEntity();
-        lessonRequestEntity.setId(lessonRequestDTO.getId());
+        lessonRequestEntity.setId(Utils.fromDTO(lessonRequestDTO.getId()));
         lessonRequestEntity.setSender(participatorConverter.getFromDB(lessonRequestDTO.getSender()));
         lessonRequestEntity.setReciever(participatorConverter.getFromDB(lessonRequestDTO.getReciever()));
         lessonRequestEntity.setLesson(lessonConverter.getFromDB(lessonRequestDTO.getLesson()));
@@ -36,7 +36,7 @@ public class LessonRequestConverter implements ConverterInterface<LessonRequestD
             return null;
 
         LessonRequestDTO lessonRequestDTO = new LessonRequestDTO();
-        lessonRequestDTO.setId(lessonRequestEntity.getId());
+        lessonRequestDTO.setId(lessonRequestEntity.getId().toString());
         lessonRequestDTO.setSender(participatorConverter.fromEntity(lessonRequestEntity.getSender()));
         lessonRequestDTO.setReciever(participatorConverter.fromEntity(lessonRequestEntity.getReciever()));
         lessonRequestDTO.setLesson(lessonConverter.fromEntity(lessonRequestEntity.getLesson()));
@@ -47,6 +47,6 @@ public class LessonRequestConverter implements ConverterInterface<LessonRequestD
 
     @Override
     public LessonRequestEntity getFromDB(LessonRequestDTO lessonRequestDTO) {
-        return lessonRequestRepository.findById(lessonRequestDTO.getId()).get();
+        return lessonRequestRepository.findById(Utils.fromDTO(lessonRequestDTO.getId())).get();
     }
 }
