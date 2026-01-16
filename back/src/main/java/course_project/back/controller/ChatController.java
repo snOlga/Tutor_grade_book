@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import course_project.back.DTO.ChatDTO;
 import course_project.back.service.ChatService;
+import course_project.back.service.SanitizerService;
 
 @RestController
 @RequestMapping("/chats")
@@ -24,10 +25,12 @@ public class ChatController {
 
     @Autowired
     private ChatService chatService;
+    @Autowired
+    private SanitizerService sanitizerService;
 
     @PostMapping
     public ResponseEntity<ChatDTO> createChat(@RequestBody ChatDTO chatDTO) {
-        ChatDTO result = chatService.create(chatDTO);
+        ChatDTO result = chatService.create(sanitizerService.sanitize(chatDTO));
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
@@ -56,7 +59,7 @@ public class ChatController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteChat(@PathVariable String id) {
-        boolean deleted = chatService.deleteById(UUID.fromString(id));
+        boolean deleted = chatService.deleteById(UUID.fromString(sanitizerService.sanitize(id)));
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

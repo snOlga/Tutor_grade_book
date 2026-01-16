@@ -6,6 +6,7 @@ import java.util.UUID;
 import course_project.back.DTO.LessonDTO;
 import course_project.back.DTO.WeekDTO;
 import course_project.back.service.LessonService;
+import course_project.back.service.SanitizerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,18 +26,20 @@ public class LessonController {
 
     @Autowired
     private LessonService lessonService;
+    @Autowired
+    private SanitizerService sanitizerService;
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'TUTOR')")
     @PostMapping
     public ResponseEntity<LessonDTO> createLesson(@RequestBody LessonDTO lessonDTO) {
-        LessonDTO createdLessonDTO = lessonService.create(lessonDTO);
+        LessonDTO createdLessonDTO = lessonService.create(sanitizerService.sanitize(lessonDTO));
         return new ResponseEntity<>(createdLessonDTO, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'TUTOR')")
     @PutMapping("/{id}")
     public ResponseEntity<LessonDTO> updateLesson(@PathVariable String id, @RequestBody LessonDTO lessonDTO) {
-        LessonDTO updatedLessonDTO = lessonService.update(lessonDTO);
+        LessonDTO updatedLessonDTO = lessonService.update(sanitizerService.sanitize(lessonDTO));
         return updatedLessonDTO != null ? new ResponseEntity<>(updatedLessonDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -44,7 +47,7 @@ public class LessonController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'TUTOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLesson(@PathVariable String id) {
-        boolean deleted = lessonService.deleteById(UUID.fromString(id));
+        boolean deleted = lessonService.deleteById(UUID.fromString(sanitizerService.sanitize(id)));
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

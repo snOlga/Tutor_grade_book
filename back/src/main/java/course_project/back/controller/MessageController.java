@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import course_project.back.DTO.MessageDTO;
 import course_project.back.service.MessageService;
+import course_project.back.service.SanitizerService;
 
 @RestController
 @RequestMapping("/messages")
@@ -27,10 +28,12 @@ public class MessageController {
     private MessageService messageService;
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private SanitizerService sanitizerService;
 
     @PostMapping
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDTO) {
-        MessageDTO result = messageService.create(messageDTO);
+        MessageDTO result = messageService.create(sanitizerService.sanitize(messageDTO));
         messagingTemplate.convertAndSend("/topic/chat/" + result.getChat().getId(),
                 this.getallChatMessages(result.getChat().getId()));
         return new ResponseEntity<>(result, HttpStatus.CREATED);
@@ -38,14 +41,14 @@ public class MessageController {
 
     @GetMapping("/chat/{chatId}")
     public ResponseEntity<List<MessageDTO>> getallChatMessages(@PathVariable String chatId) {
-        List<MessageDTO> result = messageService.findAllChatMessages(UUID.fromString(chatId));
+        List<MessageDTO> result = messageService.findAllChatMessages(UUID.fromString(sanitizerService.sanitize(chatId)));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PutMapping("/{messageId}")
     public ResponseEntity<MessageDTO> putMethodName(@PathVariable String messageId,
             @RequestBody MessageDTO messageDTO) {
-        MessageDTO result = messageService.update(UUID.fromString(messageId), messageDTO);
+        MessageDTO result = messageService.update(UUID.fromString(sanitizerService.sanitize(messageId)), sanitizerService.sanitize(messageDTO));
         messagingTemplate.convertAndSend("/topic/chat/" + result.getChat().getId(),
                 this.getallChatMessages(result.getChat().getId()));
         return result != null ? new ResponseEntity<>(result, HttpStatus.OK)
@@ -54,7 +57,7 @@ public class MessageController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageDTO> deleteLesson(@PathVariable String messageId) {
-        MessageDTO result = messageService.deleteById(UUID.fromString(messageId));
+        MessageDTO result = messageService.deleteById(UUID.fromString(sanitizerService.sanitize(messageId)));
         messagingTemplate.convertAndSend("/topic/chat/" + result.getChat().getId(),
                 this.getallChatMessages(result.getChat().getId()));
         return result != null ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -62,7 +65,7 @@ public class MessageController {
 
     @GetMapping("/last/{chatId}")
     public ResponseEntity<MessageDTO> getLastMessage(@PathVariable String chatId) {
-        MessageDTO result = messageService.findLastMessage(UUID.fromString(chatId));
+        MessageDTO result = messageService.findLastMessage(UUID.fromString(sanitizerService.sanitize(chatId)));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
