@@ -1,5 +1,7 @@
 package course_project.back.converters;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,18 @@ public class ParticipatorConverter implements ConverterInterface<ParticipatorDTO
 
     @Autowired
     private UserRepository userRepository;
+    private final ModelMapper mapper = new ModelMapper();
+
+    public ParticipatorConverter() {
+        configureMappings();
+    }
+
+    private void configureMappings() {
+        TypeMap<UserEntity, ParticipatorDTO> toDtoTypeMap = mapper.createTypeMap(UserEntity.class, ParticipatorDTO.class);
+        toDtoTypeMap.addMappings(m -> {
+            m.skip(ParticipatorDTO::setRoles);
+        });
+    }
 
     @Override
     public UserEntity fromDTO(ParticipatorDTO participatorDTO) {
@@ -25,15 +39,9 @@ public class ParticipatorConverter implements ConverterInterface<ParticipatorDTO
         if (userEntity == null)
             return null;
 
-        ParticipatorDTO participatorDTO = new ParticipatorDTO();
-        participatorDTO.setName(userEntity.getName());
-        participatorDTO.setSecondName(userEntity.getSecondName());
-        participatorDTO.setDescription(userEntity.getDescription());
-        participatorDTO.setEmail(userEntity.getEmail());
-        participatorDTO.setHumanReadableID(userEntity.getHumanReadableID());
-        participatorDTO.setPhone(userEntity.getPhone());
-        participatorDTO.setRoles(userEntity.getRoles().stream().map(RoleEntity::getName).toList());
-        return participatorDTO;
+        ParticipatorDTO dto = mapper.map(userEntity, ParticipatorDTO.class);
+        dto.setRoles(userEntity.getRoles().stream().map(RoleEntity::getName).toList());
+        return dto;
     }
 
     @Override

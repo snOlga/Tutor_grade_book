@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.5</version>
+		<version>3.4.11</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>course_project</groupId>
@@ -53,12 +53,6 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- <dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>7.1.0.Final</version>
-		</dependency> -->
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -127,7 +121,6 @@
 			<version>3.4.1</version>
 		</dependency>
 
-		<!-- Spring Kafka for producing messages to LessonService -->
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
@@ -139,14 +132,54 @@
 			<version>20240325.1</version>
 		</dependency>
 
-
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>3.2.0</version>
+		</dependency>
 	</dependencies>
+
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>12.1.1</version>
+				<configuration>
+					<failBuildOnCVSS>7</failBuildOnCVSS>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.8.5.0</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.github.spotbugs</groupId>
+						<artifactId>spotbugs</artifactId>
+						<version>4.8.5</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.18.0</version>
+				<configuration>
+					<rulesUri>file:///${project.basedir}/maven-version-rules.xml</rulesUri>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

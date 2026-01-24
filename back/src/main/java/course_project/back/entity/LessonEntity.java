@@ -1,6 +1,5 @@
 package course_project.back.entity;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
@@ -23,15 +22,12 @@ public class LessonEntity {
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID id;
 
-    @Nonnull
     @Column(name = "start_time")
     private Timestamp startTime;
 
-    @Nonnull
     @Column(name = "duration_in_minutes")
     private Integer durationInMinutes;
 
-    @Nonnull
     @ManyToOne
     @JoinColumn(name = "subject_id")
     private SubjectEntity subject;
@@ -39,11 +35,9 @@ public class LessonEntity {
     @Column(name = "homework")
     private String homework;
 
-    @Nonnull
     @Column(name = "is_open")
     private Boolean isOpen;
 
-    @Nonnull
     @Column(name = "is_deleted")
     private Boolean isDeleted = Boolean.FALSE;
 
@@ -53,11 +47,9 @@ public class LessonEntity {
     @Column(name = "human_readable_id")
     private String humanReadableId;
 
-    @Nonnull
     @Column(name = "heading")
     private String heading;
 
-    @Nonnull
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private UserEntity owner;

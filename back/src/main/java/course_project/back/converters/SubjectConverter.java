@@ -1,5 +1,6 @@
 package course_project.back.converters;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,26 +14,25 @@ public class SubjectConverter implements ConverterInterface<SubjectDTO, SubjectE
 
     @Autowired
     private SubjectRepository subjectRepository;
+    private final ModelMapper mapper = new ModelMapper();
+
+    public SubjectConverter() {
+        configureMappings();
+    }
+
+    private void configureMappings() {
+        mapper.createTypeMap(SubjectEntity.class, SubjectDTO.class);
+        mapper.createTypeMap(SubjectDTO.class, SubjectEntity.class);
+    }
 
     @Override
     public SubjectEntity fromDTO(SubjectDTO subjectDTO) {
-        SubjectEntity subjectEntity = new SubjectEntity();
-        subjectEntity.setId(subjectDTO.getId());
-        subjectEntity.setName(subjectDTO.getName());
-        subjectEntity.setAnalogyNames(subjectDTO.getAnalogyNames());
-        return subjectEntity;
+        return mapper.map(subjectDTO, SubjectEntity.class);
     }
 
     @Override
     public SubjectDTO fromEntity(SubjectEntity subjectEntity) {
-        if (subjectEntity == null)
-            return null;
-
-        SubjectDTO subjectDTO = new SubjectDTO();
-        subjectDTO.setId(subjectEntity.getId());
-        subjectDTO.setName(subjectEntity.getName());
-        subjectDTO.setAnalogyNames(subjectEntity.getAnalogyNames());
-        return subjectDTO;
+        return mapper.map(subjectEntity, SubjectDTO.class);
     }
 
     @Override

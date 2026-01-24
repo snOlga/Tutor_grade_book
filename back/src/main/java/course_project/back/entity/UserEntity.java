@@ -3,9 +3,6 @@ package course_project.back.entity;
 import java.util.Set;
 import java.util.UUID;
 
-// import org.hibernate.annotations.Where;
-
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,21 +12,18 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "users_tutor_grade_book")
-// @Where(clause = "is_deleted = false")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID id;
 
-    @Nonnull
     @Column(name = "name")
     private String name;
 
     @Column(name = "second_name")
     private String secondName;
 
-    @Nonnull
     @Column(name = "email", unique = true)
     private String email;
 
@@ -39,11 +33,9 @@ public class UserEntity {
     @Column(name = "description")
     private String description;
 
-    @Nonnull
     @Column(name = "human_readable_id", unique = true)
     private String humanReadableID;
 
-    @Nonnull
     @Column(name = "password")
     private String password;
 

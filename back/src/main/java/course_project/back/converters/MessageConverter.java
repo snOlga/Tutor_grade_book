@@ -2,6 +2,8 @@ package course_project.back.converters;
 
 import java.util.UUID;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +21,32 @@ public class MessageConverter implements ConverterInterface<MessageDTO, MessageE
     private ChatConverter chatConverter;
     @Autowired
     private ParticipatorConverter participatorConverter;
+    private final ModelMapper mapper = new ModelMapper();
+
+    public MessageConverter() {
+        configureMappings();
+    }
+
+    private void configureMappings() {
+        TypeMap<MessageEntity, MessageDTO> toDtoTypeMap = mapper.createTypeMap(MessageEntity.class, MessageDTO.class);
+        toDtoTypeMap.addMappings(m -> {
+            m.skip(MessageDTO::setId);
+        });
+
+        TypeMap<MessageDTO, MessageEntity> toEntityTypeMap = mapper.createTypeMap(MessageDTO.class,
+                MessageEntity.class);
+        toEntityTypeMap.addMappings(m -> {
+            m.skip(MessageEntity::setId);
+        });
+    }
 
     @Override
     public MessageEntity fromDTO(MessageDTO messageDTO) {
-        MessageEntity messageEntity = new MessageEntity();
-        messageEntity.setId(Utils.fromDTO(messageDTO.getId()));
-        messageEntity.setIsEdited(messageDTO.getIsEdited());
-        messageEntity.setIsDeleted(messageDTO.getIsDeleted());
-        messageEntity.setSentTime(messageDTO.getSentTime());
-        messageEntity.setText(messageDTO.getText());
-        messageEntity.setAuthor(participatorConverter.getFromDB(messageDTO.getAuthor()));
-        messageEntity.setChat(chatConverter.getFromDB(messageDTO.getChat()));
-        return messageEntity;
+        MessageEntity entity = mapper.map(messageDTO, MessageEntity.class);
+        entity.setId(Utils.fromDTO(messageDTO.getId()));
+        entity.setAuthor(participatorConverter.getFromDB(messageDTO.getAuthor()));
+        entity.setChat(chatConverter.getFromDB(messageDTO.getChat()));
+        return entity;
     }
 
     @Override
@@ -38,15 +54,11 @@ public class MessageConverter implements ConverterInterface<MessageDTO, MessageE
         if (messageEntity == null)
             return null;
 
-        MessageDTO messageDTO = new MessageDTO();
-        messageDTO.setId(messageEntity.getId().toString());
-        messageDTO.setIsEdited(messageEntity.getIsEdited());
-        messageDTO.setIsDeleted(messageEntity.getIsDeleted());
-        messageDTO.setSentTime(messageEntity.getSentTime());
-        messageDTO.setText(messageEntity.getText());
-        messageDTO.setAuthor(participatorConverter.fromEntity(messageEntity.getAuthor()));
-        messageDTO.setChat(chatConverter.fromEntity(messageEntity.getChat()));
-        return messageDTO;
+        MessageDTO entity = mapper.map(messageEntity, MessageDTO.class);
+        entity.setId(messageEntity.getId().toString());
+        entity.setAuthor(participatorConverter.fromEntity(messageEntity.getAuthor()));
+        entity.setChat(chatConverter.fromEntity(messageEntity.getChat()));
+        return entity;
     }
 
     @Override

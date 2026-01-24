@@ -10,14 +10,10 @@ import lombok.*;
 @AllArgsConstructor
 public class MessageDTO {
     private String id;
-    @NonNull
     private ChatDTO chat;
-    @NonNull
     private ParticipatorDTO author;
-    @NonNull
     private Timestamp sentTime;
     private Boolean isEdited;
-    @NonNull
     private String text;
     private Boolean isDeleted;
 }

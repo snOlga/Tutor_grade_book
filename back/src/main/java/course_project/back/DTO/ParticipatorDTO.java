@@ -21,7 +21,6 @@ public class ParticipatorDTO {
     private String email;
     private String phone;
     private String description;
-    @NonNull
     private String humanReadableID;
     @NonNull
     private List<String> roles;

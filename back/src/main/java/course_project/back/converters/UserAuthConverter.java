@@ -2,6 +2,8 @@ package course_project.back.converters;
 
 import java.util.HashSet;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,44 +21,47 @@ public class UserAuthConverter implements ConverterInterface<UserDTO, UserEntity
     private UserRepository userRepository;
     @Autowired
     private RolesRepository rolesRepository;
+    private final ModelMapper mapper = new ModelMapper();
+
+    public UserAuthConverter() {
+        configureMappings();
+    }
+
+    private void configureMappings() {
+        TypeMap<UserEntity, UserDTO> toDtoTypeMap = mapper.createTypeMap(UserEntity.class, UserDTO.class);
+        toDtoTypeMap.addMappings(m -> {
+            m.skip(UserDTO::setRoles);
+            m.skip(UserDTO::setPassword);
+        });
+
+        TypeMap<UserDTO, UserEntity> toEntityTypeMap = mapper.createTypeMap(UserDTO.class, UserEntity.class);
+        toEntityTypeMap.addMappings(m -> {
+            m.skip(UserEntity::setId);
+            m.skip(UserEntity::setHumanReadableID);
+            m.skip(UserEntity::setRoles);
+        });
+    }
 
     @Override
     public UserEntity fromDTO(UserDTO userDTO) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(Utils.fromDTO(userDTO.getId()));
-        userEntity.setName(userDTO.getName());
-        userEntity.setSecondName(userDTO.getSecondName());
-        userEntity.setEmail(userDTO.getEmail());
-        userEntity.setDescription(userDTO.getDescription());
-        userEntity.setHumanReadableID(userDTO.getHumanReadableID() == null ? "" : userDTO.getHumanReadableID());
-        userEntity.setPhone(userDTO.getPhone());
-        userEntity.setPassword(userDTO.getPassword());
-        userEntity.setRoles(new HashSet<>(userDTO.getRoles().stream().map(rolesRepository::findByName).toList()));
-        userEntity.setIsDeleted(userDTO.getIsDeleted());
-        return userEntity;
+        UserEntity entity = mapper.map(userDTO, UserEntity.class);
+        entity.setId(Utils.fromDTO(userDTO.getId()));
+        entity.setHumanReadableID(userDTO.getHumanReadableID() == null ? "" : userDTO.getHumanReadableID());
+        entity.setRoles(new HashSet<>(userDTO.getRoles().stream().map(rolesRepository::findByName).toList()));
+        return entity;
     }
 
     @Override
     public UserDTO fromEntity(UserEntity userEntity) {
         if (userEntity == null)
             return null;
+        UserDTO dto = mapper.map(userEntity, UserDTO.class);
+        dto.setRoles(new HashSet<>(userEntity.getRoles().stream().map(RoleEntity::getName).toList()));
 
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(userEntity.getId().toString());
-        userDTO.setName(userEntity.getName());
-        userDTO.setSecondName(userEntity.getSecondName());
-        userDTO.setEmail(userEntity.getEmail());
-        userDTO.setDescription(userEntity.getDescription());
-        userDTO.setHumanReadableID(userEntity.getHumanReadableID());
-        userDTO.setPhone(userEntity.getPhone());
-        userDTO.setIsDeleted(userEntity.getIsDeleted());
-        // userDTO.setPassword(userEntity.getPassword());
-        userDTO.setRoles(new HashSet<>(userEntity.getRoles().stream().map(RoleEntity::getName).toList()));
-
-        if (userDTO.getRoles().isEmpty())
+        if (dto.getRoles().isEmpty())
             return null;
 
-        return userDTO;
+        return dto;
     }
 
     @Override

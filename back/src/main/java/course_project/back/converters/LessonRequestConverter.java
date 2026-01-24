@@ -1,5 +1,7 @@
 package course_project.back.converters;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +19,34 @@ public class LessonRequestConverter implements ConverterInterface<LessonRequestD
     private ParticipatorConverter participatorConverter;
     @Autowired
     private LessonRequestRepository lessonRequestRepository;
+    private final ModelMapper mapper = new ModelMapper();
+
+    public LessonRequestConverter() {
+        configureMappings();
+    }
+
+    private void configureMappings() {
+        TypeMap<LessonRequestEntity, LessonRequestDTO> toDtoTypeMap = mapper.createTypeMap(LessonRequestEntity.class,
+                LessonRequestDTO.class);
+        toDtoTypeMap.addMappings(m -> {
+            m.skip(LessonRequestDTO::setId);
+        });
+
+        TypeMap<LessonRequestDTO, LessonRequestEntity> toEntityTypeMap = mapper.createTypeMap(LessonRequestDTO.class,
+                LessonRequestEntity.class);
+        toEntityTypeMap.addMappings(m -> {
+            m.skip(LessonRequestEntity::setId);
+        });
+    }
 
     @Override
     public LessonRequestEntity fromDTO(LessonRequestDTO lessonRequestDTO) {
-        LessonRequestEntity lessonRequestEntity = new LessonRequestEntity();
-        lessonRequestEntity.setId(Utils.fromDTO(lessonRequestDTO.getId()));
-        lessonRequestEntity.setSender(participatorConverter.getFromDB(lessonRequestDTO.getSender()));
-        lessonRequestEntity.setReciever(participatorConverter.getFromDB(lessonRequestDTO.getReciever()));
-        lessonRequestEntity.setLesson(lessonConverter.getFromDB(lessonRequestDTO.getLesson()));
-        lessonRequestEntity.setIsApproved(lessonRequestDTO.getIsApproved());
-        lessonRequestEntity.setIsDeleted(lessonRequestDTO.getIsDeleted());
-        return lessonRequestEntity;
+        LessonRequestEntity entity = mapper.map(lessonRequestDTO, LessonRequestEntity.class);
+        entity.setId(Utils.fromDTO(lessonRequestDTO.getId()));
+        entity.setSender(participatorConverter.getFromDB(lessonRequestDTO.getSender()));
+        entity.setReciever(participatorConverter.getFromDB(lessonRequestDTO.getReciever()));
+        entity.setLesson(lessonConverter.getFromDB(lessonRequestDTO.getLesson()));
+        return entity;
     }
 
     @Override
@@ -35,13 +54,11 @@ public class LessonRequestConverter implements ConverterInterface<LessonRequestD
         if (lessonRequestEntity == null)
             return null;
 
-        LessonRequestDTO lessonRequestDTO = new LessonRequestDTO();
+        LessonRequestDTO lessonRequestDTO = mapper.map(lessonRequestEntity, LessonRequestDTO.class);
         lessonRequestDTO.setId(lessonRequestEntity.getId().toString());
         lessonRequestDTO.setSender(participatorConverter.fromEntity(lessonRequestEntity.getSender()));
         lessonRequestDTO.setReciever(participatorConverter.fromEntity(lessonRequestEntity.getReciever()));
         lessonRequestDTO.setLesson(lessonConverter.fromEntity(lessonRequestEntity.getLesson()));
-        lessonRequestDTO.setIsApproved(lessonRequestEntity.getIsApproved());
-        lessonRequestDTO.setIsDeleted(lessonRequestEntity.getIsDeleted());
         return lessonRequestDTO;
     }
 

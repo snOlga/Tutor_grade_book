@@ -2,6 +2,8 @@ package course_project.back.converters;
 
 import java.util.HashSet;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +22,32 @@ public class LessonConverter implements ConverterInterface<LessonDTO, LessonEnti
     private LessonRepository lessonRepository;
     @Autowired
     private SubjectConverter subjectConverter;
+    private final ModelMapper mapper = new ModelMapper();
+
+    public LessonConverter() {
+        configureMappings();
+    }
+
+    private void configureMappings() {
+        TypeMap<LessonEntity, LessonDTO> toDtoTypeMap = mapper.createTypeMap(LessonEntity.class,
+                LessonDTO.class);
+        toDtoTypeMap.addMappings(m -> {
+            m.skip(LessonDTO::setId);
+            m.skip(LessonDTO::setUsers);
+        });
+
+        TypeMap<LessonDTO, LessonEntity> toEntityTypeMap = mapper.createTypeMap(LessonDTO.class,
+                LessonEntity.class);
+        toEntityTypeMap.addMappings(m -> {
+            m.skip(LessonEntity::setId);
+            m.skip(LessonEntity::setUsers);
+        });
+    }
 
     @Override
     public LessonEntity fromDTO(LessonDTO lessonDTO) {
-        LessonEntity lessonEntity = new LessonEntity();
+        LessonEntity lessonEntity = mapper.map(lessonDTO, LessonEntity.class);
         lessonEntity.setId(Utils.fromDTO(lessonDTO.getId()));
-        lessonEntity.setHeading(lessonDTO.getHeading());
-        lessonEntity.setDurationInMinutes(lessonDTO.getDurationInMinutes());
-        lessonEntity.setHomework(lessonDTO.getHomework());
-        lessonEntity.setDescription(lessonDTO.getDescription());
-        lessonEntity.setStartTime(lessonDTO.getStartTime());
-        lessonEntity.setIsOpen(lessonDTO.getIsOpen());
-        lessonEntity.setIsDeleted(lessonDTO.getIsDeleted());
 
         UserEntity owner = participatorConverter.getFromDB(lessonDTO.getOwner());
         HashSet<UserEntity> participators = new HashSet<>();
@@ -49,16 +65,8 @@ public class LessonConverter implements ConverterInterface<LessonDTO, LessonEnti
         if (lessonEntity == null)
             return null;
 
-        LessonDTO lessonDTO = new LessonDTO();
+        LessonDTO lessonDTO = mapper.map(lessonEntity, LessonDTO.class);
         lessonDTO.setId(lessonEntity.getId().toString());
-        lessonDTO.setHeading(lessonEntity.getHeading());
-        lessonDTO.setDescription(lessonEntity.getDescription());
-        lessonDTO.setHomework(lessonEntity.getHomework());
-        lessonDTO.setDurationInMinutes(lessonEntity.getDurationInMinutes());
-        lessonDTO.setStartTime(lessonEntity.getStartTime());
-        lessonDTO.setIsOpen(lessonEntity.getIsOpen());
-        lessonDTO.setIsDeleted(lessonEntity.getIsDeleted());
-        lessonDTO.setHumanReadableId(lessonEntity.getHumanReadableId());
         lessonDTO.setOwner(participatorConverter.fromEntity(lessonEntity.getOwner()));
         lessonDTO.setUsers(lessonEntity.getUsers().stream().map(participatorConverter::fromEntity).toList());
         lessonDTO.setSubject(subjectConverter.fromEntity(lessonEntity.getSubject()));

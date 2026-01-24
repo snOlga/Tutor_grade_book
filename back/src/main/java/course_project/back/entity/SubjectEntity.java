@@ -1,6 +1,5 @@
 package course_project.back.entity;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,7 +15,6 @@ public class SubjectEntity {
     @Column(name = "id")
     private Long id;
 
-    @Nonnull
     @Column(name = "main_name")
     private String name;
 

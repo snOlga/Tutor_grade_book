@@ -9,8 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WeekDTO {
-    @NonNull
     private Date startDate;
-    @NonNull
     private Date endDate;
 }

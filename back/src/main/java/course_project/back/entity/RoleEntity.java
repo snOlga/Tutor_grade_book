@@ -1,6 +1,5 @@
 package course_project.back.entity;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +19,6 @@ public class RoleEntity {
     @Column(name = "id")
     private Short id;
 
-    @Nonnull
     @Column(name = "name")
     private String name;
 }

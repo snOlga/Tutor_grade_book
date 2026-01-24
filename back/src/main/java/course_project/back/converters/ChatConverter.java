@@ -2,6 +2,8 @@ package course_project.back.converters;
 
 import java.util.HashSet;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,32 @@ public class ChatConverter implements ConverterInterface<ChatDTO, ChatEntity> {
     private ChatRepository chatRepository;
     @Autowired
     private ParticipatorConverter participatorConverter;
+    private final ModelMapper mapper = new ModelMapper();
+
+    public ChatConverter() {
+        configureMappings();
+    }
+
+    private void configureMappings() {
+        TypeMap<ChatEntity, ChatDTO> toDtoTypeMap = mapper.createTypeMap(ChatEntity.class,
+                ChatDTO.class);
+        toDtoTypeMap.addMappings(m -> {
+            m.skip(ChatDTO::setId);
+            m.skip(ChatDTO::setUsers);
+        });
+
+        TypeMap<ChatDTO, ChatEntity> toEntityTypeMap = mapper.createTypeMap(ChatDTO.class,
+                ChatEntity.class);
+        toEntityTypeMap.addMappings(m -> {
+            m.skip(ChatEntity::setId);
+            m.skip(ChatEntity::setUsers);
+        });
+    }
 
     @Override
     public ChatEntity fromDTO(ChatDTO chatDTO) {
-        ChatEntity chatEntity = new ChatEntity();
+        ChatEntity chatEntity = mapper.map(chatDTO, ChatEntity.class);
         chatEntity.setId(Utils.fromDTO(chatDTO.getId()));
-        chatEntity.setIsDeleted(chatDTO.getIsDeleted());
         chatEntity.setUsers(new HashSet<>(chatDTO.getUsers().stream().map(participatorConverter::fromDTO).toList()));
         return chatEntity;
     }
@@ -32,9 +54,8 @@ public class ChatConverter implements ConverterInterface<ChatDTO, ChatEntity> {
         if (chatEntity == null)
             return null;
 
-        ChatDTO chatDTO = new ChatDTO();
+        ChatDTO chatDTO = mapper.map(chatEntity, ChatDTO.class);
         chatDTO.setId(chatEntity.getId().toString());
-        chatDTO.setIsDeleted(chatEntity.getIsDeleted());
         chatDTO.setUsers(new HashSet<>(chatEntity.getUsers().stream().map(participatorConverter::fromEntity).toList()));
 
         return chatDTO;
