@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import '../styles/search_style.css'
-import { refreshAccessToken } from '../services/auth'
+import '../../styles/search_style.css'
+import { refreshAccessToken } from '../../services/auth'
 
 function TutorSearch({ setLessons }) {
 

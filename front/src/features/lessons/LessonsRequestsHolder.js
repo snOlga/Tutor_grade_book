@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/lessons_requests_style.css'
-import { getCurrentUserEmail } from '../App';
+import '../../styles/lessons_requests_style.css'
+import { getCurrentUserEmail } from '../../utils/auth';
 import { YesIcon, NoIcon } from './modals/InfoLessonModal';
 import IncomeRequestCard from './cards/IncomeRequestCard';
 import OutcomeRequestCard from './cards/OutcomeRequestCard';
-import { refreshAccessToken } from '../services/auth'
+import { refreshAccessToken } from '../../services/auth'
 
 function LessonsRequestsHolder({ openLessonInfo }) {
     const [showIncome, setShowIncome] = useState(true)

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/chat_style.css'
-import { getCurrentUserEmail, getRoles, ROLES } from '../App';
-import { EditIcon } from './modals/InfoLessonModal';
-import { BinIcon } from './cards/LessonCard';
+import '../../styles/chat_style.css'
+import { getCurrentUserEmail, getRoles, ROLES } from '../../utils/auth';
+import { EditIcon } from '../lessons/modals/InfoLessonModal';
+import { BinIcon } from '../lessons/cards/LessonCard';
 
 function Message({ message, messageEditing }) {
     const msgDate = new Date(message.sentTime)

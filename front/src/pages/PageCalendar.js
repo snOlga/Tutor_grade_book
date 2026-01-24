@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Calendar from "../components/Calendar";
-import Header from '../components/Header';
-import ChatHolder from '../components/ChatHolder';
-import CreateLessonModal from '../components/modals/CreateLessonModal';
-import InfoLessonModal from '../components/modals/InfoLessonModal';
-import LessonsRequestsHolder from '../components/LessonsRequestsHolder';
-import { getRoles, ROLES, getCurrentUserEmail } from '../App';
-import StudentSearchUI from '../components/StudentSearchUI';
-import { refreshAccessToken } from '../services/auth'
+import React, { useState } from 'react';
+import Calendar from "../features/calendar/Calendar";
+import Header from '../shared/Header';
+import ChatHolder from '../features/chat/ChatHolder';
+import CreateLessonModal from '../features/lessons/modals/CreateLessonModal';
+import InfoLessonModal from '../features/lessons/modals/InfoLessonModal';
+import LessonsRequestsHolder from '../features/lessons/LessonsRequestsHolder';
+import { getRoles, ROLES } from '../utils/auth';
+import StudentSearchUI from '../features/search/StudentSearchUI';
+import { useLessons } from '../hooks/useLessons';
 
 function TutorCalendar() {
     const [isChatOpen, openChat] = useState(false)
@@ -17,36 +17,14 @@ function TutorCalendar() {
         lesson: {}
     })
     const [isLessonsRequestsOpen, openLessonsRequests] = useState(false)
-    const [lessons, setLessons] = useState([])
     const isStudent = getRoles().includes(ROLES.STUDENT)
     const [startWeekDate, setStartWeekDate] = useState(new Date())
     const [endWeekDate, setEndWeekDate] = useState(new Date())
     const setWeek = { setStartWeekDate, setEndWeekDate }
+    const { lessons, setLessons } = useLessons(startWeekDate, endWeekDate)
 
     function openLessonInfoModal(state) {
         setLessonInfoModalState({ ...lessonInfoModalState, isOpen: state })
-    }
-
-    useEffect(() => {
-        loadLessons()
-    }, [startWeekDate, endWeekDate])
-
-    function loadLessons() {
-        fetch(process.env.REACT_APP_ROOT_PATH + 'lessons/user/' + getCurrentUserEmail(), {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                startDate: startWeekDate.toISOString(),
-                endDate: endWeekDate.toISOString()
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                setLessons(data)
-            }).catch(() => refreshAccessToken())
     }
 
     return (

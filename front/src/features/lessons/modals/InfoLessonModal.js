@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import '../../styles/lesson_creation_modal_style.css'
-import '../../styles/lesson_info_modal_style.css'
-import { getRoles, ROLES, getCurrentUserEmail } from '../../App';
-import { refreshAccessToken } from '../../services/auth'
+import '../../../styles/lesson_creation_modal_style.css'
+import '../../../styles/lesson_info_modal_style.css'
+import { getRoles, ROLES, getCurrentUserEmail } from '../../../utils/auth';
+import { refreshAccessToken } from '../../../services/auth'
 
 function InfoLessonModal({ currentLesson, closeModal }) {
     const lessonDate = new Date(currentLesson.startTime)

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { ROLES } from '../../App';
+import { ROLES } from '../../utils/auth';
 import auth from '../../services/auth'
 
 function RegistrationForm() {

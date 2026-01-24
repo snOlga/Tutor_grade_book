@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import '../../styles/calendar_style.css'
-import '../../styles/card_style.css'
+import '../../../styles/calendar_style.css'
+import '../../../styles/card_style.css'
 import DeletionModal from './DeletionModal';
 import LessonCard from './LessonCard';
 

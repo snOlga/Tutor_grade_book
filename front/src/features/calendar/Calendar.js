@@ -1,8 +1,8 @@
 import React from 'react';
 import { useEffect, useState } from 'react'
-import LessonsCards from './cards/LessonsCards.js';
-import '../styles/calendar_style.css'
-import { getCurrentUserEmail } from '../App.js'
+import LessonsCards from '../lessons/cards/LessonsCards';
+import '../../styles/calendar_style.css'
+import { getCurrentUserEmail } from '../../utils/auth'
 
 function Calendar({ lessons, setLessonInfoModalState, setWeek }) {
     const [currentWeek, setCurrentWeek] = useState(0)

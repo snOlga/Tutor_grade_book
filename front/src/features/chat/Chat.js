@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import '../styles/chat_style.css'
-import { getCurrentUserEmail } from '../App';
+import '../../styles/chat_style.css'
+import { getCurrentUserEmail } from '../../utils/auth';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import Message from './Message';
-import { refreshAccessToken } from '../services/auth'
+import { refreshAccessToken } from '../../services/auth'
 
 function Chat({ chat, setOpenChat, setCurrentChat }) {
     const [allMessages, setMessages] = useState([])

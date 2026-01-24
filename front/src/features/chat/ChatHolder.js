@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import '../styles/chat_style.css'
-import { getCurrentUserEmail, getRoles, ROLES } from '../App';
+import '../../styles/chat_style.css'
+import { getCurrentUserEmail, getRoles, ROLES } from '../../utils/auth';
 import Chat from './Chat';
-import { BinIcon } from './cards/LessonCard';
-import { refreshAccessToken } from '../services/auth'
+import { BinIcon } from '../lessons/cards/LessonCard';
+import { refreshAccessToken } from '../../services/auth'
 
 function ChatHolder({ openChat, chat, setChat }) {
     const [allChats, setAllChats] = useState([])

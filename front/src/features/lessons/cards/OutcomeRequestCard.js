@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import '../../styles/lessons_requests_style.css'
+import '../../../styles/lessons_requests_style.css'
 import { YesIcon, NoIcon } from '../modals/InfoLessonModal';
-import { refreshAccessToken } from '../../services/auth'
+import { refreshAccessToken } from '../../../services/auth'
 
 function OutcomeRequestCard({ request, openLessonInfo, outcome, setOutcome }) {
 

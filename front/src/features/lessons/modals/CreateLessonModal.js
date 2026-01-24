@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import '../../styles/lesson_creation_modal_style.css'
-import { getCurrentUserEmail } from '../../App'
-import { refreshAccessToken } from '../../services/auth'
+import '../../../styles/lesson_creation_modal_style.css'
+import { getCurrentUserEmail } from '../../../utils/auth'
+import { refreshAccessToken } from '../../../services/auth'
 
 function CreateLessonModal({ closeModal }) {
     const [newLesson, setNewLesson] = useState(

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import '../../styles/calendar_style.css'
-import { refreshAccessToken } from '../../services/auth'
+import '../../../styles/calendar_style.css'
+import { refreshAccessToken } from '../../../services/auth'
 
 function DeletionModal({ valueToDelete, closeModal, lessonDate }) {
 

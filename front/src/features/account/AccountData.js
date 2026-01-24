@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/account_page.css'
-import { getCurrentUserEmail, getRoles, ROLES } from '../App';
-import { EditIcon } from './modals/InfoLessonModal';
+import '../../styles/account_page.css'
+import { getCurrentUserEmail, getRoles, ROLES } from '../../utils/auth';
+import { EditIcon } from '../lessons/modals/InfoLessonModal';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { refreshAccessToken } from '../services/auth'
+import { refreshAccessToken } from '../../services/auth'
 
 function AccountData({ currentUser, openChatWithId }) {
     const isAdmin = getRoles().includes(ROLES.ADMIN)
